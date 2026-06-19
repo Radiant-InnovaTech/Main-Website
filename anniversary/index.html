@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exclusive POS Offer — Radiant InnovaTech</title>
+  <meta name="description" content="Limited-time exclusive: 50% off your quoted price for our full-featured multi-store POS system. Radiant InnovaTech, Tarkwa."/>
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <style>
+    #offer-hero {
+      min-height: 100vh;
+      background: radial-gradient(ellipse 80% 60% at 60% 45%, rgba(0,100,200,0.1) 0%, transparent 70%),
+                  var(--onyx);
+      display: flex; align-items: center;
+      padding-top: var(--nav-h); position: relative; overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(0,170,255,0.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0,170,255,0.035) 1px, transparent 1px);
+      background-size: 48px 48px; pointer-events: none;
+    }
+    .offer-hero-inner {
+      position: relative; z-index: 2; width: 100%;
+      max-width: 800px; margin: 0 auto; padding: 80px 60px;
+      text-align: center;
+    }
+    .offer-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px;
+      background: var(--gold-dim); border: 1px solid var(--gold-border);
+      padding: 8px 18px; border-radius: 2px;
+    }
+    .offer-badge::before { content: '◈'; font-size: 0.5rem; }
+    .offer-hero-inner h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(3rem, 7vw, 5.6rem); font-weight: 700;
+      color: var(--white); letter-spacing: 0.03em; line-height: 1.05;
+      margin-bottom: 10px;
+    }
+    .offer-hero-inner h1 .accent { color: var(--radiant); }
+    .offer-hero-inner h1 .gold  { color: var(--gold); }
+    .offer-sub {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .offer-hero-inner > p {
+      font-size: 1rem; line-height: 1.8; color: var(--muted);
+      max-width: 560px; margin: 0 auto 40px; font-weight: 300;
+    }
+    .urgency-strip {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold);
+      margin-top: 12px;
+    }
+    .urgency-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--gold);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.8);} }
+
+    #features { background: var(--onyx2); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--border); margin-top: 52px;
+    }
+    .feature-cell {
+      background: var(--panel); padding: 38px 30px;
+      transition: background 0.2s;
+    }
+    .feature-cell:hover { background: var(--panel2); }
+    .feature-ico {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--radiant);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .feature-ico::before { content: '▶'; font-size: 0.45rem; color: var(--radiant); }
+    .feature-cell h3 {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em; margin-bottom: 10px;
+    }
+    .feature-cell p { font-size: 0.85rem; line-height: 1.7; color: var(--muted); }
+
+    #pricing { background: var(--onyx); }
+    .price-box {
+      max-width: 620px; margin: 52px auto 0;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+      position: relative; overflow: hidden; text-align: center; padding: 52px 44px;
+    }
+    .price-box::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .price-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .price-slash {
+      font-family: 'Rajdhani', sans-serif; font-size: clamp(4rem, 12vw, 7rem);
+      font-weight: 700; color: var(--gold); line-height: 1; letter-spacing: -0.02em;
+    }
+    .price-off {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700;
+      letter-spacing: 0.1em; color: var(--white); margin-top: 8px; margin-bottom: 24px;
+    }
+    .price-note {
+      font-size: 0.88rem; line-height: 1.75; color: var(--muted);
+      max-width: 420px; margin: 0 auto;
+    }
+    .price-note strong { color: var(--white); }
+
+    #accept { background: var(--onyx2); }
+    .accept-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start;
+      margin-top: 52px;
+    }
+    .accept-info p { font-size: 0.95rem; line-height: 1.85; color: var(--muted); margin-bottom: 16px; font-weight: 300; }
+    .accept-info p strong { color: var(--white); }
+    .accept-info ul {
+      list-style: none; display: flex; flex-direction: column; gap: 10px;
+      margin-top: 24px;
+    }
+    .accept-info ul li {
+      font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 10px;
+    }
+    .accept-info ul li::before { content: '✓'; color: var(--radiant); font-size: 0.8rem; flex-shrink: 0; }
+
+    .accept-form {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+      padding: 40px; position: relative; overflow: hidden;
+    }
+    .accept-form::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--radiant), transparent);
+    }
+    .form-grid { display: flex; flex-direction: column; gap: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .btn-submit {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--onyx); background: var(--radiant);
+      border: none; padding: 15px 30px; border-radius: 3px;
+      cursor: pointer; font-weight: 500; width: 100%;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { box-shadow: 0 0 24px rgba(0,170,255,0.5); transform: translateY(-2px); }
+
+    #thank-you {
+      display: none; text-align: center; padding: 40px 30px;
+    }
+    #thank-you .ty-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    #thank-you h3 {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700;
+      color: var(--white); margin-bottom: 10px;
+    }
+    #thank-you p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    .wa-float {
+      position: fixed; bottom: 28px; right: 28px; z-index: 300;
+      display: flex; align-items: center; gap: 10px;
+      background: #25d366; color: #fff;
+      padding: 13px 22px; border-radius: 50px;
+      text-decoration: none; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .wa-float:hover { transform: translateY(-3px); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+    .wa-float svg { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
+
+    @media (max-width: 960px) {
+      .offer-hero-inner { padding: 60px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .accept-inner { grid-template-columns: 1fr; gap: 40px; }
+    }
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      .price-box { padding: 40px 24px; }
+      .accept-form { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <img src="../assets/logo.png" class="nav-logo-img" alt="Radiant InnovaTech"/>
+    <span class="nav-brand-text">RADIANT <span>INNOVATECH</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../pages/about.html">About</a></li>
+    <li><a href="../pages/services.html">Services</a></li>
+    <li><a href="../pages/sectors.html">Sectors</a></li>
+    <li><a href="../pages/contact.html">Contact</a></li>
+  </ul>
+  <a href="#accept" class="nav-cta">Claim Offer</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section id="offer-hero">
+  <div class="hero-grid-bg"></div>
+  <div class="offer-hero-inner">
+    <div class="offer-badge">Exclusive Limited-Time Offer</div>
+    <h1>Get <span class="gold">50% Off</span><br/>Your <span class="accent">POS System</span></h1>
+    <div class="offer-sub">Multi-Store &middot; Inventory &middot; Sales &middot; Analytics</div>
+    <p>We are extending a one-time exclusive discount to a select group of business owners. Half off your quoted price — full system, full features, no compromise.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="#accept" class="btn-gold">Claim Your 50% Discount</a>
+      <a href="#features" class="btn-ghost">See What's Included</a>
+    </div>
+    <div class="urgency-strip">
+      <div class="urgency-dot"></div>
+      This offer is exclusive and time-limited — seats are not guaranteed
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container section-pad">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
+      <div class="eyebrow" style="justify-content:center;">Everything Included</div>
+      <h2 class="sec-title">A Complete <span class="accent">POS Platform</span></h2>
+      <br/>
+      <p style="font-size:0.95rem;line-height:1.8;color:var(--muted);font-weight:300;">Every feature below is included in your 50% off package. No add-ons, no hidden costs.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-cell reveal">
+        <div class="feature-ico">Module 01</div>
+        <h3>Multi-Store POS</h3>
+        <p>Run multiple store locations from one unified dashboard. Sales, stock, and staff all in sync — whether you have one branch or ten.</p>
+      </div>
+      <div class="feature-cell reveal d1">
+        <div class="feature-ico">Module 02</div>
+        <h3>Inventory Management</h3>
+        <p>Real-time stock tracking, low-stock alerts, and purchase order management. Know exactly what you have and when to reorder.</p>
+      </div>
+      <div class="feature-cell reveal d2">
+        <div class="feature-ico">Module 03</div>
+        <h3>Sales &amp; Receipts</h3>
+        <p>Fast checkout, digital and printed receipts, discount management, and full transaction history at your fingertips.</p>
+      </div>
+      <div class="feature-cell reveal">
+        <div class="feature-ico">Module 04</div>
+        <h3>Staff Roles &amp; Access</h3>
+        <p>Define cashier, manager, and admin roles with granular permissions. Track activity per staff member for accountability.</p>
+      </div>
+      <div class="feature-cell reveal d1">
+        <div class="feature-ico">Module 05</div>
+        <h3>Reports &amp; Analytics</h3>
+        <p>Daily, weekly, and monthly sales reports. Best-selling items, revenue trends, and staff performance — all exportable.</p>
+      </div>
+      <div class="feature-cell reveal d2">
+        <div class="feature-ico">Bonus</div>
+        <h3>3 Months Free Support</h3>
+        <p>Dedicated post-deployment support for 90 days. Training, troubleshooting, and updates — included at no extra charge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container section-pad">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto;">
+      <div class="eyebrow" style="justify-content:center;">The Discount</div>
+      <h2 class="sec-title">Half Off. <span class="accent">Your Price.</span></h2>
+    </div>
+    <div class="price-box reveal">
+      <div class="price-label">Exclusive Offer — Applied to Your Quoted Price</div>
+      <div class="price-slash">50%</div>
+      <div class="price-off">OFF YOUR QUOTED PRICE</div>
+      <p class="price-note">
+        Whatever price was quoted to you — you pay <strong>half</strong>.
+        Full system. Full deployment. Full 3-month support.<br/><br/>
+        This discount is applied directly to your individual quote. No negotiations, no catch — just the price cut in half for those who act before this offer closes.
+      </p>
+    </div>
+    <p class="reveal" style="text-align:center;margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">
+      &#9672; &nbsp; Offer is exclusive, time-limited, and available only to selected clients &nbsp; &#9672;
+    </p>
+  </div>
+</section>
+
+<section id="accept">
+  <div class="container section-pad">
+    <div class="reveal" style="max-width:560px;">
+      <div class="eyebrow">Accept the Offer</div>
+      <h2 class="sec-title">Secure Your <span class="accent">Spot</span></h2>
+    </div>
+    <div class="accept-inner">
+      <div class="accept-info reveal">
+        <p>Fill in the form and we will confirm your 50% discount and schedule your deployment. <strong>Spots are limited</strong> — this offer will close once capacity is reached.</p>
+        <p>After you submit, a WhatsApp message will be sent automatically so our team can follow up with you directly.</p>
+        <ul>
+          <li>No payment required to claim your spot</li>
+          <li>We will confirm within 24 hours</li>
+          <li>Deployment scheduled at your convenience</li>
+          <li>Full onboarding and staff training included</li>
+          <li>3 months of dedicated support from day one</li>
+        </ul>
+      </div>
+      <div class="accept-form reveal d1">
+        <div id="form-view">
+          <div class="form-grid">
+            <div class="form-row">
+              <div class="fld">
+                <label for="f-name">Your Name</label>
+                <input type="text" id="f-name" placeholder="Full name" required/>
+              </div>
+              <div class="fld">
+                <label for="f-store">Store Name</label>
+                <input type="text" id="f-store" placeholder="Business / store name" required/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="fld">
+                <label for="f-email">Email Address</label>
+                <input type="email" id="f-email" placeholder="you@example.com" required/>
+              </div>
+              <div class="fld">
+                <label for="f-phone">Phone Number</label>
+                <input type="tel" id="f-phone" placeholder="050 000 0000" required/>
+              </div>
+            </div>
+            <div class="fld">
+              <label for="f-notes">Notes (optional)</label>
+              <textarea id="f-notes" placeholder="Number of locations, current setup, any questions…"></textarea>
+            </div>
+            <button type="button" class="btn-submit" id="submitBtn">Claim My 50% Discount &#8594;</button>
+          </div>
+        </div>
+        <div id="thank-you">
+          <div class="ty-icon">&#9989;</div>
+          <h3>You're In!</h3>
+          <p>Your details have been sent to our team via WhatsApp. We will confirm your 50% discount and reach out within 24 hours to schedule your deployment.</p>
+          <br/>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--radiant);">Radiant InnovaTech &middot; Tarkwa, Ghana</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-row">
+        <img src="../assets/logo.png" class="footer-logo-img" alt="Radiant InnovaTech"/>
+        <span class="footer-brand-text">RADIANT <span>INNOVATECH</span></span>
+      </div>
+      <p>Sovereign engineering infrastructure for Ghana's industrial heartland. Based in Tarkwa, built for scale.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/about.html">About</a></li>
+        <li><a href="../pages/services.html">Services</a></li>
+        <li><a href="../pages/sectors.html">Sectors</a></li>
+        <li><a href="../pages/contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="../pages/services.html">System Nodes</a></li>
+        <li><a href="../pages/services.html">Obsidian Protocol</a></li>
+        <li><a href="../pages/services.html">The Sentry Project</a></li>
+        <li><a href="../pages/services.html">Radiant Vault</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:0504555100">050 455 5100</a></li>
+        <li><a href="mailto:info@radiantinnovatech.com">info@radiantinnovatech.com</a></li>
+        <li><a href="../pages/contact.html">Request Site Survey</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&#169; 2025 Radiant InnovaTech &middot; Tarkwa, Western Region, Ghana &middot; All Rights Reserved</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="https://wa.me/233248028237" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  Chat on WhatsApp
+</a>
+
+<script src="../js/global.js"></script>
+<script>
+(function () {
+  var WA_NUMBER = '233248028237'; // TODO: replace with real number, digits only
+
+  document.getElementById('submitBtn').addEventListener('click', function () {
+    var name  = document.getElementById('f-name').value.trim();
+    var store = document.getElementById('f-store').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
+    var notes = document.getElementById('f-notes').value.trim();
+
+    if (!name || !store || !email || !phone) {
+      alert('Please fill in your name, store name, email, and phone number.');
+      return;
+    }
+
+    var lines = [
+      '\uD83C\uDF89 *POS Offer \u2014 50% Discount Claim*',
+      '',
+      '*Name:* ' + name,
+      '*Store:* ' + store,
+      '*Email:* ' + email,
+      '*Phone:* ' + phone
+    ];
+    if (notes) lines.push('*Notes:* ' + notes);
+    lines.push('', '_Submitted via radiantinnovatech.com/anniversary_');
+
+    var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(lines.join('\n'));
+    window.open(waUrl, '_blank', 'noopener');
+
+    document.getElementById('form-view').style.display = 'none';
+    document.getElementById('thank-you').style.display = 'block';
+  });
+
+  // keep the floating WA button href in sync
+  document.getElementById('waFloat').href = 'https://wa.me/' + WA_NUMBER;
+})();
+</script>
+</body>
+</html>

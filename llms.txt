@@ -1,0 +1,68 @@
+# Radiant InnovaTech — llms.txt
+# https://llmstxt.org
+
+# Radiant InnovaTech is a technology engineering firm headquartered in Tarkwa, Western Region, Ghana.
+# Its flagship product is Radiant Nexus, an autonomous operational intelligence platform for security operations.
+
+## Company
+
+Radiant InnovaTech is a sovereign engineering firm founded and headquartered in Tarkwa, Ghana,
+near the University of Mines and Technology (UMaT). The firm builds industrial-grade digital
+infrastructure and security systems for demanding environments. Its flagship product, Radiant Nexus,
+extends that mission into autonomous security operations.
+
+## Flagship Product — Radiant Nexus
+
+Radiant Nexus is an AI-native, autonomous operational intelligence layer for the Security Operations
+Center (SOC). It is NOT a SIEM and NOT an observability tool. Nexus continuously reasons across
+telemetry, runs investigations end to end, builds persistent operational memory, and coordinates
+specialised AI agents to assist analysts and execute supervised response.
+
+- Autonomous investigation: each alert becomes a complete, evidence-backed case file in under 60 seconds
+- Agentic reasoning: a reasoning core orchestrates specialised identity, cloud, endpoint and network agents
+- Persistent operational memory: every investigation sharpens the next, adapting to your environment
+- Supervised response: containment runs through human approval gates — explainable, reversible, logged
+- Native integrations: AWS, Azure, Google Cloud, CrowdStrike, SentinelOne, Microsoft Defender, Okta,
+  Active Directory, Splunk, Microsoft Sentinel, Datadog, Palo Alto Networks, Cisco Secure
+
+## Engineering Services (Radiant InnovaTech)
+
+- Network infrastructure design and deployment (LoRaWAN, fibre, LAN/WAN)
+- Cybersecurity: AES-256 encryption, penetration testing, security audits
+- Custom software development: web applications, internal tools, client portals
+- AI integration: LLM-powered assistants, RAG pipelines, workflow automation
+- Cloud infrastructure: AWS deployment, CI/CD, server hardening
+
+## Sectors Served
+
+- Enterprise security operations centers (SOCs) and MSSPs
+- Financial services and banking
+- Critical infrastructure and heavy engineering (gold mining sector, Western Region)
+- Legal and professional services
+- Academic institutions (UMaT and partner universities)
+
+## Location
+
+Tarkwa, Western Region, Ghana. Deployed across Ghana and beyond.
+
+## Contact
+
+Website: https://radiantinnovatech.com
+Request a demo: https://radiantinnovatech.com/pages/contact.html
+Join the pilot waitlist: https://radiantinnovatech.com/waitlist
+
+## Pages
+
+- [Home](https://radiantinnovatech.com/)
+- [Platform](https://radiantinnovatech.com/pages/platform.html)
+- [AI Agents](https://radiantinnovatech.com/pages/agents.html)
+- [Solutions](https://radiantinnovatech.com/pages/solutions.html)
+- [Architecture](https://radiantinnovatech.com/pages/architecture.html)
+- [Security & Trust](https://radiantinnovatech.com/pages/security.html)
+- [Pricing](https://radiantinnovatech.com/pages/pricing.html)
+- [About](https://radiantinnovatech.com/pages/about.html)
+- [Resources](https://radiantinnovatech.com/pages/resources.html)
+- [Services](https://radiantinnovatech.com/pages/services.html)
+- [Sectors](https://radiantinnovatech.com/pages/sectors.html)
+- [Contact](https://radiantinnovatech.com/pages/contact.html)
+- [Waitlist](https://radiantinnovatech.com/waitlist)

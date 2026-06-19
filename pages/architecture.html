@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Architecture — Radiant Nexus</title>
+  <meta name="description" content="How Radiant Nexus moves from telemetry ingest to reasoning, persistent memory, and supervised response — plus SaaS, hybrid, on-prem, and air-gapped deployment models."/>
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="../css/global.css?v=20260613"/>
+  <style>
+    /* ── ARCHITECTURE PAGE LAYOUT (tokens only) ── */
+    .flow-svg { width: 100%; height: auto; display: block; }
+
+    /* Pipeline track */
+    .pipeline { display: flex; flex-direction: column; gap: 18px; max-width: 940px; margin: 0 auto; }
+    .stage {
+      display: grid; grid-template-columns: 64px 1fr; gap: 24px; align-items: stretch;
+      position: relative;
+    }
+    .stage-rail { display: flex; flex-direction: column; align-items: center; }
+    .stage-node {
+      width: 56px; height: 56px; border-radius: var(--r-md); flex-shrink: 0;
+      display: grid; place-items: center; font-size: 22px;
+      background: var(--bg-elevated); border: 1px solid var(--accent-border); color: var(--accent-soft);
+      box-shadow: var(--shadow-sm); position: relative; z-index: 2;
+    }
+    .stage-node .step {
+      position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--bg-primary); border: 1px solid var(--border-strong); color: var(--text-faint);
+      font: 600 10px 'JetBrains Mono', monospace; display: grid; place-items: center;
+    }
+    .stage-line { width: 2px; flex: 1; margin: 8px 0; background: linear-gradient(180deg, var(--accent-border), var(--border)); }
+    .stage:last-child .stage-line { display: none; }
+
+    .stage-node.is-success { background: var(--success-dim); border-color: var(--success-border); color: var(--success); }
+    .stage-node.is-warning { background: var(--warning-dim); border-color: var(--warning-border); color: var(--warning); }
+
+    .stage-body {
+      background: linear-gradient(180deg, var(--bg-surface), var(--bg-secondary));
+      border: 1px solid var(--border); border-radius: var(--r-lg); padding: 24px 26px;
+      transition: border-color .28s var(--ease), box-shadow .28s var(--ease), transform .28s var(--ease);
+    }
+    .stage-body:hover { border-color: var(--accent-border); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .stage-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+    .stage-head h3 { font-size: 1.18rem; font-weight: 700; letter-spacing: -0.01em; }
+    .stage-body p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65; }
+    .stage-meta { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--text-secondary); display: flex; gap: 8px; align-items: center; }
+    .stage-meta strong { color: var(--text-primary); }
+
+    /* Dominant reasoning stage */
+    .stage.is-core .stage-node { width: 64px; height: 64px; font-size: 26px; background: linear-gradient(135deg, #0E1830, #162237); border-color: var(--accent); box-shadow: var(--glow-accent); }
+    .stage.is-core .stage-body { border: 1px solid var(--accent-border); background: linear-gradient(160deg, #0E1830, var(--bg-secondary)); box-shadow: var(--shadow-md), 0 0 0 1px rgba(59,130,246,.12); padding: 30px; }
+    .stage.is-core .stage-head h3 { font-size: 1.45rem; color: var(--accent-soft); }
+    .core-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0 4px; }
+    .core-chip { display: flex; gap: 9px; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-soft); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 9px 11px; border-radius: var(--r-sm); }
+    .core-chip .ic { font-size: 15px; flex-shrink: 0; }
+
+    /* Deployment models grid */
+    .deploy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .deploy-card h3 { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; }
+    .deploy-card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65; margin-bottom: 16px; }
+    .deploy-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .deploy-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.88rem; color: var(--text-secondary); }
+    .deploy-list .ic { color: var(--success); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+    .deploy-tag { margin-left: auto; }
+
+    /* Boundary / sovereignty row */
+    .boundary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+    @media (max-width: 960px) {
+      .deploy-grid, .boundary-grid { grid-template-columns: 1fr; }
+      .core-chips { grid-template-columns: 1fr; }
+      .stage { grid-template-columns: 52px 1fr; gap: 16px; }
+      .stage-node { width: 48px; height: 48px; font-size: 19px; }
+      .stage.is-core .stage-node { width: 52px; height: 52px; font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION -->
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <img src="../assets/logo.png" class="nav-logo-img" alt="Radiant Nexus" onerror="this.src='https://placehold.co/64x64/3B82F6/white?text=RN'"/>
+    <span class="nav-brand-text">RADIANT <span>NEXUS</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="platform.html">Platform</a></li>
+    <li><a href="agents.html">AI Agents</a></li>
+    <li><a href="solutions.html">Solutions</a></li>
+    <li><a href="architecture.html">Architecture</a></li>
+    <li><a href="security.html">Security &amp; Trust</a></li>
+    <li><a href="about.html">About</a></li>
+    <li class="nav-mobile-only"><a href="/waitlist">Join Waitlist</a></li>
+    <li class="nav-mobile-only"><a href="contact.html">Request Demo</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/waitlist" class="nav-waitlist">Join Waitlist</a>
+    <a href="contact.html" class="nav-cta">Request Demo <svg class="ic"><use href="#i-arrow-right"/></svg></a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="container reveal">
+    <span class="page-hero-tag">Architecture</span>
+    <h1>Telemetry in. <span class="accent">Reasoned response</span> out.</h1>
+    <p>One continuous path: ingest signals from across your estate, reason over them, write what matters to persistent memory, and coordinate supervised response. Runs the same way whether it lives in our cloud or fully inside your perimeter.</p>
+  </div>
+</div>
+
+<!-- DATA FLOW DIAGRAM -->
+<section class="container section-pad">
+  <div class="section-head center reveal">
+    <span class="eyebrow">The data flow</span>
+    <h2 class="sec-title">Ingest, reason, remember, <span class="accent">respond</span></h2>
+    <p class="lede">Sources stream in on the left. The reasoning core sits at the center, drawing on persistent memory and coordinating response. Every action is logged and explainable.</p>
+  </div>
+
+  <div class="panel reveal" style="transition-delay:.1s">
+    <div class="panel-bar">
+      <span class="panel-dots"><i style="background:#F0556B"></i><i style="background:#F0B23E"></i><i style="background:#1FD498"></i></span>
+      <span class="panel-title">operational-pipeline // live data path</span>
+      <span class="live-badge" style="margin-left:auto"><span class="live-dot"></span>STREAMING</span>
+    </div>
+    <div class="panel-body" style="padding:26px 20px">
+      <svg class="flow-svg" viewBox="0 0 920 360" role="img" aria-label="Telemetry sources flow into the reasoning core, which reads and writes persistent memory and coordinates supervised response.">
+        <defs>
+          <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3B82F6" stop-opacity=".5"/><stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="edgeIn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3B82F6" stop-opacity=".06"/><stop offset="1" stop-color="#3B82F6" stop-opacity=".5"/></linearGradient>
+          <linearGradient id="edgeOut" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1FD498" stop-opacity=".5"/><stop offset="1" stop-color="#1FD498" stop-opacity=".06"/></linearGradient>
+          <linearGradient id="edgeMem" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6AA2FF" stop-opacity=".5"/><stop offset="1" stop-color="#6AA2FF" stop-opacity=".06"/></linearGradient>
+        </defs>
+
+        <!-- column labels -->
+        <g font-family="JetBrains Mono, monospace" font-size="9" fill="#5C6678" text-anchor="middle" letter-spacing="1.5">
+          <text x="92" y="26">INGEST</text>
+          <text x="460" y="26">REASON</text>
+          <text x="828" y="26">RESPOND</text>
+        </g>
+
+        <!-- edges in -->
+        <path id="ai1" d="M150,80 C260,96 320,150 380,176" fill="none" stroke="url(#edgeIn)" stroke-width="1.5"/>
+        <path id="ai2" d="M150,150 C250,162 320,170 378,180" fill="none" stroke="url(#edgeIn)" stroke-width="1.5"/>
+        <path id="ai3" d="M150,220 C260,206 320,194 380,186" fill="none" stroke="url(#edgeIn)" stroke-width="1.5"/>
+        <path id="ai4" d="M150,290 C260,272 320,210 380,192" fill="none" stroke="url(#edgeIn)" stroke-width="1.5"/>
+        <!-- edges out -->
+        <path id="ao1" d="M540,176 C620,150 690,110 768,92" fill="none" stroke="url(#edgeOut)" stroke-width="1.5"/>
+        <path id="ao2" d="M540,188 C620,210 690,250 768,268" fill="none" stroke="url(#edgeOut)" stroke-width="1.5"/>
+        <!-- memory loop (down + back) -->
+        <path id="am1" d="M460,238 C460,290 460,300 460,316" fill="none" stroke="url(#edgeMem)" stroke-width="1.5"/>
+
+        <!-- traveling pulses -->
+        <g fill="#6AA2FF">
+          <circle r="3"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#ai1"/></animateMotion></circle>
+          <circle r="3"><animateMotion dur="2.7s" begin=".5s" repeatCount="indefinite"><mpath href="#ai2"/></animateMotion></circle>
+          <circle r="3"><animateMotion dur="2.5s" begin="1s" repeatCount="indefinite"><mpath href="#ai3"/></animateMotion></circle>
+          <circle r="3"><animateMotion dur="2.6s" begin="1.4s" repeatCount="indefinite"><mpath href="#ai4"/></animateMotion></circle>
+        </g>
+        <g fill="#1FD498">
+          <circle r="3"><animateMotion dur="2.3s" begin="1.2s" repeatCount="indefinite"><mpath href="#ao1"/></animateMotion></circle>
+          <circle r="3"><animateMotion dur="2.5s" begin="1.6s" repeatCount="indefinite"><mpath href="#ao2"/></animateMotion></circle>
+        </g>
+        <g fill="#6AA2FF">
+          <circle r="3"><animateMotion dur="2.2s" begin=".8s" repeatCount="indefinite"><mpath href="#am1"/></animateMotion></circle>
+        </g>
+
+        <!-- source nodes -->
+        <g font-family="JetBrains Mono, monospace" font-size="9.5" fill="#97A2B6">
+          <g><rect x="40" y="62" width="110" height="36" rx="8" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="74" y="84">EDR</text></g>
+          <g><rect x="40" y="132" width="110" height="36" rx="8" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="74" y="154">Cloud</text></g>
+          <g><rect x="40" y="202" width="110" height="36" rx="8" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="74" y="224">Identity</text></g>
+          <g><rect x="40" y="272" width="110" height="36" rx="8" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="74" y="294">Network</text></g>
+        </g>
+        <g fill="none" stroke="#6AA2FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <use href="#i-server" x="54" y="70" width="16" height="16"/>
+          <use href="#i-cloud" x="54" y="140" width="16" height="16"/>
+          <use href="#i-key" x="54" y="210" width="16" height="16"/>
+          <use href="#i-network" x="54" y="280" width="16" height="16"/>
+        </g>
+
+        <!-- output nodes -->
+        <g font-family="JetBrains Mono, monospace" font-size="9.5" fill="#1FD498" font-weight="600">
+          <g><rect x="770" y="74" width="118" height="36" rx="8" fill="#0F1626" stroke="rgba(31,212,152,.32)"/><text x="808" y="96">RESPONSE</text></g>
+          <g><rect x="770" y="250" width="118" height="36" rx="8" fill="#0F1626" stroke="rgba(31,212,152,.32)"/><text x="808" y="272">ANALYSTS</text></g>
+        </g>
+        <g fill="none" stroke="#1FD498" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <use href="#i-bolt" x="784" y="82" width="16" height="16"/>
+          <use href="#i-users" x="784" y="258" width="16" height="16"/>
+        </g>
+
+        <!-- persistent memory node (breathing) -->
+        <g>
+          <rect x="396" y="316" width="128" height="34" rx="8" fill="#0F1626" stroke="rgba(106,162,255,.4)" class="anim-memory"/>
+          <use href="#i-database" x="410" y="324" width="15" height="15" fill="none" stroke="#6AA2FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="466" y="338" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#6AA2FF" font-weight="600">MEMORY</text>
+        </g>
+
+        <!-- reasoning core -->
+        <circle cx="460" cy="182" r="58" fill="url(#coreGlow)" class="anim-memory"/>
+        <polygon points="460,134 502,158 502,206 460,230 418,206 418,158" fill="#0A1124" stroke="#3B82F6" stroke-width="1.6"/>
+        <polygon points="460,150 488,166 488,198 460,214 432,198 432,166" fill="none" stroke="rgba(59,130,246,.4)" stroke-width="1" stroke-dasharray="2 3"/>
+        <use href="#i-brain" x="446" y="168" width="28" height="28" fill="none" stroke="#6AA2FF" stroke-width="1.6"/>
+        <text x="460" y="256" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="#6AA2FF" font-weight="600">REASONING CORE</text>
+        <text x="460" y="270" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#97A2B6">orchestrating 7 agents</text>
+      </svg>
+    </div>
+    <div class="console-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px 18px;border-top:1px solid var(--border);background:rgba(255,255,255,.012);">
+      <div><div class="mono" style="font-size:1.25rem;font-weight:800;color:var(--accent-soft)" data-count="60" data-prefix="&lt; " data-suffix="s">&lt; 60s</div><div style="font-size:.66rem;color:var(--text-secondary);margin-top:5px;letter-spacing:.02em;">TIME TO VERDICT</div></div>
+      <div><div class="mono" style="font-size:1.25rem;font-weight:800;color:var(--success)" data-count="94.7" data-suffix="%">94.7%</div><div style="font-size:.66rem;color:var(--text-secondary);margin-top:5px;letter-spacing:.02em;">REASONING CONFIDENCE</div></div>
+      <div><div class="mono" style="font-size:1.25rem;font-weight:800;color:#6AA2FF">150:1</div><div style="font-size:.66rem;color:var(--text-secondary);margin-top:5px;letter-spacing:.02em;">ALERT COMPRESSION</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE STAGES -->
+<section style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container section-pad">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Stage by stage</span>
+      <h2 class="sec-title">What happens between <span class="accent">signal and resolution</span></h2>
+      <p class="lede">Eight stages run continuously. Telemetry is the input; the reasoning core does the work; persistent memory and your analysts keep it sharp.</p>
+    </div>
+
+    <div class="pipeline reveal">
+
+      <!-- 01 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node"><svg class="ic"><use href="#i-plug"/></svg><span class="step">01</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Telemetry ingest</h3><span class="tag">Ingest</span></div>
+          <p>Listeners pull raw events from EDR, identity providers, container infrastructure, and multi-cloud audit logs — continuously, without manual pivoting between consoles.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-activity"/></svg> <span><strong>Input:</strong> raw events from across your estate</span></div>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node"><svg class="ic"><use href="#i-layers"/></svg><span class="step">02</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Normalization</h3><span class="tag">Parse</span></div>
+          <p>Raw strings become typed records. Identities, sessions, network primitives, and binary metadata are extracted into a common schema so the rest of the pipeline can reason over them.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-doc"/></svg> <span><strong>Schema:</strong> typed OCSF records</span></div>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node"><svg class="ic"><use href="#i-link"/></svg><span class="step">03</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Correlation</h3><span class="tag">Synthesize</span></div>
+          <p>Concurrent signals are correlated across time windows to cut noise, clustering thousands of low-tier events into a handful of distinct incident candidates before they reach the core.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-gauge"/></svg> <span><strong>Compression:</strong> 150:1 alert-to-incident</span></div>
+        </div>
+      </div>
+
+      <!-- 04 — CORE -->
+      <div class="stage is-core">
+        <div class="stage-rail">
+          <div class="stage-node"><svg class="ic"><use href="#i-brain"/></svg><span class="step">04</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Reasoning core</h3><span class="tag">Reason</span></div>
+          <p style="color:var(--text-primary);font-size:1rem;">The center of the platform. A continuous multi-agent layer that consumes validated telemetry to form, test, and rank attack hypotheses — coordinating specialized reasoning loops against calibrated confidence scores.</p>
+          <div class="core-chips">
+            <span class="core-chip"><svg class="ic"><use href="#i-users"/></svg> 7 autonomous agents</span>
+            <span class="core-chip"><svg class="ic"><use href="#i-bolt"/></svg> Sub-second hypotheses</span>
+            <span class="core-chip"><svg class="ic"><use href="#i-eye"/></svg> Full reasoning trace</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node"><svg class="ic"><use href="#i-branch"/></svg><span class="step">05</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Investigation graph</h3><span class="tag">Map</span></div>
+          <p>Builds a timeline-ordered map of identities, file handles, and network pivots, with cryptographic provenance on each edge and mappings to MITRE ATT&amp;CK techniques.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-clock"/></svg> <span><strong>Assembly:</strong> automatic, in &lt; 60 seconds</span></div>
+        </div>
+      </div>
+
+      <!-- 06 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node is-success"><svg class="ic"><use href="#i-bolt"/></svg><span class="step">06</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Response orchestration</h3><span class="tag" style="color:var(--success);background:var(--success-dim);border-color:var(--success-border)">Respond</span></div>
+          <p>Compiles containment tailored to the active incident. Low-risk actions like token revocation run autonomously; irreversible steps route to approval gates. Every action is reversible and logged.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-rotate"/></svg> <span><strong>Safety:</strong> rollback-verified, state-preserving</span></div>
+        </div>
+      </div>
+
+      <!-- 07 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node is-success"><svg class="ic"><use href="#i-database"/></svg><span class="step">07</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Persistent memory</h3><span class="tag" style="color:var(--success);background:var(--success-dim);border-color:var(--success-border)">Remember</span></div>
+          <p>Verified incidents, analyst overrides, and containment patterns are committed to memory unique to your environment — sharpening every future investigation against adversary adaptation.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-lock"/></svg> <span><strong>Store:</strong> encrypted embedded vector memory</span></div>
+        </div>
+      </div>
+
+      <!-- 08 -->
+      <div class="stage">
+        <div class="stage-rail">
+          <div class="stage-node is-warning"><svg class="ic"><use href="#i-users"/></svg><span class="step">08</span></div>
+          <div class="stage-line"></div>
+        </div>
+        <div class="stage-body">
+          <div class="stage-head"><h3>Analyst oversight</h3><span class="tag" style="color:var(--warning);background:var(--warning-dim);border-color:var(--warning-border)">Supervise</span></div>
+          <p>Fully investigated incidents are presented with one-click approval for held actions. Your team keeps command of anything that changes the environment — with the full audit trail behind every decision.</p>
+          <div class="stage-meta"><svg class="ic"><use href="#i-fingerprint"/></svg> <span><strong>Trace:</strong> complete auditability and provenance</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOYMENT MODELS -->
+<section class="container section-pad">
+  <div class="section-head center reveal">
+    <span class="eyebrow">Deployment models</span>
+    <h2 class="sec-title">Deploy it <span class="accent">where your data lives</span></h2>
+    <p class="lede">The same platform, the same reasoning, four control surfaces — from fully managed SaaS to fully air-gapped. Telemetry never has to leave your boundary.</p>
+  </div>
+
+  <div class="deploy-grid reveal">
+
+    <div class="deploy-card">
+      <h3><span class="icon-chip"><svg class="ic"><use href="#i-cloud"/></svg></span> SaaS <span class="tag deploy-tag">Fastest</span></h3>
+      <p>Fully managed in our cloud. Connect your sources and start reasoning in hours. We handle scaling, upgrades, and uptime.</p>
+      <ul class="deploy-list">
+        <li><svg class="ic"><use href="#i-check"/></svg> Zero infrastructure to run</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Continuous updates, no maintenance windows</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Regional data residency options</li>
+      </ul>
+    </div>
+
+    <div class="deploy-card">
+      <h3><span class="icon-chip"><svg class="ic"><use href="#i-network"/></svg></span> Hybrid <span class="tag deploy-tag">Balanced</span></h3>
+      <p>Reasoning runs in our cloud; sensitive telemetry and memory stay in your environment. A thin collector bridges the two over an encrypted channel.</p>
+      <ul class="deploy-list">
+        <li><svg class="ic"><use href="#i-check"/></svg> Raw telemetry never leaves your perimeter</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Managed control plane, local data plane</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Memory store held in your tenancy</li>
+      </ul>
+    </div>
+
+    <div class="deploy-card">
+      <h3><span class="icon-chip"><svg class="ic"><use href="#i-server"/></svg></span> On-premises <span class="tag deploy-tag">Sovereign</span></h3>
+      <p>The full platform deployed inside your data center or private cloud. You own the infrastructure; we provide the software and update channel.</p>
+      <ul class="deploy-list">
+        <li><svg class="ic"><use href="#i-check"/></svg> Runs entirely within your network boundary</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Your keys, your storage, your control</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Meets strict data-locality mandates</li>
+      </ul>
+    </div>
+
+    <div class="deploy-card">
+      <h3><span class="icon-chip"><svg class="ic"><use href="#i-lock"/></svg></span> Air-gapped <span class="tag deploy-tag">Isolated</span></h3>
+      <p>For classified and critical-infrastructure environments. Reasoning models ship as a sealed bundle; updates arrive through a controlled, offline channel.</p>
+      <ul class="deploy-list">
+        <li><svg class="ic"><use href="#i-check"/></svg> No outbound network dependency</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Offline model and signature delivery</li>
+        <li><svg class="ic"><use href="#i-check"/></svg> Built for regulated and defense estates</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- BOUNDARY GUARANTEES -->
+<section style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container section-pad">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Across every model</span>
+      <h2 class="sec-title">The same <span class="accent">boundary guarantees</span></h2>
+      <p class="lede">Whatever the deployment, the security posture holds. Data isolation, supervised action, and full auditability are not deployment-specific add-ons.</p>
+    </div>
+
+    <div class="boundary-grid reveal">
+      <div class="feature-row">
+        <span class="icon-chip"><svg class="ic"><use href="#i-shield-check"/></svg></span>
+        <div>
+          <b>Tenant isolation</b>
+          <span>Your telemetry, memory, and models are cryptographically isolated. Nothing is shared or trained across customers.</span>
+        </div>
+      </div>
+      <div class="feature-row">
+        <span class="icon-chip success"><svg class="ic"><use href="#i-lock"/></svg></span>
+        <div>
+          <b>Supervised action</b>
+          <span>Destructive steps always pass through approval gates. Autonomy is for investigation; humans own anything that changes state.</span>
+        </div>
+      </div>
+      <div class="feature-row">
+        <span class="icon-chip"><svg class="ic"><use href="#i-fingerprint"/></svg></span>
+        <div>
+          <b>Tamper-evident audit</b>
+          <span>Every reasoning step and action lands in an append-only log with cryptographic provenance — exportable to your SIEM.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONVERSION CTA -->
+<div class="cta-band">
+  <div class="container">
+    <div class="cta-band-inner reveal">
+      <div>
+        <h2>See the architecture <span class="accent">run live.</span></h2>
+        <p>Book a technical briefing and watch an autonomous investigation move through the full pipeline — in the deployment model that fits your estate.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a href="contact.html" class="primary-btn">Request Blueprint Demo <svg class="ic"><use href="#i-arrow-right"/></svg></a>
+        <a href="security.html" class="secondary-btn"><svg class="ic"><use href="#i-shield"/></svg> Security &amp; Trust</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <img src="../assets/logo.png" style="width:32px;height:32px;" alt="Radiant Nexus"/>
+        <span class="mono" style="font-size:1.1rem;font-weight:700;color:#fff;">RADIANT <span style="color:var(--accent)">NEXUS</span></span>
+      </div>
+      <p>The autonomous operational intelligence platform for the modern SOC — continuously reasoning, correlating, and retaining persistent operational memory alongside your analysts.</p>
+      <p style="margin-top:14px;font-size:.8rem;color:var(--text-faint);">A platform by <strong style="color:var(--text-secondary)">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><ul>
+      <li><a href="platform.html">Operational Layer</a></li>
+      <li><a href="agents.html">AI Constellation</a></li>
+      <li><a href="architecture.html">Architecture Flow</a></li>
+      <li><a href="security.html">Security &amp; Trust</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Solutions</h4><ul>
+      <li><a href="solutions.html">Enterprise SOCs</a></li>
+      <li><a href="solutions.html">MSSP / Managed SOC</a></li>
+      <li><a href="solutions.html">Banking &amp; Finance</a></li>
+      <li><a href="solutions.html">Critical Infrastructure</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="resources.html">Resources Hub</a></li>
+      <li><a href="contact.html">Request Demo</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a><a href="#">Security Assurance</a><a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/global.js?v=20260613" defer></script>
+</body>
+</html>

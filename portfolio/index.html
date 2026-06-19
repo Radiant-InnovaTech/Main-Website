@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samuel Maclar — Cybersecurity Engineer & AI Builder</title>
+<meta name="description" content="Samuel Nana Kweku Abekah Maclar — BSc Cybersecurity student, AI builder, and co-founder of Radiant InnovaTech. Building AI-powered security tools for Africa from Tarkwa, Ghana.">
+
+<!--
+  Flash-of-wrong-theme prevention.
+  Runs synchronously before first paint; reads saved preference and
+  sets the class before CSS renders. No visible flash.
+-->
+<script>
+(function(){
+  try {
+    var t = localStorage.getItem('sm-theme');
+    if (t === 'dark') document.documentElement.classList.add('theme-dark');
+    else if (t === 'light') document.documentElement.classList.add('theme-light');
+  } catch(e) {}
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DESIGN TOKEN SYSTEM
+   ─────────────────────────────────────────────────────────────
+   Naming convention:
+     --color-[role]-[variant]
+
+   Roles:
+     surface   Page/component backgrounds
+     border    Dividers and outlines
+     text      Foreground content
+     interact  Primary interactive (links, buttons, focus)
+     success / warning / danger   Semantic feedback
+
+   All foreground/background pairings documented with their
+   WCAG contrast ratio. AA requires ≥4.5:1 normal text,
+   ≥3:1 large text and UI components.
+
+   To add a new theme: create html.theme-[name] { … } with
+   the same token names. No component CSS changes needed.
+   ============================================================ */
+
+/* ── Light theme (default) ─────────────────────────────────── */
+/*
+  Palette source:
+    olive-leaf  #606c38   interact-default, text-secondary
+    black-forest #283618  text-primary, interact-hover
+    cornsilk    #fefae0   surface-base, text-on-accent
+    sunlit-clay #dda15e   warning accents, dark-mode interact
+    copperwood  #bc6c25   danger, decorative border
+
+  Key WCAG pairs (all ≥ 4.5:1 AA for normal text):
+    black-forest / cornsilk     12.24:1 ✓
+    olive-leaf   / cornsilk      5.40:1 ✓
+    cornsilk     / olive-leaf    5.40:1 ✓  (text-on-accent)
+    black-forest / sunlit-clay   5.72:1 ✓  (warning text)
+    [copperwood on cornsilk = 3.76 — FAILS normal text, not used as text on light bg]
+*/
+:root,
+html.theme-light {
+  color-scheme: light;
+
+  /* Surface */
+  --color-surface-base:    #fefae0;              /* cornsilk — warm canvas */
+  --color-surface-raised:  #fffef7;              /* near-white — cards float above */
+  --color-surface-sunken:  #f3eecc;              /* deeper cream — inputs */
+  --color-surface-overlay: rgba(40,54,24,.52);   /* forest scrim */
+
+  /* Border */
+  --color-border-subtle:   #e8e2b8;
+  --color-border-default:  #d0c890;
+  --color-border-strong:   #b0a568;
+
+  /* Text */
+  --color-text-primary:    #283618;  /* black-forest  — on surface-base: 12.24:1 ✓ */
+  --color-text-secondary:  #606c38;  /* olive-leaf    — on surface-base:  5.40:1 ✓ */
+  --color-text-disabled:   #9a9e6a;  /* muted olive-gray — decorative only */
+  --color-text-on-accent:  #fefae0;  /* cornsilk on olive-leaf: 5.40:1 ✓ */
+  --color-text-inverse:    #fefae0;
+
+  /* Interactive */
+  --color-interact-default: #606c38; /* olive-leaf — cornsilk text: 5.40:1 ✓ */
+  --color-interact-hover:   #283618; /* black-forest */
+  --color-interact-active:  #1a2410;
+  --color-interact-subtle:  #eef0e0; /* faint olive tint */
+  --color-interact-text:    #283618; /* on surface-base: 12.24:1 ✓ */
+  --color-interact-border:  #b0be80;
+
+  /* Success (forest green family) */
+  --color-success-default:  #3d5a24; /* on success-subtle: 6.39:1 ✓ */
+  --color-success-subtle:   #eef3e0;
+  --color-success-text:     #3d5a24;
+  --color-success-border:   #b0c890;
+
+  /* Warning (sunlit-clay family)
+     NOTE: copperwood (#bc6c25) is only 3.76:1 on cornsilk — unusable as text.
+     Use black-forest as text on clay-tinted bg instead (5.72:1 ✓). */
+  --color-warning-default:  #dda15e; /* sunlit-clay — bg/badge only */
+  --color-warning-subtle:   #fdf3e0;
+  --color-warning-text:     #283618; /* black-forest on clay bg: 5.72:1 ✓ */
+  --color-warning-border:   #dda15e;
+
+  /* Danger (burnt copper family) */
+  --color-danger-default:   #922b0f; /* on danger-subtle: 7.39:1 ✓ */
+  --color-danger-subtle:    #fdf0ea;
+  --color-danger-text:      #922b0f;
+  --color-danger-border:    #d09070;
+
+  /* Elevation — forest-tinted shadows */
+  --shadow-sm:    0 1px 3px rgba(40,54,24,.08), 0 1px 2px rgba(40,54,24,.04);
+  --shadow-md:    0 4px 16px rgba(40,54,24,.09), 0 2px 4px rgba(40,54,24,.05);
+  --shadow-lg:    0 16px 48px rgba(40,54,24,.12), 0 4px 8px rgba(40,54,24,.06);
+  --shadow-focus: 0 0 0 3px rgba(96,108,56,.32);
+
+  /* Non-colour tokens (shared) */
+  --font-sans:    'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  --radius-sm:    6px;
+  --radius-md:    12px;
+  --radius-lg:    18px;
+  --radius-full:  9999px;
+  --nav-height:   64px;
+  --duration-fast:  140ms;
+  --duration-base:  220ms;
+  --duration-slow:  380ms;
+  --ease-out:     cubic-bezier(.16,1,.3,1);
+  --ease-in-out:  cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Dark theme ─────────────────────────────────────────────
+   Applied by:
+     a) @media (prefers-color-scheme: dark) when no explicit
+        class is set — no JavaScript needed on first load.
+     b) html.theme-dark class — set by JS toggle and persisted
+        to localStorage. Has higher specificity so it wins.
+   ─────────────────────────────────────────────────────────── */
+/*
+  Dark theme — earthy forest at night.
+  Key WCAG pairs:
+    cornsilk / black-forest     12.24:1 ✓  (text-primary on surface-raised)
+    #c5bb94  / black-forest      6.69:1 ✓  (text-secondary)
+    cornsilk / #1a1f0d          ~14.8:1 ✓  (text-primary on surface-base)
+    sunlit-clay / black-forest   5.72:1 ✓  (interact-text on raised)
+    sunlit-clay / #1a1f0d        7.49:1 ✓  (interact-text on base)
+    black-forest / sunlit-clay   5.72:1 ✓  (text-on-accent)
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light) {
+    color-scheme: dark;
+    --color-surface-base:    #1a1f0d;              /* below black-forest */
+    --color-surface-raised:  #283618;              /* black-forest — cards */
+    --color-surface-sunken:  #0f1208;              /* deepest */
+    --color-surface-overlay: rgba(15,18,8,.68);
+    --color-border-subtle:   #2e3d18;
+    --color-border-default:  #3d5020;
+    --color-border-strong:   #506828;
+    --color-text-primary:    #fefae0;  /* cornsilk — 14.8:1 on base ✓ */
+    --color-text-secondary:  #c5bb94;  /* warm muted — 6.69:1 on raised ✓ */
+    --color-text-disabled:   #7a7a4a;
+    --color-text-on-accent:  #283618;  /* black-forest on clay: 5.72:1 ✓ */
+    --color-text-inverse:    #283618;
+    --color-interact-default: #dda15e; /* sunlit-clay button — forest text: 5.72:1 ✓ */
+    --color-interact-hover:   #e8b070;
+    --color-interact-active:  #bc6c25; /* copperwood pressed */
+    --color-interact-subtle:  #2a2c18;
+    --color-interact-text:    #dda15e; /* on base: 7.49:1 ✓ */
+    --color-interact-border:  #4a5228;
+    --color-success-default:  #a8c872; /* light olive-lime — 8.93:1 ✓ */
+    --color-success-subtle:   #1a2210;
+    --color-success-text:     #a8c872;
+    --color-success-border:   #3d5828;
+    --color-warning-default:  #dda15e; /* sunlit-clay — 7.49:1 ✓ */
+    --color-warning-subtle:   #251a08;
+    --color-warning-text:     #dda15e;
+    --color-warning-border:   #4a3010;
+    --color-danger-default:   #e88060; /* warm orange-red — 6.16:1 ✓ */
+    --color-danger-subtle:    #200c08;
+    --color-danger-text:      #e88060;
+    --color-danger-border:    #4a1c10;
+    --shadow-sm:    0 1px 3px rgba(0,0,0,.30), 0 1px 2px rgba(0,0,0,.22);
+    --shadow-md:    0 4px 16px rgba(0,0,0,.36), 0 2px 4px rgba(0,0,0,.22);
+    --shadow-lg:    0 16px 48px rgba(0,0,0,.50), 0 4px 8px rgba(0,0,0,.32);
+    --shadow-focus: 0 0 0 3px rgba(221,161,94,.36);
+  }
+}
+
+html.theme-dark {
+  color-scheme: dark;
+  --color-surface-base:    #1a1f0d;
+  --color-surface-raised:  #283618;
+  --color-surface-sunken:  #0f1208;
+  --color-surface-overlay: rgba(15,18,8,.68);
+  --color-border-subtle:   #2e3d18;
+  --color-border-default:  #3d5020;
+  --color-border-strong:   #506828;
+  --color-text-primary:    #fefae0;
+  --color-text-secondary:  #c5bb94;
+  --color-text-disabled:   #7a7a4a;
+  --color-text-on-accent:  #283618;
+  --color-text-inverse:    #283618;
+  --color-interact-default: #dda15e;
+  --color-interact-hover:   #e8b070;
+  --color-interact-active:  #bc6c25;
+  --color-interact-subtle:  #2a2c18;
+  --color-interact-text:    #dda15e;
+  --color-interact-border:  #4a5228;
+  --color-success-default:  #a8c872;
+  --color-success-subtle:   #1a2210;
+  --color-success-text:     #a8c872;
+  --color-success-border:   #3d5828;
+  --color-warning-default:  #dda15e;
+  --color-warning-subtle:   #251a08;
+  --color-warning-text:     #dda15e;
+  --color-warning-border:   #4a3010;
+  --color-danger-default:   #e88060;
+  --color-danger-subtle:    #200c08;
+  --color-danger-text:      #e88060;
+  --color-danger-border:    #4a1c10;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.30), 0 1px 2px rgba(0,0,0,.22);
+  --shadow-md:    0 4px 16px rgba(0,0,0,.36), 0 2px 4px rgba(0,0,0,.22);
+  --shadow-lg:    0 16px 48px rgba(0,0,0,.50), 0 4px 8px rgba(0,0,0,.32);
+  --shadow-focus: 0 0 0 3px rgba(221,161,94,.36);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--color-surface-base);
+  color: var(--color-text-primary);
+  overflow-x: hidden;
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    color           var(--duration-slow) var(--ease-in-out);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  color: var(--color-text-primary);
+}
+
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+
+/* Focus visible — AA-compliant ring */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+.container {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-interact-text);
+  margin-bottom: 10px;
+}
+
+.section-heading {
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.section-body {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  max-width: 540px;
+  line-height: 1.75;
+}
+
+/* ============================================================
+   COMPONENT: BUTTON
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 22px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color     var(--duration-fast) var(--ease-out),
+    color            var(--duration-fast) var(--ease-out),
+    transform        var(--duration-fast) var(--ease-out),
+    box-shadow       var(--duration-fast) var(--ease-out);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background-color: var(--color-interact-default);
+  color: var(--color-text-on-accent);
+  box-shadow: 0 3px 12px rgba(78,57,222,.25);
+}
+.btn-primary:hover {
+  background-color: var(--color-interact-hover);
+  box-shadow: 0 6px 20px rgba(78,57,222,.30);
+}
+.btn-primary:active { background-color: var(--color-interact-active); }
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border: 1.5px solid var(--color-border-default);
+}
+.btn-ghost:hover {
+  border-color: var(--color-interact-border);
+  background-color: var(--color-interact-subtle);
+  color: var(--color-interact-text);
+}
+
+/* ============================================================
+   COMPONENT: BADGE / TAG
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.badge-accent  { background: var(--color-interact-subtle);  color: var(--color-interact-text);  border: 1px solid var(--color-interact-border); }
+.badge-success { background: var(--color-success-subtle);   color: var(--color-success-text);   border: 1px solid var(--color-success-border); }
+.badge-warning { background: var(--color-warning-subtle);   color: var(--color-warning-text);   border: 1px solid var(--color-warning-border); }
+.badge-muted   { background: var(--color-surface-sunken);   color: var(--color-text-secondary); border: 1px solid var(--color-border-default); }
+
+/* ============================================================
+   COMPONENT: NAV
+   ============================================================ */
+#nav {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 100;
+  height: var(--nav-height);
+  background-color: color-mix(in srgb, var(--color-surface-base) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-border-subtle);
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-slow) var(--ease-in-out),
+    box-shadow       var(--duration-base) var(--ease-out);
+}
+#nav.scrolled { box-shadow: var(--shadow-sm); }
+
+.nav-inner {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-interact-default);
+  color: var(--color-text-on-accent);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background-color var(--duration-fast);
+}
+.nav-logo:hover { background-color: var(--color-interact-hover); }
+
+.nav-links {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+}
+.nav-link {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast), background-color var(--duration-fast);
+}
+.nav-link:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-sunken);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-default);
+  color: var(--color-text-secondary);
+  display: grid;
+  place-items: center;
+  transition:
+    border-color     var(--duration-fast),
+    color            var(--duration-fast),
+    background-color var(--duration-fast);
+}
+.theme-toggle:hover {
+  border-color: var(--color-interact-border);
+  color: var(--color-interact-text);
+  background-color: var(--color-interact-subtle);
+}
+/* Show sun in dark mode, moon in light mode */
+.icon-sun  { display: none; }
+.icon-moon { display: block; }
+html.theme-dark .icon-sun  { display: block; }
+html.theme-dark .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not(.theme-light) .icon-sun  { display: block; }
+  :root:not(.theme-light) .icon-moon { display: none; }
+}
+
+/* Command palette trigger */
+.cmd-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-default);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition:
+    border-color     var(--duration-fast),
+    color            var(--duration-fast),
+    background-color var(--duration-fast);
+}
+.cmd-trigger:hover {
+  border-color: var(--color-interact-border);
+  color: var(--color-interact-text);
+  background-color: var(--color-interact-subtle);
+}
+.cmd-trigger kbd {
+  font-family: inherit;
+  background-color: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+}
+
+/* Mobile */
+.mobile-menu-btn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-default);
+  color: var(--color-text-secondary);
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.mobile-drawer {
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-surface-raised);
+  border-bottom: 1px solid var(--color-border-default);
+  padding: 8px 24px 16px;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.mobile-drawer.open { display: flex; }
+.mobile-drawer a {
+  padding: 12px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.mobile-drawer a:last-child { border-bottom: none; }
+
+/* ============================================================
+   SCROLL REVEAL
+   Only animates elements that enter viewport. Respects
+   prefers-reduced-motion.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity   var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   SECTION: HERO
+   ============================================================ */
+#hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-block: calc(var(--nav-height) + 72px) 96px;
+  padding-inline: 24px;
+}
+
+/* Ambient blobs — light, intentional, not "vibe coded green matrix" */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+  animation: blob-drift 12s ease-in-out infinite;
+}
+.hero-blob-1 {
+  width: 480px; height: 480px;
+  background: color-mix(in srgb, var(--color-interact-default) 16%, transparent);
+  top: -10%; right: -8%;
+  animation-delay: 0s;
+}
+.hero-blob-2 {
+  width: 360px; height: 360px;
+  background: color-mix(in srgb, var(--color-success-default) 12%, transparent);
+  bottom: 5%; left: -6%;
+  animation-delay: -5s;
+}
+.hero-blob-3 {
+  width: 260px; height: 260px;
+  background: color-mix(in srgb, var(--color-warning-default) 14%, transparent);
+  top: 42%; left: 28%;
+  animation-delay: -9s;
+}
+@keyframes blob-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  40%     { transform: translate(22px,-18px) scale(1.03); }
+  70%     { transform: translate(-16px,14px) scale(.97); }
+}
+
+.hero-body {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 100%;
+  text-align: center;
+}
+
+.hero-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-name {
+  font-size: clamp(52px, 9vw, 92px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1;
+  margin-bottom: 20px;
+  color: var(--color-text-primary);
+}
+.hero-name-accent {
+  color: var(--color-interact-text);
+}
+
+.hero-role-line {
+  font-size: clamp(17px, 2.2vw, 22px);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  min-height: 32px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.hero-role-typed { color: var(--color-interact-text); font-weight: 700; }
+.hero-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background-color: var(--color-interact-default);
+  vertical-align: middle;
+  animation: cursor-blink 1s step-end infinite;
+}
+@keyframes cursor-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.hero-tagline {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  max-width: 520px;
+  margin-inline: auto;
+  margin-bottom: 36px;
+  line-height: 1.8;
+}
+.hero-tagline a {
+  color: var(--color-interact-text);
+  font-weight: 600;
+}
+.hero-tagline a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.stat-chip-num {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--color-interact-text);
+}
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-success-default);
+  flex-shrink: 0;
+  animation: pulse 2.2s ease infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-success-default) 50%, transparent); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--color-text-disabled);
+}
+.hero-scroll-arrow {
+  width: 16px; height: 16px;
+  border-right: 1.5px solid var(--color-text-disabled);
+  border-bottom: 1.5px solid var(--color-text-disabled);
+  transform: rotate(45deg);
+  animation: scroll-bounce .9s ease-in-out infinite alternate;
+}
+@keyframes scroll-bounce { from{transform:rotate(45deg) translateY(-3px)} to{transform:rotate(45deg) translateY(3px)} }
+
+/* ============================================================
+   SECTION: ABOUT
+   ============================================================ */
+#about {
+  padding-block: 96px;
+  background-color: var(--color-surface-raised);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 72px;
+  align-items: start;
+}
+.about-photo-wrap { position: relative; }
+.about-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-interact-subtle);
+  border: 1.5px solid var(--color-border-default);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.about-photo-initials {
+  font-family: var(--font-display);
+  font-size: 80px;
+  font-weight: 900;
+  color: var(--color-interact-text);
+  opacity: .3;
+  user-select: none;
+}
+.about-photo-badge {
+  position: absolute;
+  bottom: -14px;
+  right: -14px;
+  background-color: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-md);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+
+.about-text p {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+.about-text p strong { color: var(--color-text-primary); font-weight: 600; }
+
+.what-i-do {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+.what-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  background-color: var(--color-surface-base);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-fast);
+}
+.what-chip:hover {
+  border-color: var(--color-interact-border);
+  color: var(--color-interact-text);
+  background-color: var(--color-interact-subtle);
+}
+
+/* ============================================================
+   SECTION: SKILLS
+   ============================================================ */
+#skills { padding-block: 96px; }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+  margin-top: 48px;
+}
+.skill-group {
+  background-color: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-fast),
+    box-shadow       var(--duration-base) var(--ease-out),
+    transform        var(--duration-base) var(--ease-out);
+}
+.skill-group:hover {
+  border-color: var(--color-interact-border);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+.skill-group-glyph { font-size: 22px; margin-bottom: 10px; }
+.skill-group-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 14px;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.skill-tag {
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  transition:
+    background-color var(--duration-fast),
+    color            var(--duration-fast),
+    border-color     var(--duration-fast);
+}
+.skill-tag:hover {
+  background-color: var(--color-interact-subtle);
+  color: var(--color-interact-text);
+  border-color: var(--color-interact-border);
+}
+
+/* ============================================================
+   SECTION: PROJECTS
+   ============================================================ */
+#projects {
+  padding-block: 96px;
+  background-color: var(--color-surface-raised);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+
+.filter-bar {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-block: 40px 28px;
+  padding: 5px;
+  background-color: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  width: fit-content;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.filter-btn {
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition:
+    background-color var(--duration-fast),
+    color            var(--duration-fast),
+    box-shadow       var(--duration-fast);
+}
+.filter-btn:hover { color: var(--color-text-primary); }
+.filter-btn[aria-pressed="true"] {
+  background-color: var(--color-surface-raised);
+  color: var(--color-interact-text);
+  box-shadow: var(--shadow-sm);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  background-color: var(--color-surface-base);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-fast),
+    box-shadow       var(--duration-base) var(--ease-out),
+    transform        var(--duration-base) var(--ease-out);
+}
+.project-card:hover {
+  border-color: var(--color-interact-border);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+.project-card[hidden] { display: none; }
+
+.project-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.project-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+.project-desc {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  flex: 1;
+}
+.project-stack { display: flex; flex-wrap: wrap; gap: 5px; }
+.project-links {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-subtle);
+  margin-top: auto;
+}
+.project-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-disabled);
+  transition: color var(--duration-fast);
+}
+.project-link:hover { color: var(--color-interact-text); }
+
+/* ============================================================
+   SECTION: JOURNEY (TIMELINE)
+   ============================================================ */
+#journey { padding-block: 96px; }
+.timeline {
+  margin-top: 48px;
+  padding-left: 28px;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 1.5px;
+  background-color: var(--color-border-default);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.timeline-item { position: relative; margin-bottom: 28px; }
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-dot {
+  position: absolute;
+  left: -24px;
+  top: 14px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: var(--color-surface-raised);
+  border: 2px solid var(--color-interact-default);
+  transition:
+    background-color var(--duration-fast),
+    border-color     var(--duration-slow) var(--ease-in-out);
+  z-index: 1;
+}
+.timeline-item:hover .timeline-dot { background-color: var(--color-interact-default); }
+
+.timeline-card {
+  background-color: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-fast),
+    box-shadow       var(--duration-base) var(--ease-out);
+}
+.timeline-item:hover .timeline-card {
+  border-color: var(--color-interact-border);
+  box-shadow: var(--shadow-sm);
+}
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-interact-text);
+  margin-bottom: 5px;
+}
+.timeline-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+.timeline-sub {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   SECTION: CERTIFICATIONS
+   ============================================================ */
+#certifications {
+  padding-block: 60px 96px;
+  background-color: var(--color-surface-raised);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
+  margin-top: 48px;
+}
+.cert-card {
+  display: flex;
+  gap: 18px;
+  padding: 22px;
+  background-color: var(--color-surface-base);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-fast),
+    box-shadow       var(--duration-base) var(--ease-out),
+    transform        var(--duration-base) var(--ease-out);
+}
+.cert-card:hover {
+  border-color: var(--color-interact-border);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+.cert-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  background-color: var(--color-surface-sunken);
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.cert-issuer {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--color-text-disabled);
+  margin-bottom: 4px;
+}
+.cert-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.cert-date { font-size: 12.5px; color: var(--color-text-secondary); margin-bottom: 10px; }
+.cert-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-interact-text);
+}
+.cert-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ============================================================
+   SECTION: CONTACT
+   ============================================================ */
+#contact { padding-block: 96px; }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: start;
+}
+.contact-links { display: flex; flex-direction: column; gap: 10px; margin-top: 32px; }
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background-color: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration-slow) var(--ease-in-out),
+    border-color     var(--duration-fast),
+    transform        var(--duration-base) var(--ease-out),
+    box-shadow       var(--duration-base) var(--ease-out);
+}
+.contact-item:hover {
+  border-color: var(--color-interact-border);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+.contact-item-icon {
+  width: 38px; height: 38px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-interact-subtle);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.contact-item-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--color-text-disabled);
+  margin-bottom: 2px;
+}
+.contact-item-value {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.contact-panel {
+  background-color: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.contact-panel-title {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 10px;
+}
+.contact-panel-body {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+.contact-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  padding-block: 28px;
+  border-top: 1px solid var(--color-border-subtle);
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-disabled);
+  transition:
+    border-color     var(--duration-slow) var(--ease-in-out),
+    background-color var(--duration-slow) var(--ease-in-out);
+}
+footer a { color: var(--color-interact-text); font-weight: 500; }
+footer a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ============================================================
+   COMPONENT: COMMAND PALETTE
+   ============================================================ */
+#cmd-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background-color: var(--color-surface-overlay);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 100px;
+  padding-inline: 16px;
+}
+#cmd-overlay.open { display: flex; }
+
+#cmd-box {
+  width: 100%;
+  max-width: 560px;
+  background-color: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+#cmd-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+#cmd-search-icon { color: var(--color-text-disabled); font-size: 14px; flex-shrink: 0; }
+#cmd-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 14px;
+  background: transparent;
+  color: var(--color-text-primary);
+}
+#cmd-input::placeholder { color: var(--color-text-disabled); }
+#cmd-esc-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-disabled);
+  background-color: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+#cmd-list { max-height: 360px; overflow-y: auto; padding: 6px; }
+.cmd-group-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--color-text-disabled);
+  padding: 8px 10px 4px;
+}
+.cmd-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--duration-fast);
+}
+.cmd-row:hover,
+.cmd-row[aria-selected="true"] { background-color: var(--color-interact-subtle); }
+.cmd-row:hover .cmd-row-label,
+.cmd-row[aria-selected="true"] .cmd-row-label { color: var(--color-interact-text); }
+.cmd-row-icon {
+  width: 30px; height: 30px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-sunken);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: background-color var(--duration-slow) var(--ease-in-out);
+}
+.cmd-row-label { font-size: 13.5px; font-weight: 500; color: var(--color-text-primary); }
+.cmd-row-hint { margin-left: auto; font-size: 11px; color: var(--color-text-disabled); white-space: nowrap; }
+.cmd-empty { padding: 36px; text-align: center; font-size: 14px; color: var(--color-text-secondary); }
+#cmd-footer-bar {
+  border-top: 1px solid var(--color-border-subtle);
+  padding: 8px 18px;
+  display: flex;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-disabled);
+}
+#cmd-footer-bar kbd {
+  background-color: var(--color-surface-sunken);
+  border: 1px solid var(--color-border-default);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: inherit;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 800px) {
+  .nav-links, .nav-actions .btn { display: none; }
+  .mobile-menu-btn { display: flex; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-photo-wrap { display: flex; justify-content: center; }
+  .about-photo { max-width: 220px; }
+  .about-photo-badge { right: 0; }
+  .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+}
+@media (max-width: 520px) {
+  .projects-grid, .certs-grid, .skills-grid { grid-template-columns: 1fr; }
+  #cmd-overlay { padding-top: 24px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────────── -->
+<nav id="nav" role="navigation" aria-label="Site navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="Samuel Maclar home">SM</a>
+    <div class="nav-links" role="list">
+      <a href="#about"          class="nav-link" role="listitem">About</a>
+      <a href="#skills"         class="nav-link" role="listitem">Skills</a>
+      <a href="#projects"       class="nav-link" role="listitem">Projects</a>
+      <a href="#journey"        class="nav-link" role="listitem">Journey</a>
+      <a href="#contact"        class="nav-link" role="listitem">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="cmd-trigger" id="cmdTrigger" aria-label="Open command palette" aria-keyshortcuts="Control+K Meta+K">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Search <kbd>⌘K</kbd>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle colour scheme">
+        <!-- Moon: show in light mode -->
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <!-- Sun: show in dark mode -->
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <a href="mailto:samuelmaclar@radiantinnovatech.com" class="btn btn-primary">Say Hello</a>
+    </div>
+    <button class="mobile-menu-btn" id="mobileTrigger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="mobile-drawer" id="mobileDrawer" role="menu">
+    <a href="#about"    role="menuitem">About</a>
+    <a href="#skills"   role="menuitem">Skills</a>
+    <a href="#projects" role="menuitem">Projects</a>
+    <a href="#journey"  role="menuitem">Journey</a>
+    <a href="#contact"  role="menuitem">Contact</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+<section id="hero" aria-labelledby="hero-heading">
+  <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+  <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+  <div class="hero-blob hero-blob-3" aria-hidden="true"></div>
+
+  <div class="hero-body">
+    <div class="hero-location" aria-label="Location: Tarkwa, Ghana, West Africa">
+      🇬🇭 Tarkwa, Ghana · West Africa
+    </div>
+
+    <h1 class="hero-name" id="hero-heading">
+      Samuel <span class="hero-name-accent">Maclar</span>
+    </h1>
+
+    <p class="hero-role-line" aria-live="polite" aria-label="Role description">
+      I'm a&nbsp;<span class="hero-role-typed" id="typingEl"></span><span class="hero-cursor" aria-hidden="true"></span>
+    </p>
+
+    <p class="hero-tagline">
+      Building AI-powered security tools and software products from the heart of Ghana.
+      Final-year BSc Cybersecurity student &amp; co-founder of
+      <a href="https://radiantinnovatech.com" target="_blank" rel="noopener noreferrer">Radiant InnovaTech</a>.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="https://github.com/RadiantSeraph1" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">GitHub →</a>
+    </div>
+
+    <div class="hero-stats" aria-label="Quick stats">
+      <div class="stat-chip">
+        <span class="stat-chip-num" data-count-to="8" aria-label="8 projects built">0</span>
+        <span>Projects Built</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-num" data-count-to="2" aria-label="2 certifications">0</span>
+        <span>Certifications</span>
+      </div>
+      <div class="stat-chip" aria-label="Currently building CyberSentinel">
+        <span class="live-dot" aria-hidden="true"></span>
+        Building CyberSentinel
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="hero-scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─────────────────────────────────────────────────────────── -->
+<section id="about" aria-labelledby="about-heading">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal">
+        <div class="about-photo" id="photoWrap">
+          <img src="samuel.jpg" alt="Samuel Nana Kweku Abekah Maclar">
+        </div>
+        <div class="about-photo-badge">🎓 Final Year · UMaT</div>
+      </div>
+
+      <div class="about-text reveal" style="--reveal-delay:120ms">
+        <p class="section-eyebrow">About Me</p>
+        <h2 class="section-heading" id="about-heading">Student. Builder.<br>Security Researcher.</h2>
+
+        <p>I'm <strong>Samuel Nana Kweku Abekah Maclar</strong> — a final-year BSc Cybersecurity student at the University of Mines and Technology, Tarkwa, and co-founder &amp; CEO of <strong>Radiant InnovaTech</strong>.</p>
+
+        <p>I work at the intersection of cybersecurity and AI. While studying how systems are attacked, I'm building the tools that defend them — from ML-powered threat detection to LLM-driven security assistants tuned for African threat landscapes.</p>
+
+        <p>My current focus is <strong>CyberSentinel</strong>: Africa's AI-powered SOC co-pilot, built to give African organisations enterprise-grade security intelligence at SME-accessible pricing. Alongside that, I'm completing my Final Year Project — a STRIDE-based conversational threat modelling assistant called GRC Auditor.</p>
+
+        <div class="what-i-do">
+          <div class="what-chip">🔐 Cybersecurity</div>
+          <div class="what-chip">🤖 AI / LLM Engineering</div>
+          <div class="what-chip">🌐 Full-Stack Web</div>
+          <div class="what-chip">📱 Mobile Development</div>
+          <div class="what-chip">🚀 Startup Building</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SKILLS ─────────────────────────────────────────────────────────── -->
+<section id="skills" aria-labelledby="skills-heading">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Tech Stack</p>
+      <h2 class="section-heading" id="skills-heading">What I Work With</h2>
+      <p class="section-body">Spanning full-stack web, AI/ML pipelines, and offensive &amp; defensive security tooling.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group reveal" style="--reveal-delay:40ms">
+        <div class="skill-group-glyph" aria-hidden="true">🎨</div>
+        <div class="skill-group-label">Frontend</div>
+        <div class="skill-tags">
+          <span class="skill-tag">React</span><span class="skill-tag">React Native</span>
+          <span class="skill-tag">Tailwind CSS</span><span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">HTML / CSS</span><span class="skill-tag">Vite</span>
+          <span class="skill-tag">Zustand</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" style="--reveal-delay:80ms">
+        <div class="skill-group-glyph" aria-hidden="true">⚙️</div>
+        <div class="skill-group-label">Backend</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">FastAPI</span>
+          <span class="skill-tag">Node.js</span><span class="skill-tag">Express</span>
+          <span class="skill-tag">PostgreSQL</span><span class="skill-tag">ChromaDB</span>
+          <span class="skill-tag">JWT / RBAC</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" style="--reveal-delay:120ms">
+        <div class="skill-group-glyph" aria-hidden="true">🤖</div>
+        <div class="skill-group-label">AI &amp; ML</div>
+        <div class="skill-tags">
+          <span class="skill-tag">LangChain</span><span class="skill-tag">LangGraph</span>
+          <span class="skill-tag">Claude API</span><span class="skill-tag">RAG Pipelines</span>
+          <span class="skill-tag">XGBoost</span><span class="skill-tag">Isolation Forest</span>
+          <span class="skill-tag">LSTM</span><span class="skill-tag">Ollama</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" style="--reveal-delay:160ms">
+        <div class="skill-group-glyph" aria-hidden="true">🛡️</div>
+        <div class="skill-group-label">Security</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Ethical Hacking</span><span class="skill-tag">STRIDE</span>
+          <span class="skill-tag">MITRE ATT&amp;CK</span><span class="skill-tag">Burp Suite</span>
+          <span class="skill-tag">Wireshark</span><span class="skill-tag">Ghidra</span>
+          <span class="skill-tag">Bash Scripting</span>
+        </div>
+      </div>
+      <div class="skill-group reveal" style="--reveal-delay:200ms">
+        <div class="skill-group-glyph" aria-hidden="true">☁️</div>
+        <div class="skill-group-label">DevOps &amp; Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">AWS EC2</span><span class="skill-tag">Nginx</span>
+          <span class="skill-tag">PM2</span><span class="skill-tag">Git</span>
+          <span class="skill-tag">Linux</span><span class="skill-tag">Postman</span>
+          <span class="skill-tag">Kali Linux</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ───────────────────────────────────────────────────────── -->
+<section id="projects" aria-labelledby="projects-heading">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Portfolio</p>
+      <h2 class="section-heading" id="projects-heading">Things I've Built</h2>
+      <p class="section-body">From AI security platforms to full-stack business tools — shipped solo and with a co-founder.</p>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="Filter projects by category">
+      <button class="filter-btn" data-filter="all"      aria-pressed="true">All</button>
+      <button class="filter-btn" data-filter="ai"       aria-pressed="false">AI &amp; ML</button>
+      <button class="filter-btn" data-filter="security" aria-pressed="false">Security</button>
+      <button class="filter-btn" data-filter="web"      aria-pressed="false">Web</button>
+      <button class="filter-btn" data-filter="research" aria-pressed="false">Research</button>
+    </div>
+
+    <div class="projects-grid" id="projectsGrid">
+
+      <article class="project-card reveal" data-cats="ai security" style="--reveal-delay:40ms">
+        <div class="project-header">
+          <h3 class="project-title">CyberSentinel</h3>
+          <span class="badge badge-warning">In Dev</span>
+        </div>
+        <p class="project-desc">Africa's AI-powered SOC co-pilot. Combines XGBoost, Isolation Forest, and LSTM for threat detection with LLM-powered plain-English analysis and MITRE ATT&amp;CK auto-mapping — built for African organisations at 30× lower cost than enterprise SIEM tools.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">FastAPI</span>
+          <span class="badge badge-accent">React</span>
+          <span class="badge badge-accent">Claude API</span>
+          <span class="badge badge-accent">LangGraph</span>
+          <span class="badge badge-accent">XGBoost</span>
+          <span class="badge badge-warning">Flagship</span>
+        </div>
+        <div class="project-links">
+          <a href="https://radiantinnovatech.com" target="_blank" rel="noopener noreferrer" class="project-link">🌐 Company site</a>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="web" style="--reveal-delay:80ms">
+        <div class="project-header">
+          <h3 class="project-title">Radiant Platform</h3>
+          <span class="badge badge-success">Live</span>
+        </div>
+        <p class="project-desc">Full-stack internal business tools + PWA client portal. 13 modules — CRM, Kanban, Finance, HR, AI Assistant, Documents. 5-role RBAC, JWT/OTP/TOTP auth, Paystack, Brevo email, mNotify SMS.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">React</span>
+          <span class="badge badge-accent">Node.js</span>
+          <span class="badge badge-accent">PostgreSQL</span>
+          <span class="badge badge-accent">Tailwind</span>
+          <span class="badge badge-accent">PWA</span>
+        </div>
+        <div class="project-links">
+          <span class="project-link" style="cursor:default">🔒 Private — internal use</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="ai" style="--reveal-delay:120ms">
+        <div class="project-header">
+          <h3 class="project-title">Ray AI Assistant</h3>
+          <span class="badge badge-success">Live</span>
+        </div>
+        <p class="project-desc">Conversational AI assistant with long-term memory. LangGraph agent loop with ChromaDB RAG retains context across sessions. mNotify SMS OTP auth. Deployed on AWS EC2 with FastAPI.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">FastAPI</span>
+          <span class="badge badge-accent">LangGraph</span>
+          <span class="badge badge-accent">Claude API</span>
+          <span class="badge badge-accent">ChromaDB</span>
+        </div>
+        <div class="project-links">
+          <a href="https://ray.radiantinnovatech.com" target="_blank" rel="noopener noreferrer" class="project-link">🌐 Live</a>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="ai security research" style="--reveal-delay:40ms">
+        <div class="project-header">
+          <h3 class="project-title">GRC Auditor <span style="font-size:12px;font-weight:500;color:var(--color-text-disabled)">(FYP)</span></h3>
+          <span class="badge badge-muted">In Dev</span>
+        </div>
+        <p class="project-desc">Final Year Project. STRIDE-based conversational threat modelling assistant for web apps and networks. LangGraph agents guide analysts through structured threat identification and mitigation planning.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">FastAPI</span>
+          <span class="badge badge-accent">LangGraph</span>
+          <span class="badge badge-accent">Claude API</span>
+          <span class="badge badge-accent">STRIDE</span>
+          <span class="badge badge-warning">Academic</span>
+        </div>
+        <div class="project-links">
+          <span class="project-link" style="cursor:default">🎓 Academic project</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="web" style="--reveal-delay:80ms">
+        <div class="project-header">
+          <h3 class="project-title">Radiant OS</h3>
+          <span class="badge badge-muted">In Dev</span>
+        </div>
+        <p class="project-desc">Browser-based cloud operating system. Monaco code editor, file manager, and terminal — all in-browser over WebSockets. JWT-secured sessions. Targets developers needing a lightweight cloud dev environment.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">Node.js</span>
+          <span class="badge badge-accent">WebSockets</span>
+          <span class="badge badge-accent">Monaco Editor</span>
+          <span class="badge badge-accent">JWT</span>
+        </div>
+        <div class="project-links">
+          <span class="project-link" style="cursor:default">🛠️ In progress</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="security research" style="--reveal-delay:120ms">
+        <div class="project-header">
+          <h3 class="project-title">SecureVault</h3>
+          <span class="badge badge-warning">Research</span>
+        </div>
+        <p class="project-desc">Deliberately vulnerable captive portal for FYP research. Intentional OWASP vulnerabilities validate GRC Auditor's threat detection capability. Simulates real captive portal environments on OpenWrt-style architecture.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">PHP</span>
+          <span class="badge badge-accent">MySQL</span>
+          <span class="badge badge-accent">OWASP</span>
+          <span class="badge badge-warning">Intentionally Vulnerable</span>
+        </div>
+        <div class="project-links">
+          <span class="project-link" style="cursor:default">🔬 Research only</span>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="web" style="--reveal-delay:40ms">
+        <div class="project-header">
+          <h3 class="project-title">Radiant InnovaTech Website</h3>
+          <span class="badge badge-success">Live</span>
+        </div>
+        <p class="project-desc">Public marketing site for Radiant InnovaTech. Showcases CyberSentinel platform, solutions, security approach, and pricing. Clean SaaS design with platform metrics, industry use cases, and demo request flow.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">HTML</span>
+          <span class="badge badge-accent">CSS</span>
+          <span class="badge badge-accent">JavaScript</span>
+          <span class="badge badge-accent">Nginx</span>
+        </div>
+        <div class="project-links">
+          <a href="https://radiantinnovatech.com" target="_blank" rel="noopener noreferrer" class="project-link">🌐 Live site</a>
+        </div>
+      </article>
+
+      <article class="project-card reveal" data-cats="web" style="--reveal-delay:80ms">
+        <div class="project-header">
+          <h3 class="project-title">Simple Expense Tracker</h3>
+          <span class="badge badge-success">Live</span>
+        </div>
+        <p class="project-desc">Client-side personal finance tracker. Track income and expenses, visualise spending categories, export data — no backend required. Focused on simplicity and mobile usability.</p>
+        <div class="project-stack">
+          <span class="badge badge-accent">HTML</span>
+          <span class="badge badge-accent">CSS</span>
+          <span class="badge badge-accent">JavaScript</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/RadiantNightingale1/Simple-Expense-Tracker" target="_blank" rel="noopener noreferrer" class="project-link">GitHub →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── JOURNEY ────────────────────────────────────────────────────────── -->
+<section id="journey" aria-labelledby="journey-heading">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Timeline</p>
+      <h2 class="section-heading" id="journey-heading">My Journey</h2>
+      <p class="section-body">Education, leadership, and the path that led here.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal" style="--reveal-delay:40ms">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2025 – Present</div>
+          <div class="timeline-title">Co-Founder &amp; CEO · Radiant InnovaTech</div>
+          <div class="timeline-sub">Building CyberSentinel — Africa's AI-powered SOC platform. Leading product, architecture, and go-to-market strategy from Tarkwa, Ghana.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="--reveal-delay:80ms">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2022 – Present</div>
+          <div class="timeline-title">BSc Cybersecurity · University of Mines and Technology, Tarkwa</div>
+          <div class="timeline-sub">Final-year student. FYP: GRC Auditor — STRIDE-based conversational threat modelling assistant. Supervised by Dr. Abdel-Fatao.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="--reveal-delay:120ms">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">2023 – 2024</div>
+          <div class="timeline-title">Executive Member · UMaT Cybersecurity Club</div>
+          <div class="timeline-sub">Reviewed club projects with the executive team, provided technical feedback, and supported junior members.</div>
+        </div>
+      </div>
+      <div class="timeline-item reveal" style="--reveal-delay:160ms">
+        <div class="timeline-dot" aria-hidden="true"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">Before 2022</div>
+          <div class="timeline-title">WASSCE General Science · St. Mary's Boys SHS, Apowa, Takoradi</div>
+          <div class="timeline-sub">Early foundation in mathematics, science, and computing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CERTIFICATIONS ─────────────────────────────────────────────────── -->
+<section id="certifications" aria-labelledby="certs-heading">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-eyebrow">Credentials</p>
+      <h2 class="section-heading" id="certs-heading">Certifications</h2>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card reveal" style="--reveal-delay:40ms">
+        <div class="cert-icon" aria-hidden="true">🛡️</div>
+        <div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <div class="cert-name">Introduction to Cybersecurity</div>
+          <div class="cert-date">April 5, 2023</div>
+          <a href="https://www.credly.com" target="_blank" rel="noopener noreferrer" class="cert-link">View credential ↗</a>
+        </div>
+      </div>
+      <div class="cert-card reveal" style="--reveal-delay:80ms">
+        <div class="cert-icon" aria-hidden="true">📡</div>
+        <div>
+          <div class="cert-issuer">HUAWEI ICT Academy</div>
+          <div class="cert-name">Data Communications and Networking</div>
+          <div class="cert-date">Verified</div>
+          <a href="https://www.credly.com/badges/46da4c1f-a2a5-4486-8168-5ec43592f83b/public_url" target="_blank" rel="noopener noreferrer" class="cert-link">View credential ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ────────────────────────────────────────────────────────── -->
+<section id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="section-eyebrow">Get In Touch</p>
+        <h2 class="section-heading" id="contact-heading">Let's Build<br><span style="color:var(--color-interact-text)">Something</span></h2>
+        <p style="font-size:15px;color:var(--color-text-secondary);line-height:1.8;margin-bottom:0">Open to collaborations, research partnerships, internship opportunities, and conversations about AI, cybersecurity, or building for Africa.</p>
+        <div class="contact-links">
+          <a href="mailto:samuelmaclar@radiantinnovatech.com" class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">✉️</div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value">samuelmaclar@radiantinnovatech.com</div>
+            </div>
+          </a>
+          <a href="https://github.com/RadiantSeraph1" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">💻</div>
+            <div>
+              <div class="contact-item-label">GitHub</div>
+              <div class="contact-item-value">RadiantSeraph1</div>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/samuel-maclar-1a0793250" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">🔗</div>
+            <div>
+              <div class="contact-item-label">LinkedIn</div>
+              <div class="contact-item-value">samuel-maclar-1a0793250</div>
+            </div>
+          </a>
+          <a href="tel:+233504555100" class="contact-item">
+            <div class="contact-item-icon" aria-hidden="true">📞</div>
+            <div>
+              <div class="contact-item-label">Phone</div>
+              <div class="contact-item-value">+233 504 555 100</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal" style="--reveal-delay:120ms">
+        <div class="contact-panel">
+          <div class="contact-panel-title">Currently available for</div>
+          <div class="contact-panel-body">Internships, research collaborations, freelance projects, and advisory conversations around AI, cybersecurity, and building for African markets.</div>
+          <div class="contact-badges">
+            <span class="badge badge-success">Open to Opportunities</span>
+            <span class="badge badge-muted">Freelance</span>
+            <span class="badge badge-muted">Research</span>
+            <span class="badge badge-muted">Internship</span>
+            <span class="badge badge-warning">Based in Ghana</span>
+          </div>
+          <a href="https://radiantinnovatech.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Visit Radiant InnovaTech →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────────────────────────── -->
+<footer>
+  <p>© 2025 Samuel Nana Kweku Abekah Maclar ·
+    <a href="https://radiantinnovatech.com" target="_blank" rel="noopener noreferrer">Radiant InnovaTech</a> ·
+    Tarkwa, Ghana
+  </p>
+</footer>
+
+<!-- ─── COMMAND PALETTE ────────────────────────────────────────────────── -->
+<div id="cmd-overlay" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div id="cmd-box">
+    <div id="cmd-input-row">
+      <span id="cmd-search-icon" aria-hidden="true">🔍</span>
+      <input id="cmd-input" type="search" placeholder="Search projects, sections, links…" autocomplete="off" aria-autocomplete="list" aria-controls="cmd-list">
+      <span id="cmd-esc-hint" aria-hidden="true">ESC</span>
+    </div>
+    <div id="cmd-list" role="listbox"></div>
+    <div id="cmd-footer-bar" aria-hidden="true">
+      <span><kbd>↑↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> open</span>
+      <span><kbd>ESC</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+'use strict';
+
+/* ── Theme toggle ─────────────────────────────────────────────────────── */
+(function(){
+  var btn = document.getElementById('themeToggle');
+  var html = document.documentElement;
+  btn.addEventListener('click', function(){
+    var isDark = html.classList.toggle('theme-dark');
+    html.classList.toggle('theme-light', !isDark);
+    try { localStorage.setItem('sm-theme', isDark ? 'dark' : 'light'); } catch(e){}
+    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+  });
+})();
+
+/* ── Typing animation ─────────────────────────────────────────────────── */
+(function(){
+  var roles = ['Cybersecurity Student','AI Systems Builder','Startup Co-Founder','Security Researcher','Full-Stack Developer'];
+  var el = document.getElementById('typingEl');
+  var ri = 0, ci = 0, del = false;
+  function tick(){
+    var r = roles[ri];
+    el.textContent = del ? r.slice(0, ci--) : r.slice(0, ci++);
+    var d = del ? 38 : 75;
+    if (!del && ci > r.length) { d = 1900; del = true; }
+    else if (del && ci < 0)    { del = false; ri = (ri+1) % roles.length; ci = 0; d = 350; }
+    setTimeout(tick, d);
+  }
+  tick();
+})();
+
+/* ── Nav scroll shadow ────────────────────────────────────────────────── */
+(function(){
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('scrolled', window.scrollY > 16); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* ── Stat counters ────────────────────────────────────────────────────── */
+(function(){
+  var els = document.querySelectorAll('[data-count-to]');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      var el = e.target, target = +el.dataset.countTo;
+      var dur = 1000, steps = target, iv = dur / steps;
+      var cur = 0;
+      var t = setInterval(function(){
+        el.textContent = ++cur;
+        if (cur >= target) clearInterval(t);
+      }, iv);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.6 });
+  els.forEach(function(el){ io.observe(el); });
+})();
+
+/* ── Scroll reveal ────────────────────────────────────────────────────── */
+(function(){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+
+/* ── Project filter ───────────────────────────────────────────────────── */
+(function(){
+  var btns = document.querySelectorAll('.filter-btn');
+  var cards = document.querySelectorAll('.project-card');
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      var f = btn.dataset.filter;
+      cards.forEach(function(c){
+        var show = f === 'all' || (c.dataset.cats || '').split(' ').includes(f);
+        c.hidden = !show;
+      });
+    });
+  });
+})();
+
+/* ── Mobile drawer ────────────────────────────────────────────────────── */
+(function(){
+  var btn = document.getElementById('mobileTrigger');
+  var drawer = document.getElementById('mobileDrawer');
+  btn.addEventListener('click', function(){
+    var open = drawer.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.textContent = open ? '✕' : '☰';
+  });
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      drawer.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      btn.textContent = '☰';
+    });
+  });
+})();
+
+/* ── Command palette ──────────────────────────────────────────────────── */
+(function(){
+  var scroll = function(id){ document.querySelector(id).scrollIntoView({ behavior:'smooth' }); };
+  var open   = function(url){ window.open(url,'_blank','noopener,noreferrer'); };
+
+  var items = [
+    { g:'Navigate', icon:'🏠', label:'Home',             hint:'Top of page',           fn: function(){ window.scrollTo({top:0,behavior:'smooth'}); } },
+    { g:'Navigate', icon:'👤', label:'About',            hint:'#about',                fn: function(){ scroll('#about'); } },
+    { g:'Navigate', icon:'⚙️', label:'Skills',           hint:'#skills',               fn: function(){ scroll('#skills'); } },
+    { g:'Navigate', icon:'🚀', label:'Projects',         hint:'#projects',             fn: function(){ scroll('#projects'); } },
+    { g:'Navigate', icon:'📅', label:'Journey',          hint:'#journey',              fn: function(){ scroll('#journey'); } },
+    { g:'Navigate', icon:'✉️', label:'Contact',          hint:'#contact',              fn: function(){ scroll('#contact'); } },
+    { g:'Projects', icon:'🛡️', label:'CyberSentinel',    hint:'AI SOC platform',       fn: function(){ scroll('#projects'); } },
+    { g:'Projects', icon:'🏢', label:'Radiant Platform', hint:'Internal tools + portal',fn: function(){ scroll('#projects'); } },
+    { g:'Projects', icon:'🤖', label:'Ray AI',           hint:'LangGraph + ChromaDB',  fn: function(){ open('https://ray.radiantinnovatech.com'); } },
+    { g:'Projects', icon:'🔐', label:'GRC Auditor',      hint:'STRIDE FYP',            fn: function(){ scroll('#projects'); } },
+    { g:'Projects', icon:'💻', label:'Radiant OS',       hint:'Browser cloud OS',      fn: function(){ scroll('#projects'); } },
+    { g:'Projects', icon:'🔬', label:'SecureVault',      hint:'Vulnerable captive portal',fn:function(){ scroll('#projects'); } },
+    { g:'Links',    icon:'💾', label:'GitHub',           hint:'RadiantSeraph1',        fn: function(){ open('https://github.com/RadiantSeraph1'); } },
+    { g:'Links',    icon:'🔗', label:'LinkedIn',         hint:'samuel-maclar',         fn: function(){ open('https://www.linkedin.com/in/samuel-maclar-1a0793250'); } },
+    { g:'Links',    icon:'✉️', label:'Send Email',       hint:'samuelmaclar@…',        fn: function(){ open('mailto:samuelmaclar@radiantinnovatech.com'); } },
+    { g:'Links',    icon:'🌐', label:'Radiant InnovaTech',hint:'radiantinnovatech.com',fn: function(){ open('https://radiantinnovatech.com'); } },
+  ];
+
+  var overlay = document.getElementById('cmd-overlay');
+  var input   = document.getElementById('cmd-input');
+  var list    = document.getElementById('cmd-list');
+  var sel = 0, filtered = [];
+
+  function renderList(q){
+    var query = (q||'').toLowerCase().trim();
+    filtered = query
+      ? items.filter(function(i){ return (i.label+' '+i.hint+' '+i.g).toLowerCase().includes(query); })
+      : items;
+    sel = 0;
+    if (!filtered.length){ list.innerHTML = '<div class="cmd-empty">No results for "'+q+'"</div>'; return; }
+
+    var groups = {}, order = [];
+    filtered.forEach(function(item, idx){
+      if (!groups[item.g]){ groups[item.g]=[]; order.push(item.g); }
+      groups[item.g].push({ item:item, idx:idx });
+    });
+    var html = '';
+    order.forEach(function(g){
+      html += '<div class="cmd-group-name">'+g+'</div>';
+      groups[g].forEach(function(entry){
+        html += '<div class="cmd-row" role="option" aria-selected="'+(entry.idx===0?'true':'false')+'" data-idx="'+entry.idx+'">'
+          +'<div class="cmd-row-icon" aria-hidden="true">'+entry.item.icon+'</div>'
+          +'<span class="cmd-row-label">'+entry.item.label+'</span>'
+          +'<span class="cmd-row-hint">'+entry.item.hint+'</span>'
+          +'</div>';
+      });
+    });
+    list.innerHTML = html;
+
+    list.querySelectorAll('.cmd-row').forEach(function(row){
+      row.addEventListener('click', function(){
+        filtered[+row.dataset.idx].fn();
+        closeP();
+      });
+      row.addEventListener('mouseenter', function(){
+        setSel(+row.dataset.idx);
+      });
+    });
+  }
+
+  function setSel(idx){
+    sel = idx;
+    list.querySelectorAll('.cmd-row').forEach(function(r){
+      var match = +r.dataset.idx === sel;
+      r.setAttribute('aria-selected', match ? 'true' : 'false');
+      if (match) r.scrollIntoView({ block:'nearest' });
+    });
+  }
+
+  function openP(){
+    overlay.classList.add('open');
+    input.value = '';
+    input.focus();
+    renderList('');
+  }
+  function closeP(){
+    overlay.classList.remove('open');
+    input.value = '';
+  }
+
+  document.getElementById('cmdTrigger').addEventListener('click', openP);
+  overlay.addEventListener('click', function(e){ if (e.target===overlay) closeP(); });
+  input.addEventListener('input', function(){ renderList(input.value); });
+
+  document.addEventListener('keydown', function(e){
+    if ((e.ctrlKey||e.metaKey) && e.key==='k'){
+      e.preventDefault();
+      overlay.classList.contains('open') ? closeP() : openP();
+      return;
+    }
+    if (!overlay.classList.contains('open')) return;
+    if (e.key==='Escape'){ closeP(); }
+    else if (e.key==='ArrowDown'){ e.preventDefault(); setSel(Math.min(filtered.length-1, sel+1)); }
+    else if (e.key==='ArrowUp')  { e.preventDefault(); setSel(Math.max(0, sel-1)); }
+    else if (e.key==='Enter'){ e.preventDefault(); if (filtered[sel]){ filtered[sel].fn(); closeP(); } }
+  });
+})();
+</script>
+</body>
+</html>

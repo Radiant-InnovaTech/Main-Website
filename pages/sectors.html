@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sectors — Radiant InnovaTech</title>
+  <meta name="description" content="Radiant InnovaTech serves Ghana's mining, financial services, legal, and academic sectors with sovereign digital infrastructure built for industrial environments."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://radiantinnovatech.com/pages/sectors.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://radiantinnovatech.com/pages/sectors.html"/>
+  <meta property="og:title" content="Sectors — Radiant InnovaTech"/>
+  <meta property="og:description" content="Mining, financial services, legal, and academic sectors served by Radiant InnovaTech in Ghana."/>
+  <meta property="og:image" content="https://radiantinnovatech.com/assets/logo.png"/>
+  <meta property="og:site_name" content="Radiant InnovaTech"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Sectors — Radiant InnovaTech"/>
+  <meta name="twitter:description" content="Mining, finance, legal, and academic sectors served across Ghana."/>
+  <meta name="twitter:image" content="https://radiantinnovatech.com/assets/logo.png"/>
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <link rel="stylesheet" href="../css/global.css"/>
+  <style>
+    .sector-block { padding: 80px 0; border-bottom: 1px solid var(--border); }
+    .sector-block:last-child { border-bottom: none; }
+    .sector-block:nth-child(even) { background: var(--onyx2); }
+
+    .sector-inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 72px; align-items: start; }
+    .sector-inner.flip { grid-template-columns: 1.4fr 1fr; }
+    .sector-inner.flip .sector-info { order: 2; }
+    .sector-inner.flip .sector-detail { order: 1; }
+
+    .sector-icon-large {
+      width: 72px; height: 72px; border-radius: 12px;
+      background: var(--radiant-dim); border: 1px solid var(--radiant-border);
+      display: grid; place-items: center; font-size: 2rem; margin-bottom: 24px;
+    }
+    .sector-info h2 { font-family: 'Rajdhani', sans-serif; font-size: 2rem; font-weight: 700; color: var(--white); letter-spacing: 0.04em; margin-bottom: 16px; }
+    .sector-info p { font-size: 0.95rem; line-height: 1.85; color: var(--muted); margin-bottom: 16px; font-weight: 300; }
+    .sector-info p strong { color: var(--white); font-weight: 600; }
+
+    .services-offered { margin-top: 28px; }
+    .services-offered h4 { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .service-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .service-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--radiant); padding: 6px 12px;
+      background: var(--radiant-dim); border: 1px solid var(--radiant-border); border-radius: 2px;
+    }
+
+    .sector-detail-card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+      overflow: hidden; position: sticky; top: calc(var(--nav-h) + 24px);
+    }
+    .sdc-header {
+      padding: 20px 28px; background: var(--panel2); border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sdc-header::before { content: '◈'; color: var(--radiant); }
+    .sdc-body { padding: 28px; }
+    .use-case { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+    .use-case:last-child { margin-bottom: 0; }
+    .uc-icon {
+      width: 36px; height: 36px; background: var(--radiant-dim); border: 1px solid var(--radiant-border);
+      border-radius: 4px; display: grid; place-items: center; flex-shrink: 0; font-size: 0.95rem;
+    }
+    .uc-title { font-size: 0.88rem; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+    .uc-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    @media (max-width: 960px) {
+      .sector-inner, .sector-inner.flip { grid-template-columns: 1fr; }
+      .sector-inner.flip .sector-info,
+      .sector-inner.flip .sector-detail { order: unset; }
+      .sector-detail-card { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <img src="../assets/logo.png" class="nav-logo-img" alt="Radiant InnovaTech"/>
+    <span class="nav-brand-text">RADIANT <span>INNOVATECH</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="sectors.html">Sectors</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li class="nav-mobile-only"><a href="/waitlist">Join Waitlist</a></li>
+    <li class="nav-mobile-only"><a href="contact.html">Request Demo</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/waitlist" class="nav-waitlist">Join Waitlist</a>
+    <a href="contact.html" class="nav-cta">Request Demo</a>
+  </div>
+  <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="container page-hero-inner">
+    <div class="page-hero-tag">Sector Specialisation</div>
+    <h1>Industries We <span class="accent">Engineer</span> For</h1>
+    <p>We provide custom logic for the most demanding industries in Ghana. Not generic IT — sector-specific engineering solutions built for industrial-grade performance.</p>
+  </div>
+</div>
+
+<!-- MINING -->
+<section class="sector-block">
+  <div class="container">
+    <div class="sector-inner">
+      <div class="sector-info reveal">
+        <div class="sector-icon-large">⛏️</div>
+        <div class="eyebrow">Sector 01</div>
+        <h2>Mining & Heavy Engineering</h2>
+        <p>Ghana's mining sector operates at the intersection of extreme physical conditions and high-value production. <strong>Downtime is not measured in hours — it's measured in millions of cedis.</strong></p>
+        <p>Our proximity to Tarkwa — Ghana's mining capital — means we understand the operational realities: post-blast protocols, underground communications, fleet coordination, and the constant pressure to reduce Lost Production Time.</p>
+        <p>From deploying fibre across active mine sites to building the Sentry Nodes that will eventually replace humans in post-blast re-entry assessments, we engineer for the most unforgiving environment on the planet.</p>
+        <div class="services-offered">
+          <h4>Our Solutions</h4>
+          <div class="service-tags">
+            <span class="service-tag">Post-Blast Gas Sensing</span>
+            <span class="service-tag">Underground Sentry Nodes</span>
+            <span class="service-tag">Fleet Tracking Systems</span>
+            <span class="service-tag">Site Fibre Deployment</span>
+            <span class="service-tag">LoRaWAN Sub-Surface Grid</span>
+            <span class="service-tag">60GHz P2P Wireless</span>
+          </div>
+        </div>
+      </div>
+      <div class="sector-detail reveal d1">
+        <div class="sector-detail-card">
+          <div class="sdc-header">Key Use Cases</div>
+          <div class="sdc-body">
+            <div class="use-case">
+              <div class="uc-icon">💨</div>
+              <div><div class="uc-title">Post-Blast Gas Monitoring</div><div class="uc-desc">Automated sensor networks measure CO, NOx, and other blast gases to clear re-entry faster and safely.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">🚁</div>
+              <div><div class="uc-title">Sentry UAV Reconnaissance</div><div class="uc-desc">Autonomous aerial units survey post-blast zones before any human re-entry — reducing LPT by hours.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">🚚</div>
+              <div><div class="uc-title">Fleet & Asset Tracking</div><div class="uc-desc">Real-time GPS and IoT tracking for heavy equipment across active mine sites.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">📡</div>
+              <div><div class="uc-title">Underground Connectivity</div><div class="uc-desc">LoRaWAN grids providing data connectivity in underground tunnels and shafts.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINANCIAL -->
+<section class="sector-block">
+  <div class="container">
+    <div class="sector-inner flip">
+      <div class="sector-info reveal">
+        <div class="sector-icon-large">🏦</div>
+        <div class="eyebrow">Sector 02</div>
+        <h2>Financial Services & Banking</h2>
+        <p>Rural and community banks across the Western Region serve critical populations — but they operate with infrastructure that wasn't built for their scale or their threat environment.</p>
+        <p><strong>Queue Management Systems, secure cloud backups, and hardened local networks</strong> are not optional extras for a bank handling sensitive financial data. They are operational necessities.</p>
+        <p>We engineer financial-grade infrastructure for institutions that can't afford the cost of a data breach or a system failure — and we do it at a cost point that makes sense outside of Accra.</p>
+        <div class="services-offered">
+          <h4>Our Solutions</h4>
+          <div class="service-tags">
+            <span class="service-tag">Queue Management Systems</span>
+            <span class="service-tag">Secure Cloud Backup</span>
+            <span class="service-tag">AES-256 Data Encryption</span>
+            <span class="service-tag">Network Hardening</span>
+            <span class="service-tag">Disaster Recovery</span>
+          </div>
+        </div>
+      </div>
+      <div class="sector-detail reveal d1">
+        <div class="sector-detail-card">
+          <div class="sdc-header">Key Use Cases</div>
+          <div class="sdc-body">
+            <div class="use-case">
+              <div class="uc-icon">🎫</div>
+              <div><div class="uc-title">Queue Management System (QMS)</div><div class="uc-desc">Digital ticketing and customer flow management — reducing wait times and improving service experience.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">☁️</div>
+              <div><div class="uc-title">Encrypted Cloud Backup</div><div class="uc-desc">Automated, AES-256 encrypted backups with local control and off-site redundancy for disaster recovery.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">🔒</div>
+              <div><div class="uc-title">Network Security Hardening</div><div class="uc-desc">Segmented networks, endpoint protection, and intrusion detection for financial environments.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL -->
+<section class="sector-block">
+  <div class="container">
+    <div class="sector-inner">
+      <div class="sector-info reveal">
+        <div class="sector-icon-large">⚖️</div>
+        <div class="eyebrow">Sector 03</div>
+        <h2>Legal & Professional Services</h2>
+        <p>Legal firms handle the most sensitive documents that exist in any economy — land deeds, contracts, client testimony, and proprietary agreements. <strong>These cannot be stored on a generic cloud platform.</strong></p>
+        <p>Our Radiant Vault solution gives legal firms an encrypted, sovereign document repository that keeps sensitive files entirely under the firm's control — with role-based access, full audit trails, and zero external cloud dependency.</p>
+        <div class="services-offered">
+          <h4>Our Solutions</h4>
+          <div class="service-tags">
+            <span class="service-tag">Radiant Vault</span>
+            <span class="service-tag">Encrypted Document Storage</span>
+            <span class="service-tag">Role-Based Access Control</span>
+            <span class="service-tag">Audit Trail Logging</span>
+            <span class="service-tag">On-Shore Data Sovereignty</span>
+          </div>
+        </div>
+      </div>
+      <div class="sector-detail reveal d1">
+        <div class="sector-detail-card">
+          <div class="sdc-header">Key Use Cases</div>
+          <div class="sdc-body">
+            <div class="use-case">
+              <div class="uc-icon">📁</div>
+              <div><div class="uc-title">Sovereign Vault for Deeds</div><div class="uc-desc">AES-256 encrypted repository for land deeds and title documents — accessible only by authorised personnel.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">📋</div>
+              <div><div class="uc-title">Contract & Blueprint Storage</div><div class="uc-desc">Secure, versioned storage for contracts, technical blueprints, and sensitive client agreements.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">👤</div>
+              <div><div class="uc-title">Role-Based Access</div><div class="uc-desc">Granular permissions — partners see everything, associates see their files, clients see only their own.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACADEMIC -->
+<section class="sector-block">
+  <div class="container">
+    <div class="sector-inner flip">
+      <div class="sector-info reveal">
+        <div class="sector-icon-large">🎓</div>
+        <div class="eyebrow">Sector 04</div>
+        <h2>Academic Institutions</h2>
+        <p>Universities and technical institutions manage thousands of student records, examination results, and financial transactions — often on systems that were not built for the load or the scrutiny.</p>
+        <p><strong>Our automated results engines and fee-management portals</strong> replace manual, error-prone processes with reliable, auditable, and scalable digital systems — built specifically for the Ghanaian academic environment.</p>
+        <div class="services-offered">
+          <h4>Our Solutions</h4>
+          <div class="service-tags">
+            <span class="service-tag">Automated Results Engine</span>
+            <span class="service-tag">Fee Management Portal</span>
+            <span class="service-tag">Student Records System</span>
+            <span class="service-tag">Campus Network Infrastructure</span>
+          </div>
+        </div>
+      </div>
+      <div class="sector-detail reveal d1">
+        <div class="sector-detail-card">
+          <div class="sdc-header">Key Use Cases</div>
+          <div class="sdc-body">
+            <div class="use-case">
+              <div class="uc-icon">📊</div>
+              <div><div class="uc-title">Automated Results Engine</div><div class="uc-desc">Automated processing and publication of examination results — eliminating manual errors and delays.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">💳</div>
+              <div><div class="uc-title">Fee Management Portal</div><div class="uc-desc">Digital fee payment, reconciliation, and financial reporting for institutions of any size.</div></div>
+            </div>
+            <div class="use-case">
+              <div class="uc-icon">📶</div>
+              <div><div class="uc-title">Campus Network Infrastructure</div><div class="uc-desc">High-performance campus networking with managed Wi-Fi, access control, and monitoring.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div style="background:var(--panel);border-top:1px solid var(--border);padding:72px 0;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:32px;" class="reveal">
+      <div>
+        <div class="eyebrow">Start Here</div>
+        <h2 class="sec-title">Don't See Your Sector? <span class="accent">Talk to Us.</span></h2>
+        <p style="margin-top:12px;color:var(--muted);max-width:500px;">We engineer custom solutions across all industrial and institutional environments. If your operation has a technical challenge, we have a solution architecture for it.</p>
+      </div>
+      <a href="contact.html" class="btn-primary">Request a Consultation</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-row">
+        <img src="../assets/logo.png" class="footer-logo-img" alt="Radiant InnovaTech"/>
+        <span class="footer-brand-text">RADIANT <span>INNOVATECH</span></span>
+      </div>
+      <p>Sovereign engineering infrastructure for Ghana's industrial heartland.</p>
+    </div>
+    <div class="footer-col"><h4>Navigation</h4><ul><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="sectors.html">Sectors</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Sectors</h4><ul><li><a href="sectors.html">Mining</a></li><li><a href="sectors.html">Financial</a></li><li><a href="sectors.html">Legal</a></li><li><a href="sectors.html">Academic</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:0504555100">050 455 5100</a></li><li><a href="mailto:info@radiantinnovatech.com">info@radiantinnovatech.com</a></li><li><a href="contact.html">Site Survey</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Radiant InnovaTech · Tarkwa, Western Region, Ghana</p>
+    <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+</footer>
+
+<script src="../js/global.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+[Unit]
+Description=Radiant Nexus Backend API
+Documentation=https://radiantinnovatech.com
+After=network.target
+
+[Service]
+Type=simple
+User=radiant
+Group=radiant
+WorkingDirectory=/var/www/radiant-nexus/backend
+
+# Load environment variables from .env file
+EnvironmentFile=/var/www/radiant-nexus/backend/.env
+
+# Start command
+ExecStart=/usr/bin/node /var/www/radiant-nexus/backend/server.js
+
+# Restart policy: always restart on failure, with a 5-second delay
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=radiant-nexus
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+# Allow the app to write its SQLite database
+ReadWritePaths=/var/www/radiant-nexus/backend/data
+
+[Install]
+WantedBy=multi-user.target

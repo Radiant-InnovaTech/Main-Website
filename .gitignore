@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Environment secrets — NEVER commit these
+.env
+backend/.env
+
+# SQLite database files
+backend/data/waitlist.db
+backend/data/waitlist.db-shm
+backend/data/waitlist.db-wal
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build artifacts
+*.bak*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docs excluded from public repo
+RADIANT_PLATFORM.md

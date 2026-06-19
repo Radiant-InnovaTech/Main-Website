@@ -1,0 +1,2 @@
+# This file exists to ensure the data/ directory is tracked by git
+# The actual SQLite database file (waitlist.db) is listed in .gitignore

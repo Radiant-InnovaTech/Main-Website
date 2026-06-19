@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Technical Resources Hub — Radiant Nexus</title>
+  <meta name="description" content="Explore advanced cyber threat intelligence research, multi-agent reasoning whitepapers, and technical operational guidebooks."/>
+  <link rel="icon" type="image/png" href="../assets/logo.png"/>
+  <link rel="stylesheet" href="../css/global.css?v=20260601"/>
+  <style>
+    /* Category headers and filter tags for technical items */
+    .res-category-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      color: var(--accent); border-bottom: 2px solid var(--accent);
+      padding-bottom: 4px; margin-bottom: 24px; display: inline-block;
+      text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700;
+    }
+    
+    .res-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+      margin-bottom: 80px;
+    }
+    
+    .res-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+    .res-card:hover {
+      border-color: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+    
+    .res-type {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--text-secondary); background: rgba(255,255,255,0.05);
+      padding: 2px 8px; border-radius: 4px; margin-bottom: 12px;
+      display: inline-block; border: 1px solid var(--border);
+    }
+    .res-card h3 { font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 12px; line-height: 1.4; }
+    .res-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; }
+    
+    .res-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-soft);
+    }
+    .res-link { text-decoration: none; color: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+    .res-link:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .res-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 650px) {
+      .res-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- GLOBAL NAVIGATION (9 Items) -->
+<nav>
+  <a href="../index.html" class="nav-brand">
+    <img src="../assets/logo.png" class="nav-logo-img" alt="Radiant Nexus Logo" onerror="this.src='https://placehold.co/64x64/3B82F6/white?text=RN'"/>
+    <span class="nav-brand-text">RADIANT <span>NEXUS</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="platform.html">Platform</a></li>
+    <li><a href="agents.html">AI Agents</a></li>
+    <li><a href="solutions.html">Solutions</a></li>
+    <li><a href="architecture.html">Architecture</a></li>
+    <li><a href="security.html">Security &amp; Trust</a></li>
+    <li><a href="about.html">About</a></li>
+    <li class="nav-mobile-only"><a href="/waitlist">Join Waitlist</a></li>
+    <li class="nav-mobile-only"><a href="contact.html">Request Demo</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/waitlist" class="nav-waitlist">Join Waitlist</a>
+    <a href="contact.html" class="nav-cta">Request Demo</a>
+  </div>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="container page-hero-inner reveal">
+    <div class="page-hero-tag">KNOWLEDGE LIBRARY</div>
+    <h1>Technical Operational <span class="accent">Resources Hub</span></h1>
+    <p>
+      Explore published cyber threat intelligence analyses, baseline reasoning whitepapers, and operational detection guidebooks compiled by the core detection engineering staff.
+    </p>
+  </div>
+</div>
+
+<!-- RESOURCE CATEGORIES -->
+<section class="container section-pad">
+  
+  <!-- Category 1 -->
+  <div class="reveal">
+    <span class="res-category-tag">THREAT RESEARCH &amp; CTI</span>
+    <div class="res-grid">
+      <div class="res-card">
+        <div>
+          <span class="res-type">THREAT REPORT</span>
+          <h3>Dissecting Advanced Living-off-the-Land Lateral Chains</h3>
+          <p>Comprehensive forensic analysis covering token reuse scripts, non-standard memory access protocols, and unmonitored standard scheduled execution wrappers.</p>
+        </div>
+        <div class="res-meta">
+          <span>12 Min Read</span>
+          <a href="#" class="res-link">Download PDF ➔</a>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div>
+          <span class="res-type">IOC ADVISORY</span>
+          <h3>Hypervisor Target Exploits Across Hybrid Tenancies</h3>
+          <p>Review active network sub-segment indicators, command strings, and containment parameters compiled from sovereign cloud infrastructure observations.</p>
+        </div>
+        <div class="res-meta">
+          <span>Technical Digest</span>
+          <a href="#" class="res-link">Review JSON ➔</a>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div>
+          <span class="res-type">CAMPAIGN STUDY</span>
+          <h3>Targeted Data Exfiltration via HTTPS DNS Tunnels</h3>
+          <p>Evaluating multi-dimensional machine learning detection buffers capable of detecting sub-packet rate exfiltration over standard DNS query endpoints.</p>
+        </div>
+        <div class="res-meta">
+          <span>8 Min Read</span>
+          <a href="#" class="res-link">Read Briefing ➔</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category 2 -->
+  <div class="reveal">
+    <span class="res-category-tag">AGENT ARCHITECTURE &amp; AI</span>
+    <div class="res-grid">
+      <div class="res-card" style="border-left: 3px solid var(--accent);">
+        <div>
+          <span class="res-type">WHITEPAPER</span>
+          <h3>Deterministic Multi-Agent Orchestration Loops</h3>
+          <p>Detailed architecture study documenting cross-agent message passing mechanics, localized state validation matrices, and non-biased hypothesis weighting schemes.</p>
+        </div>
+        <div class="res-meta">
+          <span>Peer Reviewed</span>
+          <a href="#" class="res-link">Download Paper ➔</a>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div>
+          <span class="res-type">ENGINEERING NOTE</span>
+          <h3>Vector Reasoning Over Streaming Structural Schema</h3>
+          <p>Overcoming sliding context bounds by hashing parsed entity graph models directly into multi-dimensional memory blocks for continuous zero-lag access.</p>
+        </div>
+        <div class="res-meta">
+          <span>Core Ops</span>
+          <a href="#" class="res-link">Explore Spec ➔</a>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div>
+          <span class="res-type">RESEARCH PAPER</span>
+          <h3>Supervised Autonomy Boundaries in Action Orchestration</h3>
+          <p>Mathematical frameworks modeling operational response safety metrics ensuring implicit execution rollbacks without disrupting valid target operations.</p>
+        </div>
+        <div class="res-meta">
+          <span>22 Pages</span>
+          <a href="#" class="res-link">Get Report ➔</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category 3 -->
+  <div class="reveal">
+    <span class="res-category-tag">SOC ENGINEERING &amp; PLAYBOOKS</span>
+    <div class="res-grid" style="margin-bottom: 0;">
+      <div class="res-card">
+        <div>
+          <span class="res-type">PLAYBOOK SPEC</span>
+          <h3>Automating Tier-1 Ransomware Containment Paths</h3>
+          <p>Step-by-step logic workflows parsing high-entropy directory write actions to immediately enforce logical local network device isolations.</p>
+        </div>
+        <div class="res-meta">
+          <span>SOAR Blueprint</span>
+          <a href="#" class="res-link">View YAML ➔</a>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div>
+          <span class="res-type">ENGINEERING GUIDE</span>
+          <h3>Optimizing High-Volume EDR Data Ingestion Buffers</h3>
+          <p>Practical kernel tuning configurations and socket optimization maps preventing packet drop rates over continuous telemetry streaming hooks.</p>
+        </div>
+        <div class="res-meta">
+          <span>Sysadmin Reference</span>
+          <a href="#" class="res-link">Read Guide ➔</a>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div>
+          <span class="res-type">COMPLIANCE MAPPING</span>
+          <h3>Mapping Multi-Agent Proof Output directly to DORA Standard</h3>
+          <p>Translating automated temporal timeline structures into fully defensible internal audit logging logs meeting new digital resilience expectations.</p>
+        </div>
+        <div class="res-meta">
+          <span>Regulatory Digest</span>
+          <a href="#" class="res-link">Review Spec ➔</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONVERSION CTA -->
+<div class="cta-band">
+  <div class="container">
+    <div class="cta-band-inner reveal">
+      <div>
+        <h2>Access specialized custom <span class="accent">threat feeds.</span></h2>
+        <p>Enterprise users receive continuous machine access directly referencing our core verified behavioral signature buffers.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a href="contact.html" class="primary-btn">Request Demo</a>
+        <a href="platform.html" class="secondary-btn">Review Architecture</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <img src="../assets/logo.png" style="width: 32px; height: 32px;" alt=""/>
+        <span style="font-family: monospace; font-size: 1.1rem; font-weight: 700; color: white;">RADIANT <span style="color: var(--accent);">NEXUS</span></span>
+      </div>
+      <p>Autonomous AI security operations platform. Multi-agent operational intelligence engineered to investigate and defend alongside top SOC teams.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="platform.html">Operational Layer</a></li>
+        <li><a href="agents.html">AI Constellation</a></li>
+        <li><a href="architecture.html">Architecture Flow</a></li>
+        <li><a href="security.html">Security &amp; Trust</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <ul>
+        <li><a href="solutions.html">Enterprise SOCs</a></li>
+        <li><a href="solutions.html">MSSP / Managed SOC</a></li>
+        <li><a href="solutions.html">Banking &amp; Finance</a></li>
+        <li><a href="solutions.html">Critical Infrastructure</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="resources.html">Resources Hub</a></li>
+        <li><a href="contact.html">Request Demo</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Radiant InnovaTech · Globally Ambitious AI Security</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Security Assurance</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      observer.observe(el);
+    });
+  });
+</script>
+</body>
+</html>

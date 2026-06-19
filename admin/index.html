@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Waitlist | Radiant Innovatech</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png"/>
+  <link rel="stylesheet" href="/css/global.css?v=20260601"/>
+  <style>
+    /* ── AUTH SCREEN ── */
+    .auth-screen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 70% 20%, rgba(59,130,246,0.07), transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(16,185,129,0.04), transparent 40%),
+        var(--bg-primary);
+    }
+    .auth-screen::before {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 64px 64px; pointer-events: none;
+    }
+    .auth-card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 44px 40px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    }
+    .auth-logo {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 36px;
+    }
+    .auth-logo img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(59,130,246,0.5)); }
+    .auth-logo span { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; }
+    .auth-logo em { color: var(--accent); font-style: normal; }
+    .auth-badge {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border);
+      padding: 3px 10px; border-radius: 4px; margin-bottom: 16px;
+    }
+    .auth-card h2 { font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 6px; }
+    .auth-card p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.55; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      color: var(--text-secondary); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .form-control {
+      width: 100%; background: rgba(5,8,22,0.8);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 11px 14px; color: white; font-family: 'Inter', sans-serif;
+      font-size: 0.92rem; transition: border-color 0.2s; letter-spacing: 0.01em;
+    }
+    .form-control::placeholder { color: rgba(148,163,184,0.4); }
+    .form-control:focus { outline: none; border-color: var(--accent); background: #050816; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    .otp-control {
+      font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700;
+      letter-spacing: 0.3em; text-align: center; padding: 14px;
+    }
+
+    .auth-btn {
+      width: 100%; background: var(--accent); color: white; border: none;
+      padding: 13px; border-radius: 8px; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 4px;
+    }
+    .auth-btn:hover:not(:disabled) { background: #2563EB; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.5); }
+    .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .auth-link { background: none; border: none; color: var(--accent); font-size: 0.82rem; cursor: pointer; padding: 0; text-decoration: underline; }
+    .auth-link:hover { color: var(--accent-soft); }
+
+    .auth-msg {
+      margin-top: 14px; padding: 10px 14px; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 500; display: none;
+    }
+    .auth-msg.error   { background: var(--danger-dim);  border: 1px solid var(--danger-border);  color: #fca5a5; }
+    .auth-msg.success { background: var(--success-dim); border: 1px solid var(--success-border); color: #6ee7b7; }
+    .auth-msg.show { display: block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); border-top-color: white; animation: spin 0.7s linear infinite; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; min-height: 100vh; flex-direction: column; }
+    #dashboard.show { display: flex; }
+
+    .dash-nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+      background: rgba(5,8,22,0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .dash-nav-left { display: flex; align-items: center; gap: 12px; }
+    .dash-nav-left img { width: 24px; height: 24px; object-fit: contain; opacity: 0.85; }
+    .dash-nav-left span { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); }
+    .dash-nav-left small { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent); background: var(--accent-dim); border: 1px solid var(--accent-border); padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .dash-nav-right { display: flex; align-items: center; gap: 12px; }
+    .admin-email { font-size: 0.78rem; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
+    .logout-btn { font-size: 0.78rem; color: var(--danger); background: var(--danger-dim); border: 1px solid var(--danger-border); padding: 5px 14px; border-radius: 6px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .logout-btn:hover { background: rgba(239,68,68,0.2); }
+
+    .dash-body { flex: 1; padding: 32px; max-width: 1400px; width: 100%; margin: 0 auto; }
+
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .stat-card .stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .stat-card .stat-value { font-size: 1.9rem; font-weight: 800; color: var(--text-primary); line-height: 1; }
+    .stat-card .stat-sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 220px; }
+    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; }
+    .search-input {
+      width: 100%; background: var(--bg-surface);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 9px 14px 9px 38px; color: white; font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; transition: border-color 0.2s;
+    }
+    .search-input::placeholder { color: rgba(148,163,184,0.4); }
+    .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+    .filter-select {
+      background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 9px 32px 9px 12px; color: var(--text-primary); font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; cursor: pointer; appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="%2394A3B8" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+      background-repeat: no-repeat; background-position: right 10px center;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus { outline: none; border-color: var(--accent); }
+    .filter-select option { background: var(--bg-surface); }
+
+    .export-btn {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(16,185,129,0.1); border: 1px solid var(--success-border);
+      color: var(--success); font-size: 0.85rem; font-weight: 600;
+      padding: 9px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s;
+      white-space: nowrap; font-family: inherit;
+    }
+    .export-btn:hover { background: rgba(16,185,129,0.18); }
+    .export-btn svg { width: 14px; height: 14px; }
+
+    /* Table */
+    .table-wrap {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    thead tr { background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+    thead th {
+      padding: 12px 16px; text-align: left;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 600; white-space: nowrap;
+    }
+    thead th.sortable { cursor: pointer; user-select: none; }
+    thead th.sortable:hover { color: var(--text-primary); }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(59,130,246,0.04); }
+    td { padding: 13px 16px; color: var(--text-primary); vertical-align: middle; }
+    td.muted { color: var(--text-secondary); }
+    td.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+
+    .badge {
+      display: inline-block; font-size: 0.7rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+      padding: 3px 9px; border-radius: 4px; white-space: nowrap; letter-spacing: 0.04em;
+    }
+    .badge-blue   { background: var(--accent-dim);   color: var(--accent-soft); border: 1px solid var(--accent-border); }
+    .badge-green  { background: var(--success-dim);  color: #6ee7b7;            border: 1px solid var(--success-border); }
+    .badge-orange { background: var(--warning-dim);  color: #fcd34d;            border: 1px solid var(--warning-border); }
+    .badge-gray   { background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); }
+
+    .row-toggle {
+      background: none; border: none; color: var(--text-secondary); cursor: pointer;
+      font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; transition: all 0.15s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .row-toggle:hover { background: var(--accent-dim); color: var(--accent); }
+    .use-case-row td { background: rgba(59,130,246,0.03); color: var(--text-secondary); font-size: 0.82rem; line-height: 1.6; padding: 10px 16px 14px 16px; }
+    .use-case-row { display: none; }
+    .use-case-row.open { display: table-row; }
+
+    /* Empty / loading */
+    .table-empty {
+      padding: 60px 24px; text-align: center;
+      color: var(--text-secondary); font-size: 0.9rem;
+    }
+    .table-loading { text-align: center; padding: 60px; color: var(--text-secondary); }
+    .loading-spin { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+
+    /* Pagination */
+    .pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-top: 1px solid var(--border);
+      font-size: 0.82rem; color: var(--text-secondary); flex-wrap: wrap; gap: 12px;
+    }
+    .page-btns { display: flex; gap: 6px; }
+    .page-btn {
+      padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;
+      border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary);
+      transition: all 0.15s; font-family: inherit;
+    }
+    .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .page-btn.active { background: var(--accent-dim); border-color: var(--accent-border); color: var(--accent); }
+
+    /* Profile link */
+    .profile-link { color: var(--accent); font-size: 0.78rem; text-decoration: none; }
+    .profile-link:hover { text-decoration: underline; }
+
+    /* Clickable row */
+    tbody tr.data-row { cursor: pointer; }
+    tbody tr.data-row td { transition: background 0.1s; }
+    tbody tr.data-row.expanded td { background: rgba(59,130,246,0.06); border-bottom: none; }
+
+    /* Detail panel row */
+    .detail-row { display: none; }
+    .detail-row.open { display: table-row; }
+    .detail-row td {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+    .detail-panel {
+      padding: 20px 24px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .detail-field { display: flex; flex-direction: column; gap: 4px; }
+    .detail-field .df-label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary);
+    }
+    .detail-field .df-value {
+      font-size: 0.85rem; color: var(--text-primary); word-break: break-word; line-height: 1.5;
+    }
+    .detail-field.full-width { grid-column: 1 / -1; }
+    .detail-actions {
+      grid-column: 1 / -1;
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding-top: 12px; border-top: 1px solid var(--border); margin-top: 4px;
+    }
+    .delete-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--danger-dim); border: 1px solid var(--danger-border);
+      color: #fca5a5; font-size: 0.82rem; font-weight: 600; font-family: inherit;
+      padding: 7px 16px; border-radius: 7px; cursor: pointer; transition: all 0.2s;
+    }
+    .delete-btn:hover:not(:disabled) { background: rgba(239,68,68,0.2); color: white; }
+    .delete-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .delete-btn svg { width: 13px; height: 13px; }
+    .confirm-wrap { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #fca5a5; }
+    .confirm-yes { background: var(--danger); border: none; color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.8rem; font-family: inherit; }
+    .confirm-no  { background: none; border: 1px solid var(--border); color: var(--text-secondary); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-family: inherit; }
+    /* ── Tabs ── */
+    .dash-tabs {
+      display: flex; gap: 4px; margin-bottom: 24px;
+      border-bottom: 1px solid var(--border); padding-bottom: 0;
+    }
+    .dash-tab {
+      padding: 10px 20px; font-size: 0.85rem; font-weight: 600; font-family: inherit;
+      background: none; border: none; border-bottom: 2px solid transparent;
+      color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+      margin-bottom: -1px;
+    }
+    .dash-tab:hover { color: var(--text-primary); }
+    .dash-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Log table ── */
+    .log-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .log-table thead tr { background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+    .log-table thead th {
+      padding: 11px 16px; text-align: left;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.67rem;
+      color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .log-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .log-table tbody tr:last-child { border-bottom: none; }
+    .log-table td { padding: 11px 16px; vertical-align: middle; }
+
+    .action-pill {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
+    }
+    .action-login        { background: var(--success-dim);  color: #6ee7b7; border: 1px solid var(--success-border); }
+    .action-login_failed { background: var(--danger-dim);   color: #fca5a5; border: 1px solid var(--danger-border); }
+    .action-delete       { background: var(--danger-dim);   color: #fca5a5; border: 1px solid var(--danger-border); }
+    .action-export       { background: var(--warning-dim);  color: #fcd34d; border: 1px solid var(--warning-border); }
+    .action-default      { background: var(--accent-dim);   color: var(--accent-soft); border: 1px solid var(--accent-border); }
+  </style>
+</head>
+<body>
+
+<!-- ── AUTH SCREEN ── -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="/assets/logo.png" alt=""/>
+      <span>RADIANT <em>NEXUS</em></span>
+    </div>
+    <div class="auth-badge">Admin Access</div>
+
+    <!-- Step 1: Email -->
+    <div id="step-email">
+      <h2>Sign in to Admin</h2>
+      <p>Enter your Radiant Innovatech email. We'll send you a one-time code.</p>
+      <div class="form-group">
+        <label for="auth-email">Email Address</label>
+        <input type="email" id="auth-email" class="form-control" placeholder="you@radiantinnovatech.com" autocomplete="email"/>
+      </div>
+      <div class="auth-msg" id="email-msg"></div>
+      <button class="auth-btn" id="email-btn" onclick="requestOTP()">
+        <span id="email-btn-text">Send Code</span>
+        <div class="spinner" id="email-spinner" style="display:none"></div>
+      </button>
+    </div>
+
+    <!-- Step 2: OTP -->
+    <div id="step-otp" style="display:none">
+      <h2>Enter your code</h2>
+      <p id="otp-hint">We sent a 6-digit code to <strong id="otp-email-display"></strong>. It expires in 10 minutes.</p>
+      <div class="form-group">
+        <label for="auth-otp">One-Time Code</label>
+        <input type="text" id="auth-otp" class="form-control otp-control" placeholder="——————" maxlength="6" inputmode="numeric" autocomplete="one-time-code"/>
+      </div>
+      <div class="auth-msg" id="otp-msg"></div>
+      <button class="auth-btn" id="otp-btn" onclick="verifyOTP()">
+        <span id="otp-btn-text">Verify & Sign In</span>
+        <div class="spinner" id="otp-spinner" style="display:none"></div>
+      </button>
+      <p style="text-align:center;margin-top:16px;font-size:0.8rem;color:var(--text-secondary)">
+        Wrong email? <button class="auth-link" onclick="goBack()">Go back</button>
+        &nbsp;·&nbsp;
+        <button class="auth-link" onclick="requestOTP(true)">Resend code</button>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div id="dashboard">
+  <nav class="dash-nav">
+    <div class="dash-nav-left">
+      <img src="/assets/logo.png" alt=""/>
+      <span>RADIANT NEXUS</span>
+      <small>Admin</small>
+    </div>
+    <div class="dash-nav-right">
+      <span class="admin-email" id="dash-email"></span>
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="dash-body">
+    <!-- Tabs -->
+    <div class="dash-tabs">
+      <button class="dash-tab active" id="tab-waitlist" onclick="switchTab('waitlist')">Waitlist</button>
+      <button class="dash-tab"        id="tab-logs"     onclick="switchTab('logs')">Audit Logs</button>
+    </div>
+
+    <!-- Waitlist pane -->
+    <div id="pane-waitlist">
+    <!-- Stats -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Signups</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-sub">All time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value" id="stat-week">—</div>
+        <div class="stat-sub">Last 7 days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Viewing</div>
+        <div class="stat-value" id="stat-showing">—</div>
+        <div class="stat-sub">Filtered results</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Search name, email, company, country…"/>
+      </div>
+      <select class="filter-select" id="type-filter">
+        <option value="">All Types</option>
+        <option>SOC Analyst</option>
+        <option>Security Engineer</option>
+        <option>Threat Hunter</option>
+        <option>CISO/Security Leader</option>
+        <option>MSSP</option>
+        <option>Investor/Advisor</option>
+        <option>Other</option>
+      </select>
+      <button class="export-btn" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table id="wl-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role / Company</th>
+              <th>Country</th>
+              <th>Type</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody id="wl-tbody">
+            <tr><td colspan="8" class="table-loading"><div class="loading-spin"></div>Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination" style="display:none">
+        <span id="page-info"></span>
+        <div class="page-btns" id="page-btns"></div>
+      </div>
+    </div>
+    </div><!-- /pane-waitlist -->
+
+    <!-- Logs pane -->
+    <div id="pane-logs" style="display:none">
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Admin</th>
+                <th>Action</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody id="log-tbody">
+              <tr><td colspan="4" class="table-loading"><div class="loading-spin"></div>Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /pane-logs -->
+
+  </div><!-- /dash-body -->
+</div><!-- /dashboard -->
+
+<script>
+(function() {
+  var TOKEN_KEY = 'rn_admin_token';
+  var EMAIL_KEY = 'rn_admin_email';
+  var currentEmail = '';
+  var currentPage = 1;
+  var totalRows = 0;
+  var PAGE_SIZE = 50;
+  var searchTimer = null;
+  var allRows = [];
+
+  // ── Auth helpers ──────────────────────────────────────────────────────────
+  function getToken() { return localStorage.getItem(TOKEN_KEY); }
+  function setToken(t, e) { localStorage.setItem(TOKEN_KEY, t); localStorage.setItem(EMAIL_KEY, e); }
+  function clearToken() { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(EMAIL_KEY); }
+
+  function showMsg(id, msg, type) {
+    var el = document.getElementById(id);
+    el.textContent = msg; el.className = 'auth-msg ' + type + ' show';
+  }
+  function hideMsg(id) { document.getElementById(id).className = 'auth-msg'; }
+
+  function setLoading(btnId, textId, spinnerId, loading) {
+    document.getElementById(btnId).disabled = loading;
+    document.getElementById(textId).style.display = loading ? 'none' : 'inline';
+    document.getElementById(spinnerId).style.display = loading ? 'block' : 'none';
+  }
+
+  // ── OTP flow ──────────────────────────────────────────────────────────────
+  window.requestOTP = async function(resend) {
+    var email = resend ? currentEmail : document.getElementById('auth-email').value.trim().toLowerCase();
+    hideMsg('email-msg'); hideMsg('otp-msg');
+    if (!email || !email.endsWith('@radiantinnovatech.com')) {
+      showMsg('email-msg', 'Only @radiantinnovatech.com emails are allowed.', 'error'); return;
+    }
+    currentEmail = email;
+    setLoading('email-btn','email-btn-text','email-spinner', true);
+
+    try {
+      var r = await fetch('/api/admin/auth/request-otp', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email })
+      });
+      var j = await r.json();
+      if (r.ok) {
+        document.getElementById('step-email').style.display = 'none';
+        document.getElementById('step-otp').style.display = 'block';
+        document.getElementById('otp-email-display').textContent = email;
+        if (resend) showMsg('otp-msg', 'New code sent.', 'success');
+        document.getElementById('auth-otp').focus();
+      } else {
+        showMsg('email-msg', j.error || 'Failed to send code.', 'error');
+      }
+    } catch(e) {
+      showMsg('email-msg', 'Network error. Try again.', 'error');
+    } finally {
+      setLoading('email-btn','email-btn-text','email-spinner', false);
+    }
+  };
+
+  window.verifyOTP = async function() {
+    var code = document.getElementById('auth-otp').value.trim();
+    hideMsg('otp-msg');
+    if (code.length !== 6) { showMsg('otp-msg','Enter the 6-digit code.','error'); return; }
+    setLoading('otp-btn','otp-btn-text','otp-spinner', true);
+    try {
+      var r = await fetch('/api/admin/auth/verify-otp', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ email: currentEmail, code })
+      });
+      var j = await r.json();
+      if (r.ok) {
+        setToken(j.token, currentEmail);
+        showDashboard(currentEmail);
+      } else {
+        showMsg('otp-msg', j.error || 'Verification failed.', 'error');
+      }
+    } catch(e) {
+      showMsg('otp-msg','Network error. Try again.','error');
+    } finally {
+      setLoading('otp-btn','otp-btn-text','otp-spinner', false);
+    }
+  };
+
+  window.goBack = function() {
+    document.getElementById('step-otp').style.display = 'none';
+    document.getElementById('step-email').style.display = 'block';
+    document.getElementById('auth-otp').value = '';
+    hideMsg('otp-msg'); hideMsg('email-msg');
+  };
+
+  window.logout = function() {
+    clearToken();
+    document.getElementById('dashboard').className = '';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('step-otp').style.display = 'none';
+    document.getElementById('step-email').style.display = 'block';
+    document.getElementById('auth-email').value = '';
+    document.getElementById('auth-otp').value = '';
+    currentEmail = '';
+  };
+
+  // ── Dashboard ─────────────────────────────────────────────────────────────
+  function showDashboard(email) {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('dashboard').classList.add('show');
+    document.getElementById('dash-email').textContent = email;
+    loadWaitlist(1);
+  }
+
+  async function loadWaitlist(page) {
+    currentPage = page;
+    var search = document.getElementById('search-input').value.trim();
+    var typeFilter = document.getElementById('type-filter').value;
+    var token = getToken();
+
+    document.getElementById('wl-tbody').innerHTML =
+      '<tr><td colspan="8" class="table-loading"><div class="loading-spin"></div>Loading…</td></tr>';
+    document.getElementById('pagination').style.display = 'none';
+
+    var params = new URLSearchParams({ page, limit: PAGE_SIZE });
+    if (search) params.set('search', search);
+
+    try {
+      var r = await fetch('/api/admin/waitlist?' + params, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (r.status === 401) { logout(); return; }
+      var data = await r.json();
+
+      // Client-side type filter (server search doesn't filter user_type)
+      var rows = typeFilter ? data.rows.filter(function(row) { return row.user_type === typeFilter; }) : data.rows;
+
+      allRows = data.rows;
+      totalRows = data.total;
+      renderTable(rows, data.total, page);
+      renderStats(data.total);
+    } catch(e) {
+      document.getElementById('wl-tbody').innerHTML =
+        '<tr><td colspan="8" class="table-empty">Failed to load data. Please refresh.</td></tr>';
+    }
+  }
+
+  function renderStats(total) {
+    document.getElementById('stat-total').textContent = total.toLocaleString();
+    var week = allRows.filter(function(r) {
+      return new Date(r.created_at) > new Date(Date.now() - 7*24*60*60*1000);
+    }).length;
+    document.getElementById('stat-week').textContent = week.toLocaleString();
+    document.getElementById('stat-showing').textContent = allRows.length.toLocaleString();
+  }
+
+  var TYPE_BADGE = {
+    'SOC Analyst':         'badge-blue',
+    'Security Engineer':   'badge-blue',
+    'Threat Hunter':       'badge-blue',
+    'CISO/Security Leader':'badge-orange',
+    'MSSP':                'badge-green',
+    'Investor/Advisor':    'badge-orange',
+    'Other':               'badge-gray',
+  };
+
+  function fmtDate(d) {
+    return new Date(d).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+  }
+  function fmtDateTime(d) {
+    return new Date(d).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function renderTable(rows, total, page) {
+    if (!rows.length) {
+      document.getElementById('wl-tbody').innerHTML =
+        '<tr><td colspan="7" class="table-empty">No submissions found.</td></tr>';
+      return;
+    }
+
+    var offset = (page - 1) * PAGE_SIZE;
+    var html = '';
+    rows.forEach(function(r, i) {
+      var badgeClass = TYPE_BADGE[r.user_type] || 'badge-gray';
+      html += '<tr class="data-row" id="row-' + r.id + '" onclick="toggleDetail(' + r.id + ')">' +
+        '<td class="mono muted">' + (offset + i + 1) + '</td>' +
+        '<td><strong style="font-size:0.88rem">' + escHtml(r.full_name) + '</strong></td>' +
+        '<td class="mono" style="font-size:0.78rem">' + escHtml(r.email) + '</td>' +
+        '<td><span style="font-size:0.85rem">' + escHtml(r.role) + '</span><br/><span style="font-size:0.75rem;color:var(--text-secondary)">' + escHtml(r.company) + '</span></td>' +
+        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.country) + '</td>' +
+        '<td><span class="badge ' + badgeClass + '">' + escHtml(r.user_type) + '</span></td>' +
+        '<td class="mono muted" style="font-size:0.78rem">' + fmtDate(r.created_at) + '</td>' +
+      '</tr>';
+
+      var profileVal = r.profile_url
+        ? '<a href="' + escHtml(r.profile_url) + '" target="_blank" rel="noopener noreferrer" class="profile-link">' + escHtml(r.profile_url) + '</a>'
+        : '<span style="color:var(--text-secondary)">—</span>';
+
+      html += '<tr class="detail-row" id="detail-' + r.id + '">' +
+        '<td colspan="7"><div class="detail-panel">' +
+          '<div class="detail-field"><div class="df-label">Full Name</div><div class="df-value">' + escHtml(r.full_name) + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Email</div><div class="df-value"><a href="mailto:' + escHtml(r.email) + '" class="profile-link">' + escHtml(r.email) + '</a></div></div>' +
+          '<div class="detail-field"><div class="df-label">Job Title</div><div class="df-value">' + escHtml(r.role) + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Company</div><div class="df-value">' + escHtml(r.company) + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Country</div><div class="df-value">' + escHtml(r.country) + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Role Type</div><div class="df-value"><span class="badge ' + badgeClass + '">' + escHtml(r.user_type) + '</span></div></div>' +
+          '<div class="detail-field"><div class="df-label">Profile URL</div><div class="df-value">' + profileVal + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Consent</div><div class="df-value">' + (r.consent ? '<span style="color:var(--success)">✓ Yes</span>' : '<span style="color:var(--danger)">✗ No</span>') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Submitted</div><div class="df-value">' + fmtDateTime(r.created_at) + '</div></div>' +
+          (r.use_case ? '<div class="detail-field full-width"><div class="df-label">Use Case / Notes</div><div class="df-value" style="color:var(--text-secondary)">' + escHtml(r.use_case) + '</div></div>' : '') +
+          '<div class="detail-actions">' +
+            '<div id="del-ui-' + r.id + '">' +
+              '<button class="delete-btn" onclick="confirmDelete(event,' + r.id + ')">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
+                'Delete Entry' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div></td>' +
+      '</tr>';
+    });
+    document.getElementById('wl-tbody').innerHTML = html;
+    renderPagination(total, page);
+  }
+
+  window.toggleDetail = function(id) {
+    var detailRow = document.getElementById('detail-' + id);
+    var dataRow   = document.getElementById('row-'    + id);
+    var isOpen = detailRow.classList.toggle('open');
+    dataRow.classList.toggle('expanded', isOpen);
+    // close others
+    document.querySelectorAll('.detail-row.open').forEach(function(el) {
+      if (el.id !== 'detail-' + id) {
+        el.classList.remove('open');
+        var rid = el.id.replace('detail-','');
+        var dr = document.getElementById('row-' + rid);
+        if (dr) dr.classList.remove('expanded');
+      }
+    });
+  };
+
+  window.confirmDelete = function(e, id) {
+    e.stopPropagation();
+    var wrap = document.getElementById('del-ui-' + id);
+    wrap.innerHTML = '<div class="confirm-wrap">Remove this entry? ' +
+      '<button class="confirm-yes" onclick="doDelete(event,' + id + ')">Delete</button>' +
+      '<button class="confirm-no" onclick="cancelDelete(event,' + id + ')">Cancel</button>' +
+      '</div>';
+  };
+
+  window.cancelDelete = function(e, id) {
+    e.stopPropagation();
+    var wrap = document.getElementById('del-ui-' + id);
+    wrap.innerHTML = '<button class="delete-btn" onclick="confirmDelete(event,' + id + ')">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
+      'Delete Entry</button>';
+  };
+
+  window.doDelete = async function(e, id) {
+    e.stopPropagation();
+    var wrap = document.getElementById('del-ui-' + id);
+    wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--text-secondary)">Deleting…</span>';
+    try {
+      var r = await fetch('/api/admin/waitlist/' + id, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      });
+      if (r.status === 401) { logout(); return; }
+      if (r.ok) {
+        // fade + remove both rows
+        var dataRow   = document.getElementById('row-'    + id);
+        var detailRow = document.getElementById('detail-' + id);
+        [dataRow, detailRow].forEach(function(el) {
+          if (el) { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; }
+        });
+        setTimeout(function() {
+          if (dataRow)   dataRow.remove();
+          if (detailRow) detailRow.remove();
+          totalRows--;
+          document.getElementById('stat-total').textContent = totalRows.toLocaleString();
+        }, 300);
+      } else {
+        var j = await r.json().catch(function(){return{};});
+        wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--danger)">' + (j.error || 'Delete failed') + '</span>';
+      }
+    } catch(err) {
+      wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--danger)">Network error</span>';
+    }
+  };
+
+  function renderPagination(total, page) {
+    var pages = Math.ceil(total / PAGE_SIZE);
+    var info = document.getElementById('page-info');
+    var start = (page - 1) * PAGE_SIZE + 1;
+    var end = Math.min(page * PAGE_SIZE, total);
+    info.textContent = 'Showing ' + start + '–' + end + ' of ' + total.toLocaleString();
+
+    var btns = '';
+    btns += '<button class="page-btn" onclick="loadWaitlist(' + (page-1) + ')" ' + (page<=1?'disabled':'') + '>← Prev</button>';
+    var lo = Math.max(1, page-2), hi = Math.min(pages, page+2);
+    for (var p = lo; p <= hi; p++) {
+      btns += '<button class="page-btn' + (p===page?' active':'') + '" onclick="loadWaitlist('+p+')">' + p + '</button>';
+    }
+    btns += '<button class="page-btn" onclick="loadWaitlist(' + (page+1) + ')" ' + (page>=pages?'disabled':'') + '>Next →</button>';
+    document.getElementById('page-btns').innerHTML = btns;
+    document.getElementById('pagination').style.display = 'flex';
+  }
+
+  window.exportCSV = async function() {
+    var token = getToken();
+    var r = await fetch('/api/admin/waitlist/export', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (r.status === 401) { logout(); return; }
+    var blob = await r.blob();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'waitlist_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  function escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Search & filter ───────────────────────────────────────────────────────
+  document.getElementById('search-input').addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function() { loadWaitlist(1); }, 350);
+  });
+  document.getElementById('type-filter').addEventListener('change', function() { loadWaitlist(1); });
+
+  // ── Tabs ─────────────────────────────────────────────────────────────────
+  window.switchTab = function(tab) {
+    document.getElementById('pane-waitlist').style.display = tab === 'waitlist' ? 'block' : 'none';
+    document.getElementById('pane-logs').style.display     = tab === 'logs'     ? 'block' : 'none';
+    document.getElementById('tab-waitlist').classList.toggle('active', tab === 'waitlist');
+    document.getElementById('tab-logs').classList.toggle('active',     tab === 'logs');
+    if (tab === 'logs') loadLogs();
+  };
+
+  var ACTION_CLASS = {
+    login:        'action-login',
+    login_failed: 'action-login_failed',
+    delete:       'action-delete',
+    export:       'action-export',
+  };
+
+  function fmtFull(d) {
+    return new Date(d).toLocaleString('en-GB', {
+      day:'2-digit', month:'short', year:'numeric',
+      hour:'2-digit', minute:'2-digit', second:'2-digit'
+    });
+  }
+
+  async function loadLogs() {
+    document.getElementById('log-tbody').innerHTML =
+      '<tr><td colspan="4" class="table-loading"><div class="loading-spin"></div>Loading…</td></tr>';
+    try {
+      var r = await fetch('/api/admin/logs?limit=200', {
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      });
+      if (r.status === 401) { logout(); return; }
+      var data = await r.json();
+      if (!data.rows.length) {
+        document.getElementById('log-tbody').innerHTML =
+          '<tr><td colspan="4" class="table-empty">No audit events yet.</td></tr>';
+        return;
+      }
+      var html = '';
+      data.rows.forEach(function(row) {
+        var cls = ACTION_CLASS[row.action] || 'action-default';
+        html += '<tr>' +
+          '<td class="mono muted" style="font-size:0.76rem;white-space:nowrap">' + fmtFull(row.created_at) + '</td>' +
+          '<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;color:var(--accent)">' + escHtml(row.admin_email) + '</td>' +
+          '<td><span class="action-pill ' + cls + '">' + escHtml(row.action.replace('_',' ')) + '</span></td>' +
+          '<td style="color:var(--text-secondary);font-size:0.82rem">' + escHtml(row.detail || '—') + '</td>' +
+        '</tr>';
+      });
+      document.getElementById('log-tbody').innerHTML = html;
+    } catch(e) {
+      document.getElementById('log-tbody').innerHTML =
+        '<tr><td colspan="4" class="table-empty">Failed to load logs.</td></tr>';
+    }
+  }
+
+  // OTP: submit on Enter
+  document.getElementById('auth-email').addEventListener('keydown', function(e) { if (e.key==='Enter') requestOTP(); });
+  document.getElementById('auth-otp').addEventListener('keydown', function(e) { if (e.key==='Enter') verifyOTP(); });
+  // Auto-format OTP input to digits only
+  document.getElementById('auth-otp').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g,'').slice(0,6);
+  });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  var savedToken = getToken();
+  var savedEmail = localStorage.getItem(EMAIL_KEY) || '';
+  if (savedToken) {
+    // Quick verify token still valid
+    fetch('/api/admin/waitlist?page=1&limit=1', { headers: { 'Authorization': 'Bearer ' + savedToken } })
+      .then(function(r) {
+        if (r.ok) { showDashboard(savedEmail); }
+        else { clearToken(); }
+      }).catch(function() { /* show login */ });
+  }
+})();
+</script>
+</body>
+</html>
