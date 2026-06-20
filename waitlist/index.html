@@ -1,469 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI SOC Copilot Waitlist | Radiant Innovatech</title>
-  <meta name="description" content="Join the Radiant Innovatech waitlist to test an Autonomous AI SOC Copilot built to help security teams detect, investigate, and respond to threats faster using AI."/>
-  <meta property="og:title" content="AI SOC Copilot Waitlist | Radiant Innovatech"/>
-  <meta property="og:description" content="Join the Radiant Innovatech waitlist to test an Autonomous AI SOC Copilot built to help security teams detect, investigate, and respond to threats faster using AI."/>
-  <meta property="og:type" content="website"/>
-  <link rel="icon" type="image/png" href="/assets/logo.png"/>
-  <script>document.documentElement.classList.add('js');</script>
-  <link rel="stylesheet" href="/css/global.css?v=20260613"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join the Waitlist | Radiant Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    .waitlist-wrapper {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      padding-top: var(--nav-h);
-    }
-
-    /* ── Left column ── */
-    .wl-left {
-      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,0.08), transparent 60%), var(--bg-secondary);
-      padding: 80px 60px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      border-right: 1px solid var(--border);
-      position: relative;
-    }
-    .wl-left::before {
-      content: ''; position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-      background-size: 64px 64px; pointer-events: none;
-    }
-    .wl-left-inner { max-width: 540px; margin: auto 0; position: relative; z-index: 2; }
-
-    .wl-left h1 {
-      font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 800; color: white;
-      line-height: 1.07; letter-spacing: -0.03em; margin-bottom: 20px;
-    }
-    .wl-left h1 span { color: var(--accent); }
-    .wl-left > .wl-left-inner > p {
-      color: var(--text-secondary); font-size: 1.05rem; line-height: 1.75;
-      margin-bottom: 36px;
-    }
-
-    .benefit-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 44px; }
-    .benefit-item {
-      display: flex; align-items: flex-start; gap: 14px;
-      background: rgba(59,130,246,0.05); border: 1px solid var(--border);
-      border-radius: 10px; padding: 14px 16px;
-    }
-    .benefit-icon {
-      width: 32px; height: 32px; flex-shrink: 0; border-radius: 8px;
-      background: var(--accent-dim); border: 1px solid var(--accent-border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-    }
-    .benefit-item strong { display: block; font-size: 0.88rem; color: var(--text-primary); margin-bottom: 2px; }
-    .benefit-item span { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
-
-    .wl-who {
-      border-top: 1px solid var(--border); padding-top: 28px;
-      position: relative; z-index: 2;
-    }
-    .wl-who-lbl {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent);
-      text-transform: uppercase; letter-spacing: 0.12em; display: block; margin-bottom: 14px;
-    }
-    .who-tags {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
-    .who-tag {
-      font-size: 0.78rem; font-weight: 500; color: var(--text-secondary);
-      border: 1px solid var(--border); border-radius: 6px;
-      padding: 4px 12px; background: rgba(0,0,0,0.3);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* ── Right column (form) ── */
-    .wl-right {
-      background: var(--bg-primary);
-      padding: 80px 60px;
-      display: flex; align-items: flex-start; justify-content: center;
-      overflow-y: auto;
-    }
-
-    .form-container {
-      width: 100%; max-width: 480px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 40px; border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    }
-    .form-container h3 {
-      font-size: 1.2rem; font-weight: 700; color: white;
-      margin-bottom: 6px;
-    }
-    .form-container .form-subtitle {
-      font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 28px; line-height: 1.5;
-    }
-
-    .form-group { margin-bottom: 18px; }
-    .form-group label {
-      display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
-      color: var(--text-secondary); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .form-group label .opt { opacity: 0.5; font-weight: 400; }
-    .form-control {
-      width: 100%; background: rgba(5,8,22,0.8);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 11px 14px; color: white; font-family: 'Inter', sans-serif;
-      font-size: 0.92rem; transition: border-color 0.2s;
-    }
-    .form-control::placeholder { color: rgba(148,163,184,0.4); }
-    .form-control:focus { outline: none; border-color: var(--accent); background: #050816; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
-    textarea.form-control { resize: vertical; min-height: 88px; }
-    select.form-control {
-      cursor: pointer; appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%2394A3B8" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
-      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
-    }
-    select.form-control option { background: var(--bg-surface); color: white; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-    .consent-box {
-      display: flex; align-items: flex-start; gap: 12px;
-      background: var(--accent-dim); border: 1px solid var(--accent-border);
-      border-radius: 8px; padding: 14px; cursor: pointer;
-      margin-bottom: 20px;
-    }
-    .consent-box input[type="checkbox"] {
-      width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px;
-      accent-color: var(--accent); cursor: pointer;
-    }
-    .consent-box span { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; }
-
-    .submit-btn {
-      width: 100%; background: var(--accent); color: white; border: none;
-      padding: 13px; border-radius: 8px; font-weight: 700; font-size: 0.95rem;
-      cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(59,130,246,0.3);
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .submit-btn:hover:not(:disabled) { background: #2563EB; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,130,246,0.5); }
-    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .btn-spinner {
-      width: 15px; height: 15px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
-      animation: spin 0.7s linear infinite; display: none;
-    }
-
-    .form-msg {
-      margin-bottom: 16px; padding: 12px 14px; border-radius: 8px;
-      font-size: 0.82rem; font-weight: 500; display: none;
-    }
-    .form-msg.error { background: var(--danger-dim); border: 1px solid var(--danger-border); color: #fca5a5; }
-    .form-msg.show { display: block; }
-
-    /* Success state */
-    #success-state {
-      display: none; text-align: center; padding: 20px 0;
-    }
-    #success-state.show { display: block; }
-    .success-icon {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: var(--success-dim); border: 2px solid var(--success-border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; margin: 0 auto 20px;
-      color: var(--success);
-    }
-    #success-state h3 { font-size: 1.15rem; color: white; margin-bottom: 10px; }
-    #success-state p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
-
-    /* field validation */
-    .form-group.has-error .form-control { border-color: var(--danger); }
-    .field-err { font-size: 0.75rem; color: var(--danger); margin-top: 4px; display: none; }
-    .form-group.has-error .field-err { display: block; }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .waitlist-wrapper { grid-template-columns: 1fr; }
-      .wl-left { padding: 60px 32px; border-right: none; border-bottom: 1px solid var(--border); }
-      .wl-right { padding: 48px 24px; }
-    }
-    @media (max-width: 520px) {
-      .form-container { padding: 28px 20px; }
-      .form-row { grid-template-columns: 1fr; }
-      .wl-left { padding: 48px 24px; }
-    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #F8F9FA; color: #212529; font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: #DBEAFE; }
+    @keyframes ri-pulse { 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
+    nav a:hover { color: #212529 !important; }
+    .btn-primary { transition: background 0.15s, box-shadow 0.15s; }
+    .btn-primary:hover { background: #1D4ED8 !important; box-shadow: 0 8px 16px -4px rgba(37,99,235,0.30) !important; }
+    .btn-outline:hover { background: #EFF6FF !important; border-color: #1D4ED8 !important; color: #1D4ED8 !important; }
+    .cta-btn-white:hover { background: #F1F3F5 !important; }
+    .cta-btn-ghost:hover { background: rgba(255,255,255,0.18) !important; }
+    footer a:hover { color: #fff !important; }
+    .ri-field { width:100%; background:#fff; border:1px solid #DEE2E6; border-radius:4px; padding:11px 14px; color:#212529; font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; transition:border-color .18s, box-shadow .18s; }
+    .ri-field::placeholder { color:#ADB5BD; }
+    .ri-field:focus { outline:none; border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.18); }
+    select.ri-field { cursor:pointer; appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23868E96' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>"); background-repeat:no-repeat; background-position:right 14px center; padding-right:38px; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    @keyframes pulse-dot { 0%,100%{ opacity:.4; transform:scale(1); } 50%{ opacity:1; transform:scale(1.15); } }
+    .split-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 68px); }
+    .left-panel { position: relative; background: #fff; border-right: 1px solid #E9ECEF; padding: 72px 56px; overflow: hidden; }
+    .right-panel { background: #F8F9FA; padding: 72px 56px; display: flex; align-items: flex-start; justify-content: center; }
+    .form-card { background: #fff; border: 1px solid #E9ECEF; border-radius: 10px; padding: 36px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); width: 100%; max-width: 460px; }
+    .field-label { display: block; font-size: 13px; font-weight: 600; color: #343A40; margin-bottom: 6px; }
+    .submit-btn { width: 100%; background: #2563EB; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 13px 20px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.15s, box-shadow 0.15s; }
+    .submit-btn:hover { background: #1D4ED8; box-shadow: 0 8px 16px -4px rgba(37,99,235,0.30); }
   </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
-  <a href="/index.html" class="nav-brand">
-    <img src="/assets/logo.png" class="nav-logo-img" alt="Radiant Nexus Logo" onerror="this.src='https://placehold.co/64x64/3B82F6/white?text=RN'"/>
-    <span class="nav-brand-text">RADIANT <span>NEXUS</span></span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="/pages/platform.html">Platform</a></li>
-    <li><a href="/pages/agents.html">AI Agents</a></li>
-    <li><a href="/pages/solutions.html">Solutions</a></li>
-    <li><a href="/pages/architecture.html">Architecture</a></li>
-    <li><a href="/pages/security.html">Security &amp; Trust</a></li>
-    <li><a href="/pages/about.html">About</a></li>
-    <li class="nav-mobile-only"><a href="/waitlist" class="active">Join Waitlist</a></li>
-    <li class="nav-mobile-only"><a href="/pages/contact.html">Request Demo</a></li>
-  </ul>
-  <div class="nav-actions">
-    <a href="/waitlist" class="nav-waitlist active" style="background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.4);color:var(--accent);">Join Waitlist</a>
-    <a href="/pages/contact.html" class="nav-cta">Request Demo <svg class="ic"><use href="#i-arrow-right"/></svg></a>
+<nav style="position:sticky; top:0; z-index:50; background:rgba(248,249,250,0.82); backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid #E9ECEF;">
+  <div style="max-width:1200px; margin:0 auto; padding:0 32px; height:68px; display:flex; align-items:center; gap:32px;">
+    <a href="/" style="display:flex; align-items:center; gap:11px;">
+      <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:34px; height:34px; border-radius:8px; display:block;" />
+      <span style="font-size:16px; font-weight:800; letter-spacing:0.16em; color:#212529;">RADIANT <span style="color:#2563EB;">NEXUS</span></span>
+    </a>
+    <ul style="list-style:none; display:flex; align-items:center; gap:28px; margin:0; padding:0; margin-left:8px;">
+      <li><a href="/pages/platform.html" style="font-size:14px; font-weight:500; color:#495057;">Platform</a></li>
+      <li><a href="/pages/agents.html" style="font-size:14px; font-weight:500; color:#495057;">AI Agents</a></li>
+      <li><a href="/pages/solutions.html" style="font-size:14px; font-weight:500; color:#495057;">Solutions</a></li>
+      <li><a href="/pages/architecture.html" style="font-size:14px; font-weight:500; color:#495057;">Architecture</a></li>
+      <li><a href="/pages/security.html" style="font-size:14px; font-weight:500; color:#495057;">Security &amp; Trust</a></li>
+      <li><a href="/pages/about.html" style="font-size:14px; font-weight:500; color:#495057;">About</a></li>
+    </ul>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:14px;">
+      <a href="/waitlist/" class="btn-outline" style="display:inline-flex; align-items:center; font-size:14px; font-weight:600; color:#2563EB; background:#fff; border:1px solid #2563EB; padding:9px 16px; border-radius:6px;">Join Waitlist</a>
+      <a href="/pages/contact.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:#fff; background:#2563EB; padding:9px 16px; border-radius:6px;">Request Demo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
-  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- SPLIT LAYOUT -->
-<div class="waitlist-wrapper">
+<div class="split-layout">
 
-  <!-- Left: Copy -->
-  <div class="wl-left">
-    <div></div>
-    <div class="wl-left-inner reveal">
-      <span class="eyebrow">PILOT PROGRAM — EARLY ACCESS</span>
-      <h1>Join the <span>AI SOC Copilot</span> Waitlist</h1>
-      <p>
-        Radiant Innovatech is building an Autonomous AI SOC Copilot to help security teams detect, investigate, and respond to threats faster. We're opening a limited pilot to cybersecurity professionals who want to help shape its first functional iteration.
-      </p>
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <!-- Dot pattern overlay -->
+    <div style="position:absolute; inset:0; background-image:radial-gradient(#EAEEF3 1px, transparent 1px); background-size:22px 22px; opacity:.6; pointer-events:none;"></div>
 
-      <div class="benefit-list">
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg class="ic"><use href="#i-bolt"/></svg></div>
-          <div>
-            <strong>Test Early SOC Automation</strong>
-            <span>Hands-on access to AI-assisted triage and investigation before public launch.</span>
+    <!-- Content (above dot pattern) -->
+    <div style="position:relative; z-index:1; max-width:480px;">
+
+      <!-- Badge -->
+      <div style="display:inline-flex; align-items:center; gap:9px; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:100px; padding:5px 14px; margin-bottom:32px;">
+        <span style="width:8px; height:8px; border-radius:50%; background:#22C55E; display:inline-block; animation: pulse-dot 1.8s ease-in-out infinite;"></span>
+        <span class="mono" style="font-size:12px; font-weight:600; color:#2563EB; letter-spacing:0.06em;">Q3 2026 cohort · limited places</span>
+      </div>
+
+      <!-- H1 -->
+      <h1 style="font-size:clamp(30px,4vw,46px); font-weight:800; line-height:1.15; color:#212529; margin:0 0 20px;">Join the Radiant Nexus <span style="color:#F59E0B;">waitlist.</span></h1>
+
+      <!-- Description -->
+      <p style="font-size:16px; line-height:1.75; color:#495057; margin:0 0 32px;">We're onboarding a small cohort of SOC teams to run autonomous investigation loops against their own telemetry. Add your team and we'll reach out as places open, earliest cohorts first.</p>
+
+      <!-- Bullets -->
+      <ul style="list-style:none; margin:0 0 40px; padding:0; display:flex; flex-direction:column; gap:14px;">
+        <li style="display:flex; align-items:flex-start; gap:12px;">
+          <div style="width:22px; height:22px; min-width:22px; background:#F0FDF4; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-top:1px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
+          <span style="font-size:15px; color:#343A40; line-height:1.55;">Priority access to the design-partner programme</span>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:12px;">
+          <div style="width:22px; height:22px; min-width:22px; background:#F0FDF4; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-top:1px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span style="font-size:15px; color:#343A40; line-height:1.55;">Early-cohort pricing locked for your first year</span>
+        </li>
+        <li style="display:flex; align-items:flex-start; gap:12px;">
+          <div style="width:22px; height:22px; min-width:22px; background:#F0FDF4; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-top:1px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span style="font-size:15px; color:#343A40; line-height:1.55;">Direct line to the core engineering team</span>
+        </li>
+      </ul>
+
+      <!-- Stats row -->
+      <div style="border-top:1px solid #E9ECEF; padding-top:28px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <div>
+          <div class="mono" style="font-size:32px; font-weight:700; color:#212529; line-height:1; margin-bottom:6px;">10</div>
+          <div style="font-size:12.5px; color:#6C757D; line-height:1.4;">design-partner<br>places</div>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg class="ic"><use href="#i-target"/></svg></div>
-          <div>
-            <strong>Direct Feedback Channel</strong>
-            <span>Work directly with the team. Your input shapes the product roadmap.</span>
-          </div>
+        <div style="border-left:1px solid #E9ECEF; padding-left:16px;">
+          <div class="mono" style="font-size:32px; font-weight:700; color:#212529; line-height:1; margin-bottom:6px;">&lt;60s</div>
+          <div style="font-size:12.5px; color:#6C757D; line-height:1.4;">autonomous<br>investigation</div>
         </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg class="ic"><use href="#i-brain"/></svg></div>
-          <div>
-            <strong>Shape Explainable AI Triage</strong>
-            <span>Help us build AI that explains its reasoning — not just a verdict.</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon"><svg class="ic"><use href="#i-key"/></svg></div>
-          <div>
-            <strong>Priority Pilot Selection</strong>
-            <span>Waitlist members are first considered when pilot spots open.</span>
-          </div>
+        <div style="border-left:1px solid #E9ECEF; padding-left:16px;">
+          <div class="mono" style="font-size:32px; font-weight:700; color:#212529; line-height:1; margin-bottom:6px;">150:1</div>
+          <div style="font-size:12.5px; color:#6C757D; line-height:1.4;">alert<br>compression</div>
         </div>
       </div>
-    </div>
 
-    <div class="wl-who reveal" style="animation-delay:0.2s">
-      <span class="wl-who-lbl">Built For</span>
-      <div class="who-tags">
-        <span class="who-tag">SOC Analysts</span>
-        <span class="who-tag">Security Engineers</span>
-        <span class="who-tag">Threat Hunters</span>
-        <span class="who-tag">CISOs</span>
-        <span class="who-tag">MSSPs</span>
-        <span class="who-tag">Enterprise IT</span>
-      </div>
     </div>
   </div>
 
-  <!-- Right: Form -->
-  <div class="wl-right">
-    <div class="form-container reveal" style="animation-delay:0.1s">
-      <h3>Apply for Pilot Access</h3>
-      <p class="form-subtitle">We review applications manually. No spam. No obligation.</p>
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-card">
+      <h2 style="font-size:20px; font-weight:800; color:#212529; margin:0 0 6px;">Request your place</h2>
+      <p style="font-size:14px; color:#6C757D; margin:0 0 28px; line-height:1.5;">Fill in your details and we will be in touch as cohort places open.</p>
 
-      <div id="success-state">
-        <div class="success-icon"><svg class="ic"><use href="#i-check"/></svg></div>
-        <h3>You're on the waitlist.</h3>
-        <p>Thank you for helping shape the future of AI-driven security operations. We'll be in touch as pilot spots open up.</p>
-      </div>
+      <form action="/waitlist/submit" method="POST">
+        <input type="hidden" name="source" value="waitlist-page" />
 
-      <form id="wl-form" novalidate>
-        <input style="display:none!important" type="text" name="_hp" tabindex="-1" aria-hidden="true"/>
-
-        <div class="form-row">
-          <div class="form-group" id="f-full_name">
-            <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name" class="form-control" placeholder="John Mensah" maxlength="200"/>
-            <div class="field-err">Required.</div>
-          </div>
-          <div class="form-group" id="f-email">
-            <label for="email">Work Email</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="john@company.com" maxlength="254"/>
-            <div class="field-err">Valid email required.</div>
-          </div>
+        <!-- Full name -->
+        <div style="margin-bottom:18px;">
+          <label for="fullName" class="field-label">Full name</label>
+          <input id="fullName" name="fullName" type="text" class="ri-field" placeholder="Ama Mensah" required />
         </div>
 
-        <div class="form-row">
-          <div class="form-group" id="f-role">
-            <label for="role">Job Title</label>
-            <input type="text" id="role" name="role" class="form-control" placeholder="SOC Analyst" maxlength="150"/>
-            <div class="field-err">Required.</div>
-          </div>
-          <div class="form-group" id="f-company">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company" class="form-control" placeholder="Acme Security" maxlength="200"/>
-            <div class="field-err">Required.</div>
-          </div>
+        <!-- Work email -->
+        <div style="margin-bottom:18px;">
+          <label for="email" class="field-label">Work email</label>
+          <input id="email" name="email" type="email" class="ri-field" placeholder="ama@enterprise-soc.com" required />
         </div>
 
-        <div class="form-row">
-          <div class="form-group" id="f-country">
-            <label for="country">Country</label>
-            <input type="text" id="country" name="country" class="form-control" placeholder="Ghana" maxlength="100"/>
-            <div class="field-err">Required.</div>
-          </div>
-          <div class="form-group" id="f-user_type">
-            <label for="user_type">Role Type</label>
-            <select id="user_type" name="user_type" class="form-control">
-              <option value="" disabled selected>Select…</option>
-              <option>SOC Analyst</option>
-              <option>Security Engineer</option>
-              <option>Threat Hunter</option>
-              <option>CISO/Security Leader</option>
-              <option>MSSP</option>
-              <option>Investor/Advisor</option>
-              <option>Other</option>
+        <!-- Company -->
+        <div style="margin-bottom:18px;">
+          <label for="company" class="field-label">Company</label>
+          <input id="company" name="company" type="text" class="ri-field" placeholder="Enterprise SOC" required />
+        </div>
+
+        <!-- Two-col row: team size + sector -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:28px;">
+          <div>
+            <label for="teamSize" class="field-label">Team size</label>
+            <select id="teamSize" name="teamSize" class="ri-field" required>
+              <option value="" disabled selected>Select size</option>
+              <option value="1-5">1 – 5</option>
+              <option value="6-20">6 – 20</option>
+              <option value="21-50">21 – 50</option>
+              <option value="50+">50+</option>
             </select>
-            <div class="field-err">Required.</div>
+          </div>
+          <div>
+            <label for="sector" class="field-label">Primary sector</label>
+            <select id="sector" name="sector" class="ri-field" required>
+              <option value="" disabled selected>Select sector</option>
+              <option value="enterprise-soc">Enterprise SOC</option>
+              <option value="mssp">MSSP</option>
+              <option value="banking">Banking</option>
+              <option value="critical-infrastructure">Critical infrastructure</option>
+              <option value="government">Government</option>
+            </select>
           </div>
         </div>
 
-        <div class="form-group" id="f-profile_url">
-          <label for="profile_url">LinkedIn or X Profile <span class="opt">(optional)</span></label>
-          <input type="url" id="profile_url" name="profile_url" class="form-control" placeholder="https://linkedin.com/in/yourprofile" maxlength="500"/>
-          <div class="field-err">Enter a valid URL or leave blank.</div>
+        <!-- Submit -->
+        <button type="submit" class="submit-btn">Join the waitlist</button>
+
+        <!-- Lock note -->
+        <div style="display:flex; align-items:center; justify-content:center; gap:7px; margin-top:14px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ADB5BD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="11" width="16" height="11" rx="2" ry="2"/>
+            <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+          </svg>
+          <span style="font-size:12.5px; color:#ADB5BD;">No spam. We only email about cohort access.</span>
         </div>
-
-        <div class="form-group">
-          <label for="use_case">What should an AI SOC Copilot help with most? <span class="opt">(optional)</span></label>
-          <textarea id="use_case" name="use_case" class="form-control" placeholder="e.g. Alert fatigue, tier-1 triage, IOC investigation…" maxlength="2000"></textarea>
-        </div>
-
-        <label class="consent-box" for="consent">
-          <input type="checkbox" id="consent" name="consent"/>
-          <span>I agree to be contacted by Radiant Innovatech about the AI SOC Copilot pilot program.</span>
-        </label>
-        <div class="form-group" id="f-consent" style="margin-top:-14px;margin-bottom:18px;">
-          <div class="field-err">Consent required.</div>
-        </div>
-
-        <div class="form-msg error" id="form-err"></div>
-
-        <button type="submit" class="submit-btn" id="submit-btn">
-          <span id="btn-text">Request Pilot Access</span>
-          <div class="btn-spinner" id="btn-spinner"></div>
-        </button>
       </form>
     </div>
   </div>
 
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Scroll reveal handled globally by js/global.js
+<!-- FOOTER -->
+<footer style="background:#212529;">
+  <div style="max-width:1200px; margin:0 auto; padding:64px 32px 0;">
+    <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:48px;">
+      <div style="max-width:340px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:32px; height:32px; border-radius:7px;" />
+          <span style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#fff; letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
+        </div>
+        <p style="font-size:14px; line-height:1.6; color:#ADB5BD; margin:0;">The autonomous operational intelligence platform for the modern SOC.</p>
+        <p style="margin-top:14px; font-size:12.5px; color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
+      </div>
+      <div><h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px;">Platform</h4>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+          <li><a href="/pages/platform.html" style="font-size:14px; color:#ADB5BD;">Operational Layer</a></li>
+          <li><a href="/pages/agents.html" style="font-size:14px; color:#ADB5BD;">AI Constellation</a></li>
+          <li><a href="/pages/architecture.html" style="font-size:14px; color:#ADB5BD;">Architecture Flow</a></li>
+          <li><a href="/pages/security.html" style="font-size:14px; color:#ADB5BD;">Security &amp; Trust</a></li>
+        </ul>
+      </div>
+      <div><h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px;">Solutions</h4>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">Enterprise SOCs</a></li>
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">MSSP / Managed SOC</a></li>
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">Banking &amp; Finance</a></li>
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">Critical Infrastructure</a></li>
+        </ul>
+      </div>
+      <div><h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px;">Company</h4>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+          <li><a href="/pages/about.html" style="font-size:14px; color:#ADB5BD;">About Us</a></li>
+          <li><a href="/pages/resources.html" style="font-size:14px; color:#ADB5BD;">Resources Hub</a></li>
+          <li><a href="/pages/contact.html" style="font-size:14px; color:#ADB5BD;">Request Demo</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:22px 0; border-top:1px solid #343A40;">
+      <p style="font-size:13px; color:#868E96; margin:0;">© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
+      <div style="display:flex; gap:24px;">
+        <a href="#" style="font-size:13px; color:#868E96;">Privacy Policy</a>
+        <a href="#" style="font-size:13px; color:#868E96;">Security Assurance</a>
+        <a href="#" style="font-size:13px; color:#868E96;">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-  // Form logic
-  var form      = document.getElementById('wl-form');
-  var btn       = document.getElementById('submit-btn');
-  var btnText   = document.getElementById('btn-text');
-  var spinner   = document.getElementById('btn-spinner');
-  var formErr   = document.getElementById('form-err');
-  var successEl = document.getElementById('success-state');
-
-  function setErr(id, msg) {
-    var wrap = document.getElementById('f-' + id);
-    if (!wrap) return;
-    wrap.classList.add('has-error');
-    if (msg) { var e = wrap.querySelector('.field-err'); if (e) e.textContent = msg; }
-  }
-  function clearErr(id) {
-    var wrap = document.getElementById('f-' + id);
-    if (wrap) wrap.classList.remove('has-error');
-  }
-  function clearAll() {
-    document.querySelectorAll('.form-group.has-error').forEach(function(el) { el.classList.remove('has-error'); });
-    formErr.classList.remove('show'); formErr.textContent = '';
-  }
-  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-  function validUrl(v) { try { new URL(v); return true; } catch(e) { return false; } }
-
-  ['full_name','email','role','company','country','user_type','profile_url'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) { el.addEventListener('input', function() { clearErr(id); }); el.addEventListener('change', function() { clearErr(id); }); }
-  });
-  document.getElementById('consent').addEventListener('change', function() { clearErr('consent'); });
-
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    clearAll();
-
-    var full_name   = document.getElementById('full_name').value.trim();
-    var email       = document.getElementById('email').value.trim();
-    var role        = document.getElementById('role').value.trim();
-    var company     = document.getElementById('company').value.trim();
-    var country     = document.getElementById('country').value.trim();
-    var user_type   = document.getElementById('user_type').value;
-    var profile_url = document.getElementById('profile_url').value.trim();
-    var use_case    = document.getElementById('use_case').value.trim();
-    var consent     = document.getElementById('consent').checked;
-    var hp          = form.querySelector('[name="_hp"]').value;
-
-    var ok = true;
-    if (!full_name)              { setErr('full_name', 'Required.'); ok = false; }
-    if (!validEmail(email))      { setErr('email', 'Valid email required.'); ok = false; }
-    if (!role)                   { setErr('role', 'Required.'); ok = false; }
-    if (!company)                { setErr('company', 'Required.'); ok = false; }
-    if (!country)                { setErr('country', 'Required.'); ok = false; }
-    if (!user_type)              { setErr('user_type', 'Required.'); ok = false; }
-    if (profile_url && !validUrl(profile_url)) { setErr('profile_url', 'Enter a valid URL or leave blank.'); ok = false; }
-    if (!consent)                { setErr('consent', 'Consent required.'); ok = false; }
-    if (!ok) return;
-
-    btn.disabled = true; btnText.style.display = 'none'; spinner.style.display = 'block';
-
-    try {
-      var res = await fetch('/api/waitlist/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ full_name, email, role, company, country, user_type, profile_url, use_case, consent, _hp: hp })
-      });
-      var json = await res.json().catch(function() { return {}; });
-
-      if (res.ok) {
-        form.style.display = 'none';
-        successEl.classList.add('show');
-        return;
-      }
-      if (res.status === 409) {
-        formErr.textContent = 'This email is already on the waitlist.';
-      } else if (res.status === 429) {
-        formErr.textContent = 'Too many submissions. Please try again in 15 minutes.';
-      } else {
-        formErr.textContent = json.error || 'Something went wrong. Please try again.';
-      }
-      formErr.classList.add('show');
-    } catch(err) {
-      formErr.textContent = 'Network error. Please check your connection.';
-      formErr.classList.add('show');
-    } finally {
-      btn.disabled = false; btnText.style.display = 'inline'; spinner.style.display = 'none';
-    }
-  });
-});
-</script>
-<script src="/js/global.js?v=20260613" defer></script>
 </body>
 </html>

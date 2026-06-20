@@ -1,471 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Solutions by Sector — Radiant Nexus</title>
-  <meta name="description" content="Autonomous SOC deployments tuned to your sector — Enterprise SOCs, MSSP / Managed SOC, Banking &amp; Finance, and Critical Infrastructure. Concrete outcomes, real constraints, supervised response."/>
-  <link rel="icon" type="image/png" href="../assets/logo.png"/>
-  <script>document.documentElement.classList.add("js");</script>
-  <link rel="stylesheet" href="../css/global.css?v=20260613"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solutions | Radiant Nexus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ── SOLUTIONS-ONLY LAYOUT ── */
-    .use-row { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center; }
-    .use-row + .use-row { margin-top: 80px; }
-    .use-row.reverse .use-text { order: 2; }
-
-    .use-metric {
-      display: flex; align-items: center; gap: 16px; margin-top: 26px;
-      padding: 18px 20px; border-radius: var(--r-md);
-      background: var(--accent-dim); border: 1px solid var(--accent-border);
-    }
-    .use-metric .uv { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 800; color: var(--accent-soft); line-height: 1; }
-    .use-metric .ul { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5; }
-
-    /* Console rows inside panels */
-    .log-line { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-secondary); display: flex; gap: 9px; align-items: baseline; padding: 4px 0; }
-    .log-line b { color: var(--text-faint); }
-    .kv { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; padding: 9px 0; border-bottom: 1px solid var(--hairline); }
-    .kv:last-child { border-bottom: 0; }
-    .kv span:first-child { color: var(--text-secondary); }
-    .kv span:last-child { font-family: 'JetBrains Mono', monospace; color: var(--text-primary); }
-
-    /* Sector grid */
-    .sector-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-    .sector-card { display: flex; flex-direction: column; }
-    .sector-card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin: 18px 0 10px; letter-spacing: -0.02em; }
-    .sector-card p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 20px; }
-    .sector-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--border); }
-    .sector-feats li { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; color: var(--text-secondary); }
-    .sector-feats li .ic { color: var(--success); font-size: 16px; flex-shrink: 0; }
-    .sector-stat { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-soft); }
-
-    /* Outcomes strip */
-    .outcomes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .outcome { text-align: center; padding: 30px 18px; }
-    .outcome .ov { font-family: 'JetBrains Mono', monospace; font-size: clamp(1.9rem, 3vw, 2.5rem); font-weight: 800; color: var(--accent-soft); line-height: 1; }
-    .outcome .ol { font-size: 0.84rem; color: var(--text-secondary); margin-top: 10px; line-height: 1.5; }
-
-    @media (max-width: 960px) {
-      .use-row, .use-row.reverse { grid-template-columns: 1fr; gap: 36px; }
-      .use-row.reverse .use-text { order: 0; }
-      .sector-grid { grid-template-columns: 1fr; }
-      .outcomes { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 560px) { .outcomes { grid-template-columns: 1fr; } }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #F8F9FA; color: #212529; font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: #DBEAFE; }
+    @keyframes ri-pulse { 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
+    nav a:hover { color: #212529 !important; }
+    .btn-primary { transition: background 0.15s, box-shadow 0.15s; }
+    .btn-primary:hover { background: #1D4ED8 !important; box-shadow: 0 8px 16px -4px rgba(37,99,235,0.30) !important; }
+    .btn-outline:hover { background: #EFF6FF !important; border-color: #1D4ED8 !important; color: #1D4ED8 !important; }
+    .cta-btn-white:hover { background: #F1F3F5 !important; }
+    .cta-btn-ghost:hover { background: rgba(255,255,255,0.18) !important; }
+    footer a:hover { color: #fff !important; }
+    .ri-field{ width:100%; background:#fff; border:1px solid #DEE2E6; border-radius:4px; padding:11px 14px; color:#212529; font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; transition:border-color .18s, box-shadow .18s; }
+    .ri-field::placeholder{ color:#ADB5BD; }
+    .ri-field:focus{ outline:none; border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.18); }
+    select.ri-field{ cursor:pointer; appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23868E96' viewBox='0 0 16 16'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>"); background-repeat:no-repeat; background-position:right 14px center; padding-right:38px; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .terminal-card { background: #0F172A; border-radius: 10px; overflow: hidden; }
+    .terminal-header { background: #1E293B; padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-body { padding: 20px; }
+    .sector-card { background: #fff; border: 1px solid #E9ECEF; border-radius: 10px; padding: 28px; transition: box-shadow 0.15s, border-color 0.15s; }
+    .sector-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #CBD5E1; }
+    .uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-bottom: 72px; }
   </style>
 </head>
 <body>
 
-<!-- GLOBAL NAVIGATION -->
-<nav>
-  <a href="../index.html" class="nav-brand">
-    <img src="../assets/logo.png" class="nav-logo-img" alt="Radiant Nexus" onerror="this.src='https://placehold.co/64x64/3B82F6/white?text=RN'"/>
-    <span class="nav-brand-text">RADIANT <span>NEXUS</span></span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="platform.html">Platform</a></li>
-    <li><a href="agents.html">AI Agents</a></li>
-    <li><a href="solutions.html">Solutions</a></li>
-    <li><a href="architecture.html">Architecture</a></li>
-    <li><a href="security.html">Security &amp; Trust</a></li>
-    <li><a href="about.html">About</a></li>
-    <li class="nav-mobile-only"><a href="/waitlist">Join Waitlist</a></li>
-    <li class="nav-mobile-only"><a href="contact.html">Request Demo</a></li>
-  </ul>
-  <div class="nav-actions">
-    <a href="/waitlist" class="nav-waitlist">Join Waitlist</a>
-    <a href="contact.html" class="nav-cta">Request Demo <svg class="ic"><use href="#i-arrow-right"/></svg></a>
+<!-- NAV -->
+<nav style="position:sticky; top:0; z-index:50; background:rgba(248,249,250,0.82); backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid #E9ECEF;">
+  <div style="max-width:1200px; margin:0 auto; padding:0 32px; height:68px; display:flex; align-items:center; gap:32px;">
+    <a href="/" style="display:flex; align-items:center; gap:11px;">
+      <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:34px; height:34px; border-radius:8px; display:block;" />
+      <span style="font-size:16px; font-weight:800; letter-spacing:0.16em; color:#212529;">RADIANT <span style="color:#2563EB;">NEXUS</span></span>
+    </a>
+    <ul style="list-style:none; display:flex; align-items:center; gap:28px; margin:0; padding:0; margin-left:8px;">
+      <li><a href="/pages/platform.html" style="font-size:14px; font-weight:500; color:#495057;">Platform</a></li>
+      <li><a href="/pages/agents.html" style="font-size:14px; font-weight:500; color:#495057;">AI Agents</a></li>
+      <li><a href="/pages/solutions.html" style="font-size:14px; font-weight:600; color:#2563EB;">Solutions</a></li>
+      <li><a href="/pages/architecture.html" style="font-size:14px; font-weight:500; color:#495057;">Architecture</a></li>
+      <li><a href="/pages/security.html" style="font-size:14px; font-weight:500; color:#495057;">Security &amp; Trust</a></li>
+      <li><a href="/pages/about.html" style="font-size:14px; font-weight:500; color:#495057;">About</a></li>
+    </ul>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:14px;">
+      <a href="/waitlist/" class="btn-outline" style="display:inline-flex; align-items:center; font-size:14px; font-weight:600; color:#2563EB; background:#fff; border:1px solid #2563EB; padding:9px 16px; border-radius:6px;">Join Waitlist</a>
+      <a href="/pages/contact.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:#fff; background:#2563EB; padding:9px 16px; border-radius:6px;">Request Demo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
   </div>
-  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- HERO BANNER -->
-<div class="page-hero">
-  <div class="page-hero-grid"></div>
-  <div class="container reveal">
-    <span class="page-hero-tag">Solutions by sector</span>
-    <h1>One autonomous SOC, <span class="accent">tuned to your environment.</span></h1>
-    <p>
-      Constraints differ by sector — multi-tenant isolation, regulatory provenance, air-gapped OT networks.
-      Radiant Nexus runs the same reasoning loop everywhere, configured to the rules you actually operate under.
-    </p>
-  </div>
-</div>
-
-<!-- CORE BOTTLENECKS -->
-<section class="container section-pad">
-  <div class="section-head center reveal">
-    <span class="eyebrow">Primary use cases</span>
-    <h2 class="sec-title">Solving the operational <span class="accent">bottlenecks</span></h2>
-    <p class="lede">The same problems break every SOC: too many alerts, identities you can't baseline, and cloud that changes faster than humans can review. Here is how Nexus handles each.</p>
-  </div>
-
-  <!-- Use Case 1: Alert compression -->
-  <div class="use-row reveal">
-    <div class="use-text">
-      <span class="tag">USE CASE 01 · ALERT FATIGUE</span>
-      <h3 style="font-size:1.9rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.03em;margin:16px 0 14px;">Compress alert storms into incidents</h3>
-      <p class="muted" style="font-size:1rem;line-height:1.75;">
-        Thousands of low-tier pings bury the signals that matter. Nexus ingests your alert channels,
-        de-duplicates in real time, and assembles a single coherent incident with root cause already established.
-      </p>
-      <div class="use-metric">
-        <span class="icon-chip success"><svg class="ic"><use href="#i-layers"/></svg></span>
-        <div>
-          <div class="uv">94% lower</div>
-          <div class="ul">escalation queue volume — one verification, not thousands of pings</div>
-        </div>
-      </div>
+<!-- HERO -->
+<section style="background:#fff; border-bottom:1px solid #E9ECEF; padding:80px 32px 72px;">
+  <div style="max-width:760px; margin:0 auto; text-align:center;">
+    <div style="display:inline-flex; align-items:center; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:100px; padding:5px 14px; margin-bottom:24px;">
+      <span class="mono" style="font-size:12px; font-weight:600; color:#2563EB; letter-spacing:0.06em;">Solutions by sector</span>
     </div>
-    <div class="use-text">
-      <div class="panel">
-        <div class="panel-bar">
-          <span class="panel-dots"><i style="background:#F0556B"></i><i style="background:#F0B23E"></i><i style="background:#1FD498"></i></span>
-          <span class="panel-title">ingestion-buffer // correlation</span>
-          <span class="live-badge" style="margin-left:auto"><span class="live-dot"></span>LIVE</span>
-        </div>
-        <div class="panel-body">
-          <div class="mono" style="font-size:.66rem;color:var(--text-faint);letter-spacing:.08em;margin-bottom:8px;">RAW EVENTS</div>
-          <div style="opacity:.55;">
-            <div class="log-line"><b>04:12:01</b> EDR — suspicious child proc cmd.exe</div>
-            <div class="log-line"><b>04:12:01</b> EDR — suspicious child proc cmd.exe</div>
-            <div class="log-line"><b>04:12:02</b> EDR — suspicious child proc cmd.exe</div>
-            <div class="log-line"><b>04:12:03</b> SIEM — repeated auth failures</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin:16px 0;color:var(--accent-soft);font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.08em;">
-            <svg class="ic"><use href="#i-workflow"/></svg> AUTONOMOUS CORRELATION
-          </div>
-          <div style="padding:14px;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:var(--r-md);">
-            <strong style="color:var(--text-primary);font-size:.9rem;display:flex;align-items:center;gap:8px;"><svg class="ic" style="color:var(--accent-soft)"><use href="#i-target"/></svg> Incident INC-8824</strong>
-            <span style="font-size:.78rem;color:var(--text-secondary);display:block;margin-top:5px;">Auto-investigated. Root cause established. One verification queued.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Use Case 2: Identity / behavioural drift -->
-  <div class="use-row reverse reveal">
-    <div class="use-text">
-      <span class="tag" style="color:var(--warning);background:var(--warning-dim);border-color:var(--warning-border);">USE CASE 02 · BEHAVIOURAL DRIFT</span>
-      <h3 style="font-size:1.9rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.03em;margin:16px 0 14px;">Catch insider and compromised accounts</h3>
-      <p class="muted" style="font-size:1rem;line-height:1.75;">
-        Stolen valid credentials trip no rule. Nexus keeps a persistent behavioural baseline for every identity,
-        flagging off-hours access, unusual repositories, and abnormal data volume against what's normal for that user.
-      </p>
-      <div class="use-metric" style="background:var(--warning-dim);border-color:var(--warning-border);">
-        <span class="icon-chip warning"><svg class="ic"><use href="#i-fingerprint"/></svg></span>
-        <div>
-          <div class="uv" style="color:var(--warning)">Continuous</div>
-          <div class="ul">verification against per-identity baselines — no static rules required</div>
-        </div>
-      </div>
-    </div>
-    <div class="use-text">
-      <div class="panel">
-        <div class="panel-bar">
-          <span class="panel-dots"><i style="background:#F0556B"></i><i style="background:#F0B23E"></i><i style="background:#1FD498"></i></span>
-          <span class="panel-title">identity-profile // svc-deploy-admin</span>
-        </div>
-        <div class="panel-body">
-          <div class="kv"><span>Typical access window</span><span>08:00 – 18:00 EST</span></div>
-          <div class="kv"><span>Observed session</span><span style="color:var(--danger)">03:14 AM EST</span></div>
-          <div class="kv"><span>Data scope</span><span style="color:var(--warning)">45 GB export</span></div>
-          <div class="kv"><span>Baseline deviation</span><span style="color:var(--danger)">High</span></div>
-          <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--warning);display:flex;gap:8px;align-items:flex-start;">
-            <svg class="ic" style="margin-top:2px"><use href="#i-lock"/></svg> Action staged — revoke token pending verification
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Use Case 3: Multi-cloud -->
-  <div class="use-row reveal">
-    <div class="use-text">
-      <span class="tag" style="color:var(--success);background:var(--success-dim);border-color:var(--success-border);">USE CASE 03 · CLOUD INFRASTRUCTURE</span>
-      <h3 style="font-size:1.9rem;font-weight:800;color:var(--text-primary);letter-spacing:-0.03em;margin:16px 0 14px;">Contain multi-cloud attacks in seconds</h3>
-      <p class="muted" style="font-size:1rem;line-height:1.75;">
-        Cloud perimeters shift with every API call. Nexus reads identity logs, container audits, and config history,
-        spots IAM privilege escalation, and reverses it through your integrations the moment evidence justifies it.
-      </p>
-      <div class="use-metric" style="background:var(--success-dim);border-color:var(--success-border);">
-        <span class="icon-chip success"><svg class="ic"><use href="#i-bolt"/></svg></span>
-        <div>
-          <div class="uv" style="color:var(--success)">&lt; 1s</div>
-          <div class="ul">containment on high-confidence exploit paths, via supervised gates</div>
-        </div>
-      </div>
-    </div>
-    <div class="use-text">
-      <div class="panel">
-        <div class="panel-bar">
-          <span class="panel-dots"><i style="background:#F0556B"></i><i style="background:#F0B23E"></i><i style="background:#1FD498"></i></span>
-          <span class="panel-title">cloudtrail // iam:AttachRolePolicy</span>
-        </div>
-        <div class="panel-body">
-          <div style="padding:12px;background:var(--bg-primary);border-radius:var(--r-sm);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-secondary);line-height:1.7;margin-bottom:14px;border:1px solid var(--hairline);">
-            "PolicyArn": "arn:aws:iam::aws:policy/<span style="color:var(--danger)">AdministratorAccess</span>"<br/>
-            "Principal": "role/web-app-node"
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--success);font-weight:600;">
-            <span class="icon-chip success" style="width:30px;height:30px;font-size:15px;"><svg class="ic"><use href="#i-check"/></svg></span>
-            Containment invoked — detach policy via API
-          </div>
-        </div>
-      </div>
-    </div>
+    <h1 style="font-size:clamp(32px,5vw,52px); font-weight:800; line-height:1.15; color:#212529; margin:0 0 20px;">One autonomous SOC, <span style="color:#F59E0B;">tuned to your environment.</span></h1>
+    <p style="font-size:17px; line-height:1.7; color:#495057; margin:0 auto; max-width:640px;">Constraints differ by sector: multi-tenant isolation, regulatory provenance, air-gapped OT networks. Radiant Nexus runs the same reasoning loop everywhere, configured to the rules you actually operate under.</p>
   </div>
 </section>
 
-<!-- SECTOR CONFIGURATIONS -->
-<section style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-  <div class="container section-pad">
-    <div class="section-head center reveal">
-      <span class="eyebrow">Sector configurations</span>
-      <h2 class="sec-title">Built for the way your <span class="accent">sector operates</span></h2>
-      <p class="lede">The reasoning loop is the same. The isolation model, compliance posture, and telemetry it speaks are tuned to where you run.</p>
+<!-- USE CASES -->
+<section style="padding:96px 32px;">
+  <div style="max-width:1200px; margin:0 auto;">
+
+    <div style="text-align:center; margin-bottom:64px;">
+      <h2 style="font-size:clamp(26px,4vw,38px); font-weight:800; color:#212529; margin:0;">Solving the operational bottlenecks</h2>
     </div>
 
-    <div class="sector-grid reveal reveal-stagger">
+    <!-- UC01: text left, terminal right -->
+    <div class="uc-grid">
+      <div>
+        <div style="display:inline-flex; align-items:center; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:100px; padding:4px 12px; margin-bottom:20px;">
+          <span class="mono" style="font-size:11.5px; font-weight:700; color:#2563EB; letter-spacing:0.08em;">USE CASE 01 · ALERT FATIGUE</span>
+        </div>
+        <h3 style="font-size:28px; font-weight:800; color:#212529; margin:0 0 14px; line-height:1.25;">Compress alert storms into incidents</h3>
+        <p style="font-size:15.5px; line-height:1.75; color:#495057; margin:0 0 28px;">Thousands of low-tier pings bury the signals that matter. Nexus ingests your alert channels, de-duplicates in real time, and assembles a single coherent incident with root cause already established.</p>
+        <div style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:20px 24px; display:flex; align-items:center; gap:20px;">
+          <div class="mono" style="font-size:44px; font-weight:700; color:#2563EB; white-space:nowrap; line-height:1;">94%</div>
+          <div>
+            <div style="font-size:13px; font-weight:700; color:#1D4ED8; margin-bottom:3px;">lower</div>
+            <div style="font-size:13.5px; color:#3B5BDB; line-height:1.55;">escalation queue volume, one verification, not thousands of pings</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dot" style="background:#EF4444;"></div>
+            <div class="terminal-dot" style="background:#F59E0B;"></div>
+            <div class="terminal-dot" style="background:#22C55E;"></div>
+            <span class="mono" style="font-size:11px; color:#64748B; margin-left:8px;">ingestion-buffer // correlation</span>
+            <span style="margin-left:auto; font-size:10px; font-weight:600; color:#22C55E; background:rgba(34,197,94,0.12); border-radius:4px; padding:2px 8px;">LIVE</span>
+          </div>
+          <div class="terminal-body">
+            <div class="mono" style="font-size:11px; font-weight:600; color:#64748B; letter-spacing:0.08em; margin-bottom:8px;">RAW EVENTS</div>
+            <div class="mono" style="font-size:12px; color:#475569; line-height:2; opacity:0.7; margin-bottom:14px;">
+              <div>04:12:01 EDR — suspicious child proc cmd.exe (×3)</div>
+              <div>04:12:01 EDR — suspicious child proc cmd.exe (×3)</div>
+              <div>04:12:01 EDR — suspicious child proc cmd.exe (×3)</div>
+              <div>04:12:03 SIEM — repeated auth failures</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid #1E293B; border-bottom:1px solid #1E293B; margin-bottom:16px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              <span class="mono" style="font-size:11px; font-weight:600; color:#94A3B8; letter-spacing:0.08em;">AUTONOMOUS CORRELATION</span>
+            </div>
+            <div style="background:#1E3A5F; border:1px solid #2563EB; border-radius:6px; padding:14px 16px;">
+              <div class="mono" style="font-size:11px; font-weight:600; color:#60A5FA; margin-bottom:4px;">Incident INC-8824 · Auto-investigated.</div>
+              <div class="mono" style="font-size:11px; color:#93C5FD;">Root cause established. One verification queued.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC02: terminal left, text right -->
+    <div class="uc-grid" style="margin-bottom:72px;">
+      <div>
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dot" style="background:#EF4444;"></div>
+            <div class="terminal-dot" style="background:#F59E0B;"></div>
+            <div class="terminal-dot" style="background:#22C55E;"></div>
+            <span class="mono" style="font-size:11px; color:#64748B; margin-left:8px;">identity-profile // svc-deploy-admin</span>
+          </div>
+          <div class="terminal-body">
+            <table style="width:100%; border-collapse:collapse;">
+              <tbody>
+                <tr style="border-bottom:1px solid #1E293B;">
+                  <td class="mono" style="font-size:11.5px; color:#64748B; padding:9px 0;">Typical access window</td>
+                  <td class="mono" style="font-size:11.5px; color:#94A3B8; padding:9px 0; text-align:right;">09:00 – 18:00</td>
+                </tr>
+                <tr style="border-bottom:1px solid #1E293B;">
+                  <td class="mono" style="font-size:11.5px; color:#64748B; padding:9px 0;">Observed session</td>
+                  <td class="mono" style="font-size:11.5px; color:#EF4444; padding:9px 0; text-align:right; font-weight:600;">03:14 AM</td>
+                </tr>
+                <tr style="border-bottom:1px solid #1E293B;">
+                  <td class="mono" style="font-size:11.5px; color:#64748B; padding:9px 0;">Data scope</td>
+                  <td class="mono" style="font-size:11.5px; color:#F59E0B; padding:9px 0; text-align:right; font-weight:600;">45 GB</td>
+                </tr>
+                <tr>
+                  <td class="mono" style="font-size:11.5px; color:#64748B; padding:9px 0;">Baseline deviation</td>
+                  <td class="mono" style="font-size:11.5px; color:#EF4444; padding:9px 0; text-align:right; font-weight:600;">High</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="margin-top:16px; background:#451A03; border:1px solid #F59E0B; border-radius:6px; padding:12px 16px; display:flex; align-items:center; gap:10px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span class="mono" style="font-size:11px; color:#FDE68A;">Action staged — revoke token pending verification</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="display:inline-flex; align-items:center; background:#FFFBEB; border:1px solid #FDE68A; border-radius:100px; padding:4px 12px; margin-bottom:20px;">
+          <span class="mono" style="font-size:11.5px; font-weight:700; color:#D97706; letter-spacing:0.08em;">USE CASE 02 · BEHAVIOURAL DRIFT</span>
+        </div>
+        <h3 style="font-size:28px; font-weight:800; color:#212529; margin:0 0 14px; line-height:1.25;">Catch insider and compromised accounts</h3>
+        <p style="font-size:15.5px; line-height:1.75; color:#495057; margin:0 0 28px;">Static rules cannot model how every identity behaves. Nexus continuously profiles each account and service principal, flagging deviations the moment they emerge — before exfiltration begins.</p>
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:20px 24px; display:flex; align-items:center; gap:20px;">
+          <div class="mono" style="font-size:30px; font-weight:700; color:#D97706; white-space:nowrap; line-height:1;">Continuous</div>
+          <div style="font-size:13.5px; color:#92400E; line-height:1.55;">verification against per-identity baselines, no static rules required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC03: text left, terminal right -->
+    <div class="uc-grid" style="margin-bottom:0;">
+      <div>
+        <div style="display:inline-flex; align-items:center; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:100px; padding:4px 12px; margin-bottom:20px;">
+          <span class="mono" style="font-size:11.5px; font-weight:700; color:#16A34A; letter-spacing:0.08em;">USE CASE 03 · CLOUD INFRASTRUCTURE</span>
+        </div>
+        <h3 style="font-size:28px; font-weight:800; color:#212529; margin:0 0 14px; line-height:1.25;">Contain multi-cloud attacks in seconds</h3>
+        <p style="font-size:15.5px; line-height:1.75; color:#495057; margin:0 0 28px;">IAM escalation, lateral movement, policy abuse — cloud attack chains move faster than any human analyst. Nexus correlates cloud trail events and invokes containment actions before the blast radius expands.</p>
+        <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:20px 24px; display:flex; align-items:center; gap:20px;">
+          <div class="mono" style="font-size:44px; font-weight:700; color:#16A34A; white-space:nowrap; line-height:1;">&lt; 1s</div>
+          <div style="font-size:13.5px; color:#166534; line-height:1.55;">containment on high-confidence exploit paths, via supervised gates</div>
+        </div>
+      </div>
+      <div>
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="terminal-dot" style="background:#EF4444;"></div>
+            <div class="terminal-dot" style="background:#F59E0B;"></div>
+            <div class="terminal-dot" style="background:#22C55E;"></div>
+            <span class="mono" style="font-size:11px; color:#64748B; margin-left:8px;">cloudtrail // iam:AttachRolePolicy</span>
+          </div>
+          <div class="terminal-body">
+            <div style="background:#1A0A0A; border:1px solid #450A0A; border-radius:6px; padding:14px 16px; margin-bottom:16px;">
+              <div class="mono" style="font-size:11.5px; line-height:2; color:#94A3B8;">
+                <div><span style="color:#64748B;">"PolicyArn":</span> <span style="background:rgba(239,68,68,0.15); color:#FCA5A5; padding:1px 5px; border-radius:3px;">"arn:aws:iam::aws:policy/AdministratorAccess"</span></div>
+                <div><span style="color:#64748B;">"Principal":</span> <span style="color:#94A3B8;">"role/web-app-node"</span></div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-radius:6px; padding:12px 16px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="mono" style="font-size:11px; color:#86EFAC;">Containment invoked — detach policy via API</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTOR CARDS -->
+<section style="background:#fff; padding:96px 32px; border-top:1px solid #E9ECEF; border-bottom:1px solid #E9ECEF;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="text-align:center; margin-bottom:56px;">
+      <div style="display:inline-flex; align-items:center; background:#EFF6FF; border:1px solid #BFDBFE; border-radius:100px; padding:5px 14px; margin-bottom:16px;">
+        <span class="mono" style="font-size:12px; font-weight:600; color:#2563EB; letter-spacing:0.06em;">Sector configurations</span>
+      </div>
+      <h2 style="font-size:clamp(26px,4vw,40px); font-weight:800; color:#212529; margin:0; line-height:1.2;">Built for the way your <span style="color:#F59E0B;">sector operates</span></h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+
       <!-- Enterprise SOCs -->
-      <div class="card sector-card">
-        <span class="icon-chip"><svg class="ic"><use href="#i-building"/></svg></span>
-        <h3>Enterprise SOCs</h3>
-        <p>Supervise high-volume autonomous investigations while Nexus tracks every entity in your estate and learns your environment over time — collapsing redundant alert backlogs continuously.</p>
-        <ul class="sector-feats">
-          <li><svg class="ic"><use href="#i-check"/></svg> Custom policy autonomy <span class="sector-stat">150:1</span></li>
-          <li><svg class="ic"><use href="#i-check"/></svg> Adaptive per-entity baselines</li>
+      <div class="sector-card">
+        <div style="width:44px; height:44px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-3"/>
+            <path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/>
+          </svg>
+        </div>
+        <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 8px;">Enterprise SOCs</h3>
+        <p style="font-size:14px; line-height:1.65; color:#6C757D; margin:0 0 18px;">Autonomous triage at scale with policy autonomy matched to your internal governance structure.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Custom policy autonomy <span class="mono" style="color:#2563EB; font-weight:600; margin-left:auto; font-size:12px;">150:1</span>
+          </li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Adaptive per-entity baselines
+          </li>
         </ul>
       </div>
 
-      <!-- MSSP / Managed SOC -->
-      <div class="card sector-card">
-        <span class="icon-chip"><svg class="ic"><use href="#i-users"/></svg></span>
-        <h3>MSSP / Managed SOC</h3>
-        <p>Run scalable agent constellations behind hard multi-tenant data boundaries. Every client stays isolated while shared intelligence lifts coverage per analyst across the whole book.</p>
-        <ul class="sector-feats">
-          <li><svg class="ic"><use href="#i-check"/></svg> Strict tenant isolation</li>
-          <li><svg class="ic"><use href="#i-check"/></svg> Aggregated cross-client signal</li>
+      <!-- MSSP -->
+      <div class="sector-card">
+        <div style="width:44px; height:44px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 8px;">MSSP / Managed SOC</h3>
+        <p style="font-size:14px; line-height:1.65; color:#6C757D; margin:0 0 18px;">Serve multiple clients from a single platform with hard isolation and aggregated cross-tenant insights.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Strict tenant isolation
+          </li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Aggregated cross-client signal
+          </li>
         </ul>
       </div>
 
-      <!-- Banking & Finance -->
-      <div class="card sector-card">
-        <span class="icon-chip"><svg class="ic"><use href="#i-chart"/></svg></span>
-        <h3>Banking &amp; Finance</h3>
-        <p>Every verdict is recorded with cryptographic provenance and an immutable decision history — the audit trail DORA and PCI DSS reviewers ask for, generated as the SOC operates.</p>
-        <ul class="sector-feats">
-          <li><svg class="ic"><use href="#i-check"/></svg> Cryptographic provenance</li>
-          <li><svg class="ic"><use href="#i-check"/></svg> DORA / PCI DSS evidence</li>
+      <!-- Banking -->
+      <div class="sector-card">
+        <div style="width:44px; height:44px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>
+          </svg>
+        </div>
+        <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 8px;">Banking &amp; Finance</h3>
+        <p style="font-size:14px; line-height:1.65; color:#6C757D; margin:0 0 18px;">Meet DORA and PCI DSS obligations with cryptographic evidence trails on every autonomous action.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Cryptographic provenance
+          </li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            DORA / PCI DSS evidence
+          </li>
         </ul>
       </div>
 
       <!-- Critical Infrastructure -->
-      <div class="card sector-card">
-        <span class="icon-chip"><svg class="ic"><use href="#i-network"/></svg></span>
-        <h3>Critical Infrastructure</h3>
-        <p>Passive OT sensors read Modbus and ICS streams without touching the control loop. Physics-aware reasoning keeps detection live without ever risking operational downtime.</p>
-        <ul class="sector-feats">
-          <li><svg class="ic"><use href="#i-check"/></svg> Passive network discovery</li>
-          <li><svg class="ic"><use href="#i-check"/></svg> Purdue-zone isolation</li>
+      <div class="sector-card">
+        <div style="width:44px; height:44px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+            <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+          </svg>
+        </div>
+        <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 8px;">Critical Infrastructure</h3>
+        <p style="font-size:14px; line-height:1.65; color:#6C757D; margin:0 0 18px;">OT/IT convergence without disruption — passive discovery across Purdue zones, no active scanning required.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Passive network discovery
+          </li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Purdue-zone isolation
+          </li>
         </ul>
       </div>
 
-      <!-- Sovereign Government -->
-      <div class="card sector-card">
-        <span class="icon-chip"><svg class="ic"><use href="#i-lock"/></svg></span>
-        <h3>Sovereign Government</h3>
-        <p>Deploy fully isolated, on-premise compute that runs against un-routed, physically air-gapped networks — zero-trust by default, with all reasoning kept inside your boundary.</p>
-        <ul class="sector-feats">
-          <li><svg class="ic"><use href="#i-check"/></svg> Air-gap ready</li>
-          <li><svg class="ic"><use href="#i-check"/></svg> Embedded local compute</li>
+      <!-- Government -->
+      <div class="sector-card">
+        <div style="width:44px; height:44px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="11" width="16" height="11" rx="2" ry="2"/>
+            <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+          </svg>
+        </div>
+        <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 8px;">Sovereign Government</h3>
+        <p style="font-size:14px; line-height:1.65; color:#6C757D; margin:0 0 18px;">Classified network deployments with embedded compute — no dependency on external cloud infrastructure.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Air-gap ready
+          </li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Embedded local compute
+          </li>
         </ul>
       </div>
 
       <!-- Universities & Telecom -->
-      <div class="card sector-card">
-        <span class="icon-chip"><svg class="ic"><use href="#i-globe"/></svg></span>
-        <h3>Universities &amp; Telecom</h3>
-        <p>Engineered for high-volume, unfiltered network segments where static signature engines saturate. Dynamic anomaly detection holds up at carrier and campus scale.</p>
-        <ul class="sector-feats">
-          <li><svg class="ic"><use href="#i-check"/></svg> High-volume ingestion</li>
-          <li><svg class="ic"><use href="#i-check"/></svg> Dynamic anomaly detection</li>
+      <div class="sector-card">
+        <div style="width:44px; height:44px; background:#EFF6FF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <path d="M12 3a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 8px;">Universities &amp; Telecom</h3>
+        <p style="font-size:14px; line-height:1.65; color:#6C757D; margin:0 0 18px;">Handle extreme ingestion volumes from open networks and dynamic user populations without rule explosion.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;">
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            High-volume ingestion
+          </li>
+          <li style="display:flex; align-items:center; gap:8px; font-size:13.5px; color:#495057;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Dynamic anomaly detection
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section style="padding:96px 32px;">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="text-align:center; margin-bottom:56px;">
+      <h2 style="font-size:clamp(26px,4vw,38px); font-weight:800; color:#212529; margin:0 0 12px;">Concrete outcomes, measured</h2>
+      <p style="font-size:16px; color:#6C757D; margin:0;">Numbers from design-partner deployments across sector configurations.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:#E9ECEF; border-radius:12px; overflow:hidden; border:1px solid #E9ECEF;">
+      <div style="background:#fff; padding:36px 28px; text-align:center;">
+        <div class="mono" style="font-size:40px; font-weight:700; color:#2563EB; margin-bottom:8px; line-height:1;">&lt;60s</div>
+        <div style="font-size:14px; font-weight:600; color:#212529; margin-bottom:4px;">Investigation time</div>
+        <div style="font-size:13px; color:#6C757D;">From alert to root cause</div>
+      </div>
+      <div style="background:#fff; padding:36px 28px; text-align:center;">
+        <div class="mono" style="font-size:40px; font-weight:700; color:#2563EB; margin-bottom:8px; line-height:1;">94.7%</div>
+        <div style="font-size:14px; font-weight:600; color:#212529; margin-bottom:4px;">Queue reduction</div>
+        <div style="font-size:13px; color:#6C757D;">Escalations requiring analyst review</div>
+      </div>
+      <div style="background:#fff; padding:36px 28px; text-align:center;">
+        <div class="mono" style="font-size:40px; font-weight:700; color:#2563EB; margin-bottom:8px; line-height:1;">150:1</div>
+        <div style="font-size:14px; font-weight:600; color:#212529; margin-bottom:4px;">Alert compression</div>
+        <div style="font-size:13px; color:#6C757D;">Signals collapsed per incident</div>
+      </div>
+      <div style="background:#fff; padding:36px 28px; text-align:center;">
+        <div class="mono" style="font-size:40px; font-weight:700; color:#2563EB; margin-bottom:8px; line-height:1;">Persistent</div>
+        <div style="font-size:14px; font-weight:600; color:#212529; margin-bottom:4px;">Memory</div>
+        <div style="font-size:13px; color:#6C757D;">Cross-session entity context</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:#2563EB; padding:80px 32px;">
+  <div style="max-width:680px; margin:0 auto; text-align:center;">
+    <h2 style="font-size:clamp(24px,4vw,36px); font-weight:800; color:#fff; margin:0 0 14px; line-height:1.2;">Align Nexus with your sector's constraints.</h2>
+    <p style="font-size:16px; color:#BFDBFE; margin:0 0 36px; line-height:1.65;">Talk to our team about your environment. We will scope a configuration specific to your operational and regulatory context.</p>
+    <div style="display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;">
+      <a href="/pages/contact.html" class="cta-btn-white" style="display:inline-flex; align-items:center; gap:8px; background:#fff; color:#2563EB; font-size:15px; font-weight:700; padding:13px 24px; border-radius:8px; transition:background 0.15s;">
+        Request Demo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="/pages/architecture.html" class="cta-btn-ghost" style="display:inline-flex; align-items:center; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.28); color:#fff; font-size:15px; font-weight:600; padding:13px 24px; border-radius:8px; transition:background 0.15s;">
+        Review architecture
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#212529;">
+  <div style="max-width:1200px; margin:0 auto; padding:64px 32px 0;">
+    <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:48px;">
+      <div style="max-width:340px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:32px; height:32px; border-radius:7px;" />
+          <span style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#fff; letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
+        </div>
+        <p style="font-size:14px; line-height:1.6; color:#ADB5BD; margin:0;">The autonomous operational intelligence platform for the modern SOC.</p>
+        <p style="margin-top:14px; font-size:12.5px; color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
+      </div>
+      <div><h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px;">Platform</h4>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+          <li><a href="/pages/platform.html" style="font-size:14px; color:#ADB5BD;">Operational Layer</a></li>
+          <li><a href="/pages/agents.html" style="font-size:14px; color:#ADB5BD;">AI Constellation</a></li>
+          <li><a href="/pages/architecture.html" style="font-size:14px; color:#ADB5BD;">Architecture Flow</a></li>
+          <li><a href="/pages/security.html" style="font-size:14px; color:#ADB5BD;">Security &amp; Trust</a></li>
+        </ul>
+      </div>
+      <div><h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px;">Solutions</h4>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">Enterprise SOCs</a></li>
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">MSSP / Managed SOC</a></li>
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">Banking &amp; Finance</a></li>
+          <li><a href="/pages/solutions.html" style="font-size:14px; color:#ADB5BD;">Critical Infrastructure</a></li>
+        </ul>
+      </div>
+      <div><h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px;">Company</h4>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+          <li><a href="/pages/about.html" style="font-size:14px; color:#ADB5BD;">About Us</a></li>
+          <li><a href="/pages/resources.html" style="font-size:14px; color:#ADB5BD;">Resources Hub</a></li>
+          <li><a href="/pages/contact.html" style="font-size:14px; color:#ADB5BD;">Request Demo</a></li>
         </ul>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- DEPLOYMENT FLOW ILLUSTRATION -->
-<section class="container section-pad">
-  <div class="section-head center reveal">
-    <span class="eyebrow">How it lands</span>
-    <h2 class="sec-title">One core, four <span class="accent">isolation models</span></h2>
-    <p class="lede">Your telemetry feeds a single reasoning core. What changes by sector is how it's isolated and what evidence it keeps — never the quality of the investigation.</p>
-  </div>
-
-  <div class="panel reveal" style="max-width:960px;margin:0 auto;">
-    <div class="panel-bar">
-      <span class="panel-dots"><i style="background:#F0556B"></i><i style="background:#F0B23E"></i><i style="background:#1FD498"></i></span>
-      <span class="panel-title">deployment-topology // by sector</span>
-      <span class="live-badge" style="margin-left:auto"><span class="live-dot"></span>ACTIVE</span>
-    </div>
-    <div class="panel-body" style="padding:14px 14px 4px;">
-      <svg viewBox="0 0 920 360" width="100%" role="img" aria-label="Telemetry sources feed a central reasoning core, which routes to four sector isolation models: enterprise, MSSP multi-tenant, regulated finance, and air-gapped OT.">
-        <defs>
-          <radialGradient id="solCore" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#3B82F6" stop-opacity=".5"/><stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
-          </radialGradient>
-          <linearGradient id="solIn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3B82F6" stop-opacity=".05"/><stop offset="1" stop-color="#3B82F6" stop-opacity=".55"/></linearGradient>
-          <linearGradient id="solOut" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1FD498" stop-opacity=".55"/><stop offset="1" stop-color="#1FD498" stop-opacity=".05"/></linearGradient>
-        </defs>
-
-        <!-- inbound edges -->
-        <path id="sp1" d="M120,70 C240,90 300,150 372,170" fill="none" stroke="url(#solIn)" stroke-width="1.5"/>
-        <path id="sp2" d="M108,180 C220,180 300,180 372,180" fill="none" stroke="url(#solIn)" stroke-width="1.5"/>
-        <path id="sp3" d="M120,290 C240,270 300,210 372,190" fill="none" stroke="url(#solIn)" stroke-width="1.5"/>
-
-        <!-- outbound edges to 4 isolation models -->
-        <path id="sp4" d="M512,165 C600,120 660,80 800,64" fill="none" stroke="url(#solOut)" stroke-width="1.5"/>
-        <path id="sp5" d="M514,175 C610,150 660,135 800,138" fill="none" stroke="url(#solOut)" stroke-width="1.5"/>
-        <path id="sp6" d="M514,185 C610,210 660,225 800,222" fill="none" stroke="url(#solOut)" stroke-width="1.5"/>
-        <path id="sp7" d="M512,195 C600,240 660,280 800,296" fill="none" stroke="url(#solOut)" stroke-width="1.5"/>
-
-        <!-- pulses -->
-        <g fill="#6AA2FF">
-          <circle r="2.8"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#sp1"/></animateMotion></circle>
-          <circle r="2.8"><animateMotion dur="2.6s" begin=".5s" repeatCount="indefinite"><mpath href="#sp2"/></animateMotion></circle>
-          <circle r="2.8"><animateMotion dur="2.5s" begin="1s" repeatCount="indefinite"><mpath href="#sp3"/></animateMotion></circle>
-        </g>
-        <g fill="#1FD498">
-          <circle r="2.8"><animateMotion dur="2.3s" begin="1.2s" repeatCount="indefinite"><mpath href="#sp4"/></animateMotion></circle>
-          <circle r="2.8"><animateMotion dur="2.5s" begin="1.5s" repeatCount="indefinite"><mpath href="#sp5"/></animateMotion></circle>
-          <circle r="2.8"><animateMotion dur="2.4s" begin="1.8s" repeatCount="indefinite"><mpath href="#sp6"/></animateMotion></circle>
-          <circle r="2.8"><animateMotion dur="2.6s" begin="2.1s" repeatCount="indefinite"><mpath href="#sp7"/></animateMotion></circle>
-        </g>
-
-        <!-- source nodes -->
-        <g font-family="JetBrains Mono, monospace" font-size="9" fill="#97A2B6" text-anchor="middle">
-          <g><circle cx="96" cy="70" r="20" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="96" y="104">Cloud</text></g>
-          <g><circle cx="84" cy="180" r="20" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="84" y="214">EDR</text></g>
-          <g><circle cx="96" cy="290" r="20" fill="#0F1626" stroke="rgba(148,163,184,.22)"/><text x="96" y="324">OT / ICS</text></g>
-        </g>
-
-        <!-- reasoning core -->
-        <circle cx="442" cy="180" r="58" fill="url(#solCore)" class="anim-memory"/>
-        <polygon points="442,132 482,155 482,205 442,228 402,205 402,155" fill="#0A1124" stroke="#3B82F6" stroke-width="1.6"/>
-        <polygon points="442,148 468,163 468,197 442,212 416,197 416,163" fill="none" stroke="rgba(59,130,246,.4)" stroke-width="1" stroke-dasharray="2 3"/>
-        <circle cx="442" cy="180" r="6" fill="#6AA2FF" class="anim-memory"/>
-        <text x="442" y="258" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#6AA2FF" font-weight="600">REASONING CORE</text>
-        <text x="442" y="271" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#97A2B6">same loop, every sector</text>
-
-        <!-- isolation model nodes -->
-        <g font-family="JetBrains Mono, monospace" font-size="9" text-anchor="start">
-          <g>
-            <rect x="800" y="48" width="116" height="32" rx="8" fill="#0F1626" stroke="rgba(59,130,246,.3)"/>
-            <text x="816" y="68" fill="#6AA2FF" font-weight="600">Enterprise</text>
-          </g>
-          <g>
-            <rect x="800" y="122" width="116" height="32" rx="8" fill="#0F1626" stroke="rgba(59,130,246,.3)"/>
-            <text x="816" y="142" fill="#6AA2FF" font-weight="600">Multi-tenant</text>
-          </g>
-          <g>
-            <rect x="800" y="206" width="116" height="32" rx="8" fill="#0F1626" stroke="rgba(31,212,152,.35)"/>
-            <text x="816" y="226" fill="#1FD498" font-weight="600">Regulated</text>
-          </g>
-          <g>
-            <rect x="800" y="280" width="116" height="32" rx="8" fill="#0F1626" stroke="rgba(240,178,62,.35)"/>
-            <text x="816" y="300" fill="#F0B23E" font-weight="600">Air-gapped</text>
-          </g>
-        </g>
-      </svg>
-    </div>
-  </div>
-</section>
-
-<!-- OUTCOMES STRIP -->
-<section style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-  <div class="container section-pad">
-    <div class="section-head center reveal">
-      <span class="eyebrow">What changes</span>
-      <h2 class="sec-title">Concrete outcomes, <span class="accent">measured</span></h2>
-    </div>
-    <div class="outcomes reveal reveal-stagger">
-      <div class="surface outcome">
-        <div class="ov" data-count="60" data-prefix="&lt; " data-suffix="s">&lt; 60s</div>
-        <div class="ol">Autonomous investigation, signal to verdict</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:22px 0; border-top:1px solid #343A40;">
+      <p style="font-size:13px; color:#868E96; margin:0;">© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
+      <div style="display:flex; gap:24px;">
+        <a href="#" style="font-size:13px; color:#868E96;">Privacy Policy</a>
+        <a href="#" style="font-size:13px; color:#868E96;">Security Assurance</a>
+        <a href="#" style="font-size:13px; color:#868E96;">Terms of Service</a>
       </div>
-      <div class="surface outcome">
-        <div class="ov" data-count="94.7" data-suffix="%">94.7%</div>
-        <div class="ol">Supervised reasoning confidence</div>
-      </div>
-      <div class="surface outcome">
-        <div class="ov">150:1</div>
-        <div class="ol">Alert-to-incident compression</div>
-      </div>
-      <div class="surface outcome">
-        <div class="ov" style="color:var(--success)">Persistent</div>
-        <div class="ol">Operational memory, per environment</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONVERSION CTA -->
-<div class="cta-band">
-  <div class="container">
-    <div class="cta-band-inner reveal">
-      <div>
-        <h2>Align Nexus with your <span class="accent">sector's constraints.</span></h2>
-        <p>Talk to our architecture team about telemetry normalization, isolation model, and the compliance evidence your stack needs.</p>
-      </div>
-      <div class="cta-band-actions">
-        <a href="contact.html" class="primary-btn">Request Demo <svg class="ic"><use href="#i-arrow-right"/></svg></a>
-        <a href="architecture.html" class="secondary-btn">Review Architecture</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-        <img src="../assets/logo.png" style="width:32px;height:32px;" alt="Radiant Nexus"/>
-        <span class="mono" style="font-size:1.1rem;font-weight:700;color:#fff;">RADIANT <span style="color:var(--accent)">NEXUS</span></span>
-      </div>
-      <p>The autonomous operational intelligence platform for the modern SOC — continuously reasoning, correlating, and retaining persistent operational memory alongside your analysts.</p>
-      <p style="margin-top:14px;font-size:.8rem;color:var(--text-faint);">A platform by <strong style="color:var(--text-secondary)">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
-    </div>
-    <div class="footer-col"><h4>Platform</h4><ul>
-      <li><a href="platform.html">Operational Layer</a></li>
-      <li><a href="agents.html">AI Constellation</a></li>
-      <li><a href="architecture.html">Architecture Flow</a></li>
-      <li><a href="security.html">Security &amp; Trust</a></li>
-    </ul></div>
-    <div class="footer-col"><h4>Solutions</h4><ul>
-      <li><a href="solutions.html">Enterprise SOCs</a></li>
-      <li><a href="solutions.html">MSSP / Managed SOC</a></li>
-      <li><a href="solutions.html">Banking &amp; Finance</a></li>
-      <li><a href="solutions.html">Critical Infrastructure</a></li>
-    </ul></div>
-    <div class="footer-col"><h4>Company</h4><ul>
-      <li><a href="about.html">About Us</a></li>
-      <li><a href="resources.html">Resources Hub</a></li>
-      <li><a href="contact.html">Request Demo</a></li>
-    </ul></div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
-    <div class="footer-links">
-      <a href="#">Privacy Policy</a><a href="#">Security Assurance</a><a href="#">Terms of Service</a>
     </div>
   </div>
 </footer>
 
-<script src="../js/global.js?v=20260613" defer></script>
 </body>
 </html>
