@@ -21,8 +21,11 @@
     .ri-field{ width:100%; background:#fff; border:1px solid #DEE2E6; border-radius:4px; padding:11px 14px; color:#212529; font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; transition:border-color .18s, box-shadow .18s; }
     .ri-field::placeholder{ color:#ADB5BD; }
     .ri-field:focus{ outline:none; border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.18); }
+    textarea.ri-field{ resize:vertical; min-height:74px; }
     select.ri-field{ cursor:pointer; appearance:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%23868E96" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>'); background-repeat:no-repeat; background-position:right 14px center; padding-right:38px; }
     .submit-btn:hover{ background:#1D4ED8 !important; box-shadow:0 8px 16px -4px rgba(37,99,235,0.30) !important; }
+    .submit-btn:disabled{ opacity:.65; cursor:not-allowed; }
+    .ri-label{ display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em; }
   </style>
 </head>
 <body>
@@ -83,35 +86,59 @@
         <div id="wl-success" style="display:none; text-align:center; padding:28px 12px;">
           <span style="width:54px; height:54px; border-radius:50%; background:#DCFCE7; border:1px solid #BBF7D0; color:#15803D; display:grid; place-items:center; margin:0 auto 18px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
           <h4 style="font-size:18px; font-weight:700; color:#212529; margin:0 0 8px;">You're on the list</h4>
-          <p style="font-size:14.5px; color:#495057; line-height:1.6; margin:0;">We'll be in touch as cohort places open, earliest sign-ups first.</p>
+          <p style="font-size:14.5px; color:#495057; line-height:1.6; margin:0;">We'll be in touch as cohort places open, earliest sign-ups first. Check your inbox for a confirmation email.</p>
         </div>
 
-        <form id="wl-form" onsubmit="return submitWaitlist(event)" style="display:flex; flex-direction:column; gap:18px;">
+        <form id="wl-form" onsubmit="return submitWaitlist(event)" style="display:flex; flex-direction:column; gap:18px;" novalidate>
+          <!-- Honeypot (hidden from humans, bots fill it) -->
+          <input type="text" id="wl-hp" name="_hp" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" aria-hidden="true" />
           <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Full name</label>
-            <input id="wl-name" type="text" class="ri-field" placeholder="Ama Mensah" />
+            <label class="ri-label" for="wl-name">Full name</label>
+            <input id="wl-name" type="text" class="ri-field" placeholder="Ama Mensah" autocomplete="name" />
           </div>
           <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Work email</label>
-            <input id="wl-email" type="email" class="ri-field" placeholder="ama@enterprise-soc.com" />
-          </div>
-          <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Company</label>
-            <input id="wl-company" type="text" class="ri-field" placeholder="Enterprise SOC" />
+            <label class="ri-label" for="wl-email">Work email</label>
+            <input id="wl-email" type="email" class="ri-field" placeholder="ama@enterprise-soc.com" autocomplete="email" />
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
             <div>
-              <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Team size</label>
-              <select id="wl-team" class="ri-field"><option>1 – 5 analysts</option><option>6 – 20 analysts</option><option>21 – 50 analysts</option><option>50+ analysts</option></select>
+              <label class="ri-label" for="wl-role">Job title</label>
+              <input id="wl-role" type="text" class="ri-field" placeholder="SOC Lead" autocomplete="organization-title" />
             </div>
             <div>
-              <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Primary sector</label>
-              <select id="wl-sector" class="ri-field"><option>Enterprise SOC</option><option>MSSP / Managed SOC</option><option>Banking &amp; finance</option><option>Critical infrastructure</option><option>Government</option></select>
+              <label class="ri-label" for="wl-company">Company</label>
+              <input id="wl-company" type="text" class="ri-field" placeholder="Enterprise SOC" autocomplete="organization" />
             </div>
           </div>
-          <div id="wl-error" style="display:none; padding:11px 14px; border-radius:6px; font-size:13px; font-weight:500; background:#FEE2E2; border:1px solid #FECACA; color:#B91C1C;">Please fill in your name, email, and company.</div>
-          <button type="submit" class="submit-btn" style="width:100%; margin-top:4px; background:#2563EB; color:#fff; border:none; padding:14px; border-radius:6px; font-weight:600; font-size:15px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Join the waitlist</button>
-          <div style="font-size:12px; color:#868E96; text-align:center; display:flex; align-items:center; gap:7px; justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#868E96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> No spam. We only email about cohort access.</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div>
+              <label class="ri-label" for="wl-country">Country</label>
+              <input id="wl-country" type="text" class="ri-field" placeholder="Ghana" autocomplete="country-name" />
+            </div>
+            <div>
+              <label class="ri-label" for="wl-usertype">Role type</label>
+              <select id="wl-usertype" class="ri-field">
+                <option value="" disabled selected>Select role</option>
+                <option>SOC Analyst</option>
+                <option>Security Engineer</option>
+                <option>Threat Hunter</option>
+                <option>CISO/Security Leader</option>
+                <option>MSSP</option>
+                <option>Investor/Advisor</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="ri-label" for="wl-usecase">What do you want to use Nexus for? <span style="text-transform:none; letter-spacing:0; color:#ADB5BD;">(optional)</span></label>
+            <textarea id="wl-usecase" class="ri-field" placeholder="Tell us about your environment, telemetry volume, or what you'd like to pilot."></textarea>
+          </div>
+          <label style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#495057; line-height:1.5; cursor:pointer;">
+            <input id="wl-consent" type="checkbox" checked style="margin-top:2px; flex:none; width:16px; height:16px; accent-color:#2563EB;" />
+            <span>I agree to be contacted about the Radiant Nexus pilot programme. No spam, we only email about cohort access.</span>
+          </label>
+          <div id="wl-error" style="display:none; padding:11px 14px; border-radius:6px; font-size:13px; font-weight:500; background:#FEE2E2; border:1px solid #FECACA; color:#B91C1C;"></div>
+          <button type="submit" id="wl-submit" class="submit-btn" style="width:100%; margin-top:4px; background:#2563EB; color:#fff; border:none; padding:14px; border-radius:6px; font-weight:600; font-size:15px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Join the waitlist</button>
         </form>
       </div>
     </div>
@@ -170,30 +197,86 @@
 </div>
 
 <script>
+  // Same-origin in production (nginx proxies /api/ to the Node backend).
+  var WAITLIST_ENDPOINT = '/api/waitlist/submit';
+
+  function wlShowError(msg){
+    var err = document.getElementById('wl-error');
+    err.textContent = msg;
+    err.style.display = 'block';
+  }
+
   function submitWaitlist(e){
     e.preventDefault();
-    var name = document.getElementById('wl-name').value.trim();
-    var email = document.getElementById('wl-email').value.trim();
-    var company = document.getElementById('wl-company').value.trim();
-    var err = document.getElementById('wl-error');
-    if(!name || !email || !company){ err.style.display='block'; return false; }
-    err.style.display='none';
+
+    var fullName = document.getElementById('wl-name').value.trim();
+    var email    = document.getElementById('wl-email').value.trim();
+    var role     = document.getElementById('wl-role').value.trim();
+    var company  = document.getElementById('wl-company').value.trim();
+    var country  = document.getElementById('wl-country').value.trim();
+    var userType = document.getElementById('wl-usertype').value;
+    var useCase  = document.getElementById('wl-usecase').value.trim();
+    var consent  = document.getElementById('wl-consent').checked;
+    var hp       = document.getElementById('wl-hp').value;
+
+    // Client-side validation mirrors the backend contract.
+    if (fullName.length < 2)               return wlShowError('Please enter your full name.'), false;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return wlShowError('Please enter a valid work email.'), false;
+    if (role.length < 2)                   return wlShowError('Please enter your job title.'), false;
+    if (company.length < 2)                return wlShowError('Please enter your company name.'), false;
+    if (country.length < 2)                return wlShowError('Please enter your country.'), false;
+    if (!userType)                         return wlShowError('Please select your role type.'), false;
+    if (!consent)                          return wlShowError('Please agree to be contacted to join the waitlist.'), false;
+
+    document.getElementById('wl-error').style.display = 'none';
+
+    var btn = document.getElementById('wl-submit');
+    btn.disabled = true;
+    var originalLabel = btn.textContent;
+    btn.textContent = 'Submitting…';
+
     var payload = {
-      name: name,
-      email: email,
-      company: company,
-      teamSize: document.getElementById('wl-team').value,
-      sector: document.getElementById('wl-sector').value
+      full_name: fullName,
+      email:     email,
+      role:      role,
+      company:   company,
+      country:   country,
+      user_type: userType,
+      use_case:  useCase || null,
+      consent:   true,
+      _hp:       hp
     };
-    var done = function(){
-      document.getElementById('wl-form').style.display='none';
-      document.getElementById('wl-success').style.display='block';
-    };
-    fetch('/waitlist/submit', {
-      method: 'POST',
+
+    fetch(WAITLIST_ENDPOINT, {
+      method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).catch(function(){}).finally(done);
+      body:    JSON.stringify(payload)
+    })
+    .then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(data){
+        return { ok: res.ok, status: res.status, data: data };
+      });
+    })
+    .then(function(r){
+      if (r.ok && r.data && r.data.success) {
+        document.getElementById('wl-form').style.display = 'none';
+        document.getElementById('wl-success').style.display = 'block';
+        return;
+      }
+      // Surface the real server error instead of pretending it worked.
+      var msg = (r.data && r.data.error) ? r.data.error
+              : (r.status === 409 ? 'This email is already on the waitlist.'
+              : 'Something went wrong. Please try again in a moment.');
+      wlShowError(msg);
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    })
+    .catch(function(){
+      wlShowError('Could not reach the server. Please check your connection and try again.');
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    });
+
     return false;
   }
 </script>
