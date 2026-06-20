@@ -1,282 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resources | Radiant Nexus</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resources Hub | Radiant Nexus</title>
+  <meta name="description" content="Published threat intelligence analyses, reasoning whitepapers, and operational detection guidebooks from the Radiant Nexus detection engineering team." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body { background: #F8F9FA; color: #212529; font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    a { text-decoration: none; color: inherit; }
-    ::selection { background: #DBEAFE; }
-    @keyframes ri-pulse { 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
-    nav a:hover { color: #212529 !important; }
-    .btn-primary { transition: background 0.15s, box-shadow 0.15s; }
-    .btn-primary:hover { background: #1D4ED8 !important; box-shadow: 0 8px 16px -4px rgba(37,99,235,0.30) !important; }
-    .btn-outline:hover { background: #EFF6FF !important; border-color: #1D4ED8 !important; color: #1D4ED8 !important; }
-    .cta-btn-white:hover { background: #F1F3F5 !important; }
-    .cta-btn-ghost:hover { background: rgba(255,255,255,0.18) !important; }
-    footer a:hover { color: #fff !important; }
-    .res-card { background: #fff; border: 1px solid #E9ECEF; border-radius: 12px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; transition: border-color 0.15s, box-shadow 0.15s; }
-    .res-card:hover { border-color: #BFDBFE !important; box-shadow: 0 4px 24px -6px rgba(37,99,235,0.12) !important; }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{ background:#F8F9FA; color:#212529; font-family:"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+    a{ text-decoration:none; color:inherit; }
+    ::selection{ background:#DBEAFE; }
+    nav a.ri-link:hover{ color:#212529 !important; }
+    .btn-waitlist:hover{ color:#1D4ED8 !important; background:#EFF6FF !important; border-color:#1D4ED8 !important; }
+    .btn-primary:hover{ background:#1D4ED8 !important; box-shadow:0 4px 8px -2px rgba(37,99,235,0.25) !important; }
+    .cta-btn-white:hover{ background:#F1F3F5 !important; }
+    .cta-btn-ghost:hover{ background:rgba(255,255,255,0.18) !important; border-color:rgba(255,255,255,0.4) !important; }
+    footer a:hover{ color:#fff !important; }
+    .res-card{ transition:border-color .18s, box-shadow .18s; }
+    .res-card:hover{ border-color:#BFDBFE !important; box-shadow:0 10px 18px -6px rgba(16,24,40,0.10) !important; }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav style="position:sticky;top:0;z-index:50;background:rgba(248,249,250,0.82);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid #E9ECEF;">
-  <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;gap:32px;">
-    <a href="/" style="display:flex;align-items:center;gap:11px;">
-      <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:34px;height:34px;border-radius:8px;display:block;" />
-      <span style="font-size:16px;font-weight:800;letter-spacing:0.16em;color:#212529;">RADIANT <span style="color:#2563EB;">NEXUS</span></span>
-    </a>
-    <ul style="list-style:none;display:flex;align-items:center;gap:28px;margin:0;padding:0;margin-left:8px;">
-      <li><a href="/pages/platform.html" style="font-size:14px;font-weight:500;color:#495057;">Platform</a></li>
-      <li><a href="/pages/agents.html" style="font-size:14px;font-weight:500;color:#495057;">AI Agents</a></li>
-      <li><a href="/pages/solutions.html" style="font-size:14px;font-weight:500;color:#495057;">Solutions</a></li>
-      <li><a href="/pages/architecture.html" style="font-size:14px;font-weight:500;color:#495057;">Architecture</a></li>
-      <li><a href="/pages/security.html" style="font-size:14px;font-weight:500;color:#495057;">Security &amp; Trust</a></li>
-      <li><a href="/pages/about.html" style="font-size:14px;font-weight:500;color:#495057;">About</a></li>
-    </ul>
-    <div style="margin-left:auto;display:flex;align-items:center;gap:14px;">
-      <a href="/waitlist/" class="btn-outline" style="display:inline-flex;align-items:center;font-size:14px;font-weight:600;color:#2563EB;background:#fff;border:1px solid #2563EB;padding:9px 16px;border-radius:6px;">Join Waitlist</a>
-      <a href="/pages/contact.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:#fff;background:#2563EB;padding:9px 16px;border-radius:6px;">Request Demo
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+<div style="background:#F8F9FA; overflow-x:hidden;">
+
+  <!-- ===== NAV ===== -->
+  <nav style="position:sticky; top:0; z-index:50; background:rgba(248,249,250,0.82); backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid #E9ECEF;">
+    <div style="max-width:1200px; margin:0 auto; padding:0 32px; height:68px; display:flex; align-items:center; gap:32px;">
+      <a href="../index.html" style="display:flex; align-items:center; gap:11px;">
+        <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:34px; height:34px; border-radius:8px; display:block;" />
+        <span style="font-size:16px; font-weight:800; letter-spacing:0.16em; color:#212529;">RADIANT <span style="color:#2563EB;">NEXUS</span></span>
       </a>
-    </div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section style="background:#fff;border-bottom:1px solid #E9ECEF;padding:88px 32px 72px;">
-  <div style="max-width:740px;margin:0 auto;text-align:center;">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:100px;padding:6px 16px;margin-bottom:28px;">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#2563EB;letter-spacing:0.08em;">Knowledge library</span>
-    </div>
-    <h1 style="font-size:clamp(34px,5vw,54px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;color:#212529;margin:0 0 22px;">
-      Technical operational <span style="color:#F59E0B;">resources hub</span>
-    </h1>
-    <p style="font-size:18px;line-height:1.7;color:#495057;margin:0;">
-      Published cyber threat intelligence analyses, baseline reasoning whitepapers, and operational detection guidebooks — for practitioners who want the full technical picture.
-    </p>
-  </div>
-</section>
-
-<!-- RESOURCES MAIN -->
-<section style="padding:72px 32px;">
-  <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:64px;">
-
-    <!-- Category 1: Threat research & CTI -->
-    <div>
-      <div style="margin-bottom:28px;">
-        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#EF4444;letter-spacing:0.12em;margin:0 0 8px;">THREAT INTELLIGENCE</p>
-        <h2 style="font-size:22px;font-weight:800;color:#212529;margin:0;">Threat research &amp; CTI</h2>
+      <ul style="list-style:none; display:flex; align-items:center; gap:28px; margin:0; padding:0; margin-left:8px;">
+        <li><a href="platform.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Platform</a></li>
+        <li><a href="agents.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">AI Agents</a></li>
+        <li><a href="solutions.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Solutions</a></li>
+        <li><a href="architecture.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Architecture</a></li>
+        <li><a href="security.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Security &amp; Trust</a></li>
+        <li><a href="about.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">About</a></li>
+      </ul>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:14px;">
+        <a href="../waitlist/" class="btn-waitlist" style="display:inline-flex; align-items:center; font-size:14px; font-weight:600; color:#2563EB; background:#fff; border:1px solid #2563EB; padding:9px 16px; border-radius:6px;">Join Waitlist</a>
+        <a href="contact.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:#fff; background:#2563EB; padding:9px 16px; border-radius:6px; box-shadow:0 1px 2px rgba(16,24,40,0.05);">Request Demo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+    </div>
+  </nav>
 
-        <div class="res-card">
+  <header style="border-bottom:1px solid #E9ECEF; background:#fff;">
+    <div style="max-width:1200px; margin:0 auto; padding:76px 32px 72px;">
+      <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.04em; color:#2563EB; background:#EFF6FF; border:1px solid #DBEAFE; padding:6px 12px; border-radius:9999px; margin-bottom:22px;">Knowledge library</span>
+      <h1 style="font-size:clamp(36px,4.6vw,54px); line-height:1.06; letter-spacing:-0.03em; font-weight:800; color:#212529; margin:0 0 20px; max-width:18ch;">Technical operational <span style="color:#F59E0B;">resources hub</span></h1>
+      <p style="font-size:18px; line-height:1.6; color:#495057; max-width:66ch; margin:0;">Published cyber threat intelligence analyses, baseline reasoning whitepapers, and operational detection guidebooks compiled by the core detection engineering staff.</p>
+    </div>
+  </header>
+
+  <section style="max-width:1200px; margin:0 auto; padding:88px 32px;">
+
+    <div style="margin-bottom:64px;">
+      <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; color:#2563EB; border-bottom:2px solid #2563EB; padding-bottom:5px; margin-bottom:26px; text-transform:uppercase; letter-spacing:0.1em; font-weight:700;">Threat research &amp; CTI</span>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#EF4444;letter-spacing:0.1em;background:#FEF2F2;border:1px solid #FCA5A5;border-radius:4px;padding:3px 8px;">THREAT REPORT</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Dissecting advanced living-off-the-land lateral chains</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Forensic analysis covering token reuse scripts, LOLBin pivot sequences, and detection gaps exposed in enterprise AD environments.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">THREAT REPORT</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Dissecting advanced living-off-the-land lateral chains</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Forensic analysis covering token reuse scripts, non-standard memory access protocols, and unmonitored scheduled execution wrappers.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">12 min read</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Download PDF <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>12 min read</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Download PDF <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
-        <div class="res-card">
+        </a>
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#D97706;letter-spacing:0.1em;background:#FFFBEB;border:1px solid #FCD34D;border-radius:4px;padding:3px 8px;">IOC ADVISORY</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Hypervisor target exploits across hybrid tenancies</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Active network sub-segment indicators and host-level signatures observed in campaigns targeting VMware ESXi and Hyper-V environments.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">IOC ADVISORY</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Hypervisor target exploits across hybrid tenancies</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Active network sub-segment indicators, command strings, and containment parameters from sovereign cloud observations.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">Technical digest</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Review JSON <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>Technical digest</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Review JSON <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
-        <div class="res-card">
+        </a>
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#7C3AED;letter-spacing:0.1em;background:#F5F3FF;border:1px solid #C4B5FD;border-radius:4px;padding:3px 8px;">CAMPAIGN STUDY</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Targeted data exfiltration via HTTPS DNS tunnels</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Evaluating multi-dimensional ML detection buffers against DNS-over-HTTPS covert channels in high-volume enterprise traffic environments.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">CAMPAIGN STUDY</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Targeted data exfiltration via HTTPS DNS tunnels</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Evaluating multi-dimensional ML detection buffers that catch sub-packet-rate exfiltration over standard DNS query endpoints.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">8 min read</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Read briefing <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>8 min read</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Read briefing <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
+        </a>
       </div>
     </div>
 
-    <!-- Category 2: Agent architecture & AI -->
-    <div>
-      <div style="margin-bottom:28px;">
-        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#2563EB;letter-spacing:0.12em;margin:0 0 8px;">AI &amp; PLATFORM</p>
-        <h2 style="font-size:22px;font-weight:800;color:#212529;margin:0;">Agent architecture &amp; AI</h2>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
-
-        <div class="res-card">
+    <div style="margin-bottom:64px;">
+      <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; color:#2563EB; border-bottom:2px solid #2563EB; padding-bottom:5px; margin-bottom:26px; text-transform:uppercase; letter-spacing:0.1em; font-weight:700;">Agent architecture &amp; AI</span>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#2563EB;letter-spacing:0.1em;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:4px;padding:3px 8px;">WHITEPAPER</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Deterministic multi-agent orchestration loops</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Architecture study documenting cross-agent message passing, supervisor routing patterns, and failure isolation boundaries in production deployments.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">WHITEPAPER</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Deterministic multi-agent orchestration loops</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Architecture study documenting cross-agent message passing, localised state validation matrices, and non-biased hypothesis weighting.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">Peer reviewed</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Download paper <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>Peer reviewed</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Download paper <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
-        <div class="res-card">
+        </a>
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#059669;letter-spacing:0.1em;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:4px;padding:3px 8px;">ENGINEERING NOTE</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Vector reasoning over streaming structural schema</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Overcoming sliding context bounds by hashing parsed entity graphs into persistent vector stores — enabling reasoning continuity across multi-hour investigation chains.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">ENGINEERING NOTE</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Vector reasoning over streaming structural schema</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Overcoming sliding context bounds by hashing parsed entity graphs into multi-dimensional memory blocks for zero-lag access.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">Core ops</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Explore spec <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>Core ops</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Explore spec <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
-        <div class="res-card">
+        </a>
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#6B7280;letter-spacing:0.1em;background:#F9FAFB;border:1px solid #D1D5DB;border-radius:4px;padding:3px 8px;">RESEARCH PAPER</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Supervised autonomy boundaries in action orchestration</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Mathematical frameworks modelling response safety metrics and blast-radius constraints for autonomous AI agents operating within production security environments.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">RESEARCH PAPER</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Supervised autonomy boundaries in action orchestration</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Mathematical frameworks modelling response safety metrics that guarantee implicit rollbacks without disrupting valid operations.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">22 pages</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Get report <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>22 pages</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Get report <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
+        </a>
       </div>
     </div>
 
-    <!-- Category 3: SOC engineering & playbooks -->
-    <div>
-      <div style="margin-bottom:28px;">
-        <p style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#059669;letter-spacing:0.12em;margin:0 0 8px;">SOC OPERATIONS</p>
-        <h2 style="font-size:22px;font-weight:800;color:#212529;margin:0;">SOC engineering &amp; playbooks</h2>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
-
-        <div class="res-card">
+    <div style="margin-bottom:0;">
+      <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; color:#2563EB; border-bottom:2px solid #2563EB; padding-bottom:5px; margin-bottom:26px; text-transform:uppercase; letter-spacing:0.1em; font-weight:700;">SOC engineering &amp; playbooks</span>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#059669;letter-spacing:0.1em;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:4px;padding:3px 8px;">PLAYBOOK SPEC</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Automating Tier-1 ransomware containment paths</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Step-by-step logic workflows covering host isolation, network segmentation triggers, shadow copy protection, and backup validation in automated response pipelines.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">PLAYBOOK SPEC</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Automating Tier-1 ransomware containment paths</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Step-by-step logic workflows parsing high-entropy directory writes to immediately enforce logical local-network device isolation.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">SOAR blueprint</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">View YAML <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>SOAR blueprint</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">View YAML <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
-        <div class="res-card">
+        </a>
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#2563EB;letter-spacing:0.1em;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:4px;padding:3px 8px;">ENGINEERING GUIDE</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Optimising high-volume EDR data ingestion buffers</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Practical kernel tuning and socket optimisation techniques for sustaining 50M+ events/day throughput with sub-50ms ingest latency on commodity hardware.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">ENGINEERING GUIDE</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Optimising high-volume EDR data ingestion buffers</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Practical kernel tuning and socket optimisation maps preventing packet drop over continuous telemetry streaming hooks.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">Sysadmin reference</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Read guide <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>Sysadmin reference</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Read guide <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
-        </div>
-
-        <div class="res-card">
+        </a>
+        <a href="#" class="res-card" style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 1px 3px rgba(16,24,40,0.05);">
           <div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#D97706;letter-spacing:0.1em;background:#FFFBEB;border:1px solid #FCD34D;border-radius:4px;padding:3px 8px;">COMPLIANCE MAPPING</span>
-            <h3 style="font-size:16px;font-weight:700;color:#212529;margin:14px 0 10px;line-height:1.4;">Mapping multi-agent proof output to the DORA standard</h3>
-            <p style="font-size:14px;color:#6B7280;line-height:1.6;margin:0;">Translating automated temporal timelines, response audit trails, and confidence chains to DORA Article 17 incident reporting requirements.</p>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#868E96; background:#F8F9FA; padding:3px 9px; border-radius:4px; display:inline-block; border:1px solid #E9ECEF; letter-spacing:0.04em;">COMPLIANCE MAPPING</span>
+            <h3 style="font-size:18px; font-weight:700; color:#212529; margin:14px 0 12px; line-height:1.35; letter-spacing:-0.01em;">Mapping multi-agent proof output to the DORA standard</h3>
+            <p style="color:#495057; font-size:14px; line-height:1.6; margin:0 0 24px;">Translating automated temporal timelines into defensible internal audit logs meeting digital resilience expectations.</p>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #F3F4F6;">
-            <span style="font-size:12px;color:#9CA3AF;">Regulatory digest</span>
-            <a href="#" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#2563EB;">Review spec <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E9ECEF; padding-top:16px; font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">
+            <span>Regulatory digest</span>
+            <span style="color:#2563EB; font-weight:600; display:inline-flex; align-items:center; gap:6px;">Review spec <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:linear-gradient(135deg,#1D4ED8,#1E3A8A);">
+    <div style="max-width:1200px; margin:0 auto; padding:64px 32px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap;">
+        <div style="max-width:600px;">
+          <h2 style="font-size:clamp(28px,3vw,36px); line-height:1.15; letter-spacing:-0.02em; font-weight:700; color:#fff; margin:0 0 12px;">Access specialised custom <span style="color:#FCD34D;">threat feeds.</span></h2>
+          <p style="font-size:16.5px; line-height:1.6; color:#BFDBFE; margin:0;">Enterprise users receive continuous machine access referencing our core verified behavioural signature buffers.</p>
         </div>
-
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- CTA -->
-<section style="padding:80px 32px;background:#1E3A8A;">
-  <div style="max-width:640px;margin:0 auto;text-align:center;">
-    <h2 style="font-size:clamp(24px,4vw,38px);font-weight:800;color:#fff;margin:0 0 16px;letter-spacing:-0.02em;">Access specialised custom threat feeds.</h2>
-    <p style="font-size:16px;color:#93C5FD;line-height:1.7;margin:0 0 36px;">Nexus can deliver environment-specific IOC packages, detection rules, and adversary profiles derived from your own telemetry. Talk to us about custom CTI delivery.</p>
-    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
-      <a href="/pages/contact.html" class="cta-btn-white" style="display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1E3A8A;background:#fff;padding:13px 28px;border-radius:8px;">
-        Request Demo
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="/pages/platform.html" class="cta-btn-ghost" style="display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:#fff;border:1px solid rgba(255,255,255,0.3);padding:13px 28px;border-radius:8px;">
-        Review platform
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer style="background:#212529;">
-  <div style="max-width:1200px;margin:0 auto;padding:64px 32px 0;">
-    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;">
-      <div style="max-width:340px;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-          <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:32px;height:32px;border-radius:7px;" />
-          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#fff;letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="contact.html" class="cta-btn-white" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#1E3A8A; background:#fff; padding:13px 22px; border-radius:6px;">Request Demo
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="platform.html" class="cta-btn-ghost" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); padding:13px 22px; border-radius:6px;">Review platform</a>
         </div>
-        <p style="font-size:14px;line-height:1.6;color:#ADB5BD;margin:0;">The autonomous operational intelligence platform for the modern SOC.</p>
-        <p style="margin-top:14px;font-size:12.5px;color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> &middot; Tarkwa, Ghana</p>
-      </div>
-      <div><h4 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 14px;">Platform</h4>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-          <li><a href="/pages/platform.html" style="font-size:14px;color:#ADB5BD;">Operational Layer</a></li>
-          <li><a href="/pages/agents.html" style="font-size:14px;color:#ADB5BD;">AI Constellation</a></li>
-          <li><a href="/pages/architecture.html" style="font-size:14px;color:#ADB5BD;">Architecture Flow</a></li>
-          <li><a href="/pages/security.html" style="font-size:14px;color:#ADB5BD;">Security &amp; Trust</a></li>
-        </ul>
-      </div>
-      <div><h4 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 14px;">Solutions</h4>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">Enterprise SOCs</a></li>
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">MSSP / Managed SOC</a></li>
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">Banking &amp; Finance</a></li>
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">Critical Infrastructure</a></li>
-        </ul>
-      </div>
-      <div><h4 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 14px;">Company</h4>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-          <li><a href="/pages/about.html" style="font-size:14px;color:#ADB5BD;">About Us</a></li>
-          <li><a href="/pages/resources.html" style="font-size:14px;color:#ADB5BD;">Resources Hub</a></li>
-          <li><a href="/pages/contact.html" style="font-size:14px;color:#ADB5BD;">Request Demo</a></li>
-        </ul>
       </div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:22px 0;border-top:1px solid #343A40;">
-      <p style="font-size:13px;color:#868E96;margin:0;">&copy; 2026 Radiant InnovaTech &middot; Globally ambitious AI security</p>
-      <div style="display:flex;gap:24px;">
-        <a href="#" style="font-size:13px;color:#868E96;">Privacy Policy</a>
-        <a href="#" style="font-size:13px;color:#868E96;">Security Assurance</a>
-        <a href="#" style="font-size:13px;color:#868E96;">Terms of Service</a>
-      </div>
-    </div>
-  </div>
-</footer>
+  </section>
 
+  <!-- ===== FOOTER ===== -->
+  <footer style="background:#212529;">
+    <div style="max-width:1200px; margin:0 auto; padding:64px 32px 0;">
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:48px;">
+        <div style="max-width:340px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:32px; height:32px; border-radius:7px; display:block;" />
+            <span style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#fff; letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
+          </div>
+          <p style="font-size:14px; line-height:1.6; color:#ADB5BD; margin:0;">The autonomous operational intelligence platform for the modern SOC, continuously reasoning, correlating, and retaining persistent operational memory alongside your analysts.</p>
+          <p style="margin-top:14px; font-size:12.5px; color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
+        </div>
+        <div>
+          <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Platform</h4>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+            <li><a href="platform.html" style="font-size:14px; color:#ADB5BD;">Operational Layer</a></li>
+            <li><a href="agents.html" style="font-size:14px; color:#ADB5BD;">AI Constellation</a></li>
+            <li><a href="architecture.html" style="font-size:14px; color:#ADB5BD;">Architecture Flow</a></li>
+            <li><a href="security.html" style="font-size:14px; color:#ADB5BD;">Security &amp; Trust</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Solutions</h4>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">Enterprise SOCs</a></li>
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">MSSP / Managed SOC</a></li>
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">Banking &amp; Finance</a></li>
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">Critical Infrastructure</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Company</h4>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+            <li><a href="about.html" style="font-size:14px; color:#ADB5BD;">About Us</a></li>
+            <li><a href="resources.html" style="font-size:14px; color:#ADB5BD;">Resources Hub</a></li>
+            <li><a href="contact.html" style="font-size:14px; color:#ADB5BD;">Request Demo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:22px 0; border-top:1px solid #343A40;">
+        <p style="font-size:13px; color:#868E96; margin:0;">© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
+        <div style="display:flex; gap:24px;">
+          <a href="#" style="font-size:13px; color:#868E96;">Privacy Policy</a>
+          <a href="#" style="font-size:13px; color:#868E96;">Security Assurance</a>
+          <a href="#" style="font-size:13px; color:#868E96;">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
 </body>
 </html>

@@ -1,439 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Platform | Radiant Nexus</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <meta name="description" content="The autonomous intelligence layer for security operations — three layers, one continuous loop: telemetry reasoning, autonomous investigation, and persistent operational memory." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body { background: #F8F9FA; color: #212529; font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-    a { text-decoration: none; color: inherit; }
-    ::selection { background: #DBEAFE; }
-    @keyframes ri-pulse { 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
-    nav a:hover { color: #212529 !important; }
-    .btn-primary { transition: background 0.15s, box-shadow 0.15s; }
-    .btn-primary:hover { background: #1D4ED8 !important; box-shadow: 0 8px 16px -4px rgba(37,99,235,0.30) !important; }
-    .btn-outline:hover { background: #EFF6FF !important; border-color: #1D4ED8 !important; color: #1D4ED8 !important; }
-    .cta-btn-white:hover { background: #F1F3F5 !important; }
-    .cta-btn-ghost:hover { background: rgba(255,255,255,0.18) !important; }
-    footer a:hover { color: #fff !important; }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{ background:#F8F9FA; color:#212529; font-family:"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+    a{ text-decoration:none; color:inherit; }
+    ::selection{ background:#DBEAFE; }
+    @keyframes ri-pulse{ 0%,100%{ opacity:.35; } 50%{ opacity:1; } }
+    nav a.ri-link:hover{ color:#212529 !important; }
+    .btn-waitlist:hover{ color:#1D4ED8 !important; background:#EFF6FF !important; border-color:#1D4ED8 !important; }
+    .btn-primary:hover{ background:#1D4ED8 !important; box-shadow:0 4px 8px -2px rgba(37,99,235,0.25) !important; }
+    .cta-btn-white:hover{ background:#F1F3F5 !important; }
+    .cta-btn-ghost:hover{ background:rgba(255,255,255,0.18) !important; border-color:rgba(255,255,255,0.4) !important; }
+    footer a:hover{ color:#fff !important; }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav style="position:sticky;top:0;z-index:50;background:rgba(248,249,250,0.82);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid #E9ECEF;">
-  <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;gap:32px;">
-    <a href="/" style="display:flex;align-items:center;gap:11px;">
-      <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:34px;height:34px;border-radius:8px;display:block;" />
-      <span style="font-size:16px;font-weight:800;letter-spacing:0.16em;color:#212529;">RADIANT <span style="color:#2563EB;">NEXUS</span></span>
-    </a>
-    <ul style="list-style:none;display:flex;align-items:center;gap:28px;margin:0;padding:0;margin-left:8px;">
-      <li><a href="/pages/platform.html" style="font-size:14px;font-weight:600;color:#2563EB;">Platform</a></li>
-      <li><a href="/pages/agents.html" style="font-size:14px;font-weight:500;color:#495057;">AI Agents</a></li>
-      <li><a href="/pages/solutions.html" style="font-size:14px;font-weight:500;color:#495057;">Solutions</a></li>
-      <li><a href="/pages/architecture.html" style="font-size:14px;font-weight:500;color:#495057;">Architecture</a></li>
-      <li><a href="/pages/security.html" style="font-size:14px;font-weight:500;color:#495057;">Security &amp; Trust</a></li>
-      <li><a href="/pages/about.html" style="font-size:14px;font-weight:500;color:#495057;">About</a></li>
-    </ul>
-    <div style="margin-left:auto;display:flex;align-items:center;gap:14px;">
-      <a href="/waitlist/" class="btn-outline" style="display:inline-flex;align-items:center;font-size:14px;font-weight:600;color:#2563EB;background:#fff;border:1px solid #2563EB;padding:9px 16px;border-radius:6px;">Join Waitlist</a>
-      <a href="/pages/contact.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:#fff;background:#2563EB;padding:9px 16px;border-radius:6px;">Request Demo
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+<div style="background:#F8F9FA; overflow-x:hidden;">
+
+  <!-- ===== NAV ===== -->
+  <nav style="position:sticky; top:0; z-index:50; background:rgba(248,249,250,0.82); backdrop-filter:saturate(180%) blur(12px); border-bottom:1px solid #E9ECEF;">
+    <div style="max-width:1200px; margin:0 auto; padding:0 32px; height:68px; display:flex; align-items:center; gap:32px;">
+      <a href="../index.html" style="display:flex; align-items:center; gap:11px;">
+        <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:34px; height:34px; border-radius:8px; display:block;" />
+        <span style="font-size:16px; font-weight:800; letter-spacing:0.16em; color:#212529;">RADIANT <span style="color:#2563EB;">NEXUS</span></span>
       </a>
+      <ul style="list-style:none; display:flex; align-items:center; gap:28px; margin:0; padding:0; margin-left:8px;">
+        <li><a href="platform.html" style="font-size:14px; font-weight:600; color:#2563EB;">Platform</a></li>
+        <li><a href="agents.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">AI Agents</a></li>
+        <li><a href="solutions.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Solutions</a></li>
+        <li><a href="architecture.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Architecture</a></li>
+        <li><a href="security.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">Security &amp; Trust</a></li>
+        <li><a href="about.html" class="ri-link" style="font-size:14px; font-weight:500; color:#495057;">About</a></li>
+      </ul>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:14px;">
+        <a href="../waitlist/" class="btn-waitlist" style="display:inline-flex; align-items:center; font-size:14px; font-weight:600; color:#2563EB; background:#fff; border:1px solid #2563EB; padding:9px 16px; border-radius:6px;">Join Waitlist</a>
+        <a href="contact.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:#fff; background:#2563EB; padding:9px 16px; border-radius:6px; box-shadow:0 1px 2px rgba(16,24,40,0.05);">Request Demo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- HERO -->
-<section style="background:#fff;border-bottom:1px solid #E9ECEF;padding:88px 32px 80px;">
-  <div style="max-width:800px;margin:0 auto;text-align:center;">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:100px;padding:6px 16px;margin-bottom:28px;">
-      <span style="width:7px;height:7px;border-radius:50%;background:#2563EB;display:inline-block;animation:ri-pulse 2s infinite;"></span>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#2563EB;letter-spacing:0.08em;">Operational intelligence layer</span>
+  <!-- PAGE HERO -->
+  <header style="border-bottom:1px solid #E9ECEF; background:#fff;">
+    <div style="max-width:1200px; margin:0 auto; padding:76px 32px 72px;">
+      <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.04em; color:#2563EB; background:#EFF6FF; border:1px solid #DBEAFE; padding:6px 12px; border-radius:9999px; margin-bottom:22px;">Operational intelligence layer</span>
+      <h1 style="font-size:clamp(36px,4.6vw,54px); line-height:1.06; letter-spacing:-0.03em; font-weight:800; color:#212529; margin:0 0 20px; max-width:18ch;">The autonomous intelligence layer for <span style="color:#F59E0B;">security operations</span></h1>
+      <p style="font-size:18px; line-height:1.6; color:#495057; max-width:64ch; margin:0;">Not a SIEM. Not an observability tool. Not a query chatbot. Radiant Nexus reasons across raw telemetry, runs investigations end to end, and builds persistent operational memory, continuously.</p>
     </div>
-    <h1 style="font-size:clamp(36px,5vw,56px);font-weight:800;line-height:1.1;letter-spacing:-0.02em;color:#212529;margin:0 0 24px;">
-      The autonomous intelligence layer for <span style="color:#F59E0B;">security operations</span>
-    </h1>
-    <p style="font-size:18px;line-height:1.7;color:#495057;margin:0;">
-      Not a SIEM. Not an observability tool. Not a query chatbot. Radiant Nexus reasons across raw telemetry, runs investigations end to end, and builds persistent operational memory, continuously.
-    </p>
-  </div>
-</section>
+  </header>
 
-<!-- THREE LAYERS SECTION -->
-<section style="padding:80px 32px;">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:#2563EB;letter-spacing:0.1em;margin:0 0 12px;">HOW THE PLATFORM WORKS</p>
-      <h2 style="font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-0.02em;color:#212529;margin:0 0 16px;">Three layers, one continuous loop</h2>
-      <p style="font-size:16px;color:#495057;max-width:560px;margin:0 auto;line-height:1.7;">Telemetry flows in as fuel. The reasoning engine converts it into action. Memory ensures every lesson compounds. The loop never stops.</p>
+  <!-- PIPELINE OVERVIEW -->
+  <section style="max-width:1200px; margin:0 auto; padding:96px 32px;">
+    <div style="text-align:center; max-width:700px; margin:0 auto 48px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#2563EB; margin-bottom:14px;">How the platform works</div>
+      <h2 style="font-size:clamp(30px,3.4vw,40px); line-height:1.12; letter-spacing:-0.02em; font-weight:700; color:#212529; margin:0 0 16px;">Three layers, one <span style="color:#F59E0B;">continuous loop</span></h2>
+      <p style="font-size:18px; line-height:1.6; color:#495057; margin:0;">Telemetry flows in as fuel. The reasoning core investigates without prompting. Persistent memory makes every future investigation faster than the last.</p>
     </div>
+    <div style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; box-shadow:0 12px 16px -4px rgba(16,24,40,0.06); overflow:hidden;">
+      <div style="display:flex; align-items:center; gap:10px; padding:13px 18px; border-bottom:1px solid #E9ECEF; background:#F8F9FA;">
+        <span style="display:inline-flex; gap:6px;"><i style="width:10px;height:10px;border-radius:50%;background:#DC2626;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#16A34A;display:block;"></i></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">operational-pipeline // telemetry → reasoning → memory</span>
+        <span style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#15803D;"><span style="width:7px;height:7px;border-radius:50%;background:#16A34A;display:block; animation:ri-pulse 1.8s ease-in-out infinite;"></span>LIVE</span>
+      </div>
+      <div style="padding:24px 22px 12px;">
+        <svg viewBox="0 0 920 220" style="width:100%; height:auto;" role="img" aria-label="Telemetry sources feed a reasoning core, which writes to persistent memory and coordinates supervised response.">
+          <defs>
+            <radialGradient id="pcoreGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2563EB" stop-opacity="0.18"/><stop offset="100%" stop-color="#2563EB" stop-opacity="0"/></radialGradient>
+            <pattern id="pDots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="#EAEEF3"/></pattern>
+          </defs>
+          <rect x="0" y="0" width="920" height="220" fill="url(#pDots)"/>
+          <path id="pp1" d="M170,54 C280,64 320,98 392,108" fill="none" stroke="#BFDBFE" stroke-width="1.6"/>
+          <path id="pp2" d="M170,110 C280,110 320,110 392,110" fill="none" stroke="#BFDBFE" stroke-width="1.6"/>
+          <path id="pp3" d="M170,166 C280,156 320,122 392,112" fill="none" stroke="#BFDBFE" stroke-width="1.6"/>
+          <path id="pp4" d="M520,100 C620,80 690,64 748,58" fill="none" stroke="#BBF7D0" stroke-width="1.6"/>
+          <path id="pp5" d="M520,120 C620,140 690,156 748,162" fill="none" stroke="#BBF7D0" stroke-width="1.6"/>
+          <g fill="#2563EB">
+            <circle r="3.2"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#pp1"/></animateMotion></circle>
+            <circle r="3.2"><animateMotion dur="2.7s" begin="0.6s" repeatCount="indefinite"><mpath href="#pp2"/></animateMotion></circle>
+            <circle r="3.2"><animateMotion dur="2.5s" begin="1.1s" repeatCount="indefinite"><mpath href="#pp3"/></animateMotion></circle>
+          </g>
+          <g fill="#16A34A">
+            <circle r="3.2"><animateMotion dur="2.3s" begin="1.4s" repeatCount="indefinite"><mpath href="#pp4"/></animateMotion></circle>
+            <circle r="3.2"><animateMotion dur="2.5s" begin="1.7s" repeatCount="indefinite"><mpath href="#pp5"/></animateMotion></circle>
+          </g>
+          <g font-family="JetBrains Mono, monospace" font-size="11" fill="#495057" text-anchor="middle">
+            <rect x="44" y="38" width="120" height="32" rx="8" fill="#fff" stroke="#DBEAFE"/><text x="104" y="58">Cloud · EDR</text>
+            <rect x="44" y="94" width="120" height="32" rx="8" fill="#fff" stroke="#DBEAFE"/><text x="104" y="114">Identity · SSO</text>
+            <rect x="44" y="150" width="120" height="32" rx="8" fill="#fff" stroke="#DBEAFE"/><text x="104" y="170">Network · SIEM</text>
+          </g>
+          <circle cx="456" cy="110" r="58" fill="url(#pcoreGlow)"/>
+          <polygon points="456,64 498,87 498,133 456,156 414,133 414,87" fill="#fff" stroke="#2563EB" stroke-width="1.8"/>
+          <polygon points="456,80 484,95 484,125 456,140 428,125 428,95" fill="none" stroke="#93C5FD" stroke-width="1" stroke-dasharray="2 3"/>
+          <svg x="442" y="96" width="28" height="28" viewBox="0 0 24 24" fill="#F59E0B" stroke="none" style="animation:ri-pulse 2.2s ease-in-out infinite;"><path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/></svg>
+          <text x="456" y="184" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#2563EB" font-weight="600">REASONING CORE</text>
+          <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" text-anchor="middle">
+            <rect x="748" y="42" width="128" height="32" rx="8" fill="#ECFDF5" stroke="#86EFAC"/><text x="812" y="62" fill="#15803D">MEMORY</text>
+            <rect x="748" y="146" width="128" height="32" rx="8" fill="#ECFDF5" stroke="#86EFAC"/><text x="812" y="166" fill="#15803D">RESPONSE</text>
+          </g>
+        </svg>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding:18px 22px; border-top:1px solid #E9ECEF; background:#F8F9FA;">
+        <div><div style="font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; color:#2563EB; line-height:1;">&lt;60s</div><div style="font-size:11px; color:#868E96; margin-top:6px; letter-spacing:.02em;">TIME TO VERDICT</div></div>
+        <div><div style="font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; color:#16A34A; line-height:1;">94.7%</div><div style="font-size:11px; color:#868E96; margin-top:6px; letter-spacing:.02em;">REASONING CONFIDENCE</div></div>
+        <div><div style="font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; color:#212529; line-height:1;">150:1</div><div style="font-size:11px; color:#868E96; margin-top:6px; letter-spacing:.02em;">ALERT COMPRESSION</div></div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Pipeline visual terminal -->
-    <div style="background:#111827;border-radius:16px;padding:40px;max-width:900px;margin:0 auto;">
-      <div style="background:#1F2937;border-radius:10px 10px 0 0;padding:12px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #374151;margin:-40px -40px 32px;">
-        <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;"></div>
-        <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
-        <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
-        <span style="margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6B7280;">nexus-core // continuous intelligence loop</span>
-      </div>
-
-      <!-- Pipeline diagram -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;row-gap:24px;">
-        <!-- Sources col -->
-        <div style="display:flex;flex-direction:column;gap:10px;min-width:150px;">
-          <div style="background:#1F2937;border:1px solid #374151;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9CA3AF;">Cloud &middot; EDR</div>
-          <div style="background:#1F2937;border:1px solid #374151;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9CA3AF;">Identity &middot; SSO</div>
-          <div style="background:#1F2937;border:1px solid #374151;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9CA3AF;">Network &middot; SIEM</div>
-        </div>
-        <!-- Arrow + animated SVG -->
-        <div style="padding:0 8px;">
-          <svg width="140" height="80" viewBox="0 0 140 80" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <path id="dp1" d="M0,18 Q70,18 140,40"/>
-              <path id="dp2" d="M0,40 L140,40"/>
-              <path id="dp3" d="M0,62 Q70,62 140,40"/>
-            </defs>
-            <path d="M0,18 Q70,18 140,40" stroke="#374151" stroke-width="1.5" fill="none"/>
-            <path d="M0,40 L140,40" stroke="#374151" stroke-width="1.5" fill="none"/>
-            <path d="M0,62 Q70,62 140,40" stroke="#374151" stroke-width="1.5" fill="none"/>
-            <circle r="4" fill="#2563EB"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0s"><mpath href="#dp1"/></animateMotion></circle>
-            <circle r="4" fill="#2563EB" opacity="0.7"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0.8s"><mpath href="#dp2"/></animateMotion></circle>
-            <circle r="4" fill="#2563EB"><animateMotion dur="2.4s" repeatCount="indefinite" begin="1.6s"><mpath href="#dp3"/></animateMotion></circle>
-          </svg>
-        </div>
-        <!-- Hexagon core -->
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <svg width="80" height="88" viewBox="0 0 80 88" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="40,4 76,24 76,64 40,84 4,64 4,24" fill="#1E3A8A" stroke="#2563EB" stroke-width="2"/>
-            <text x="40" y="42" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#60A5FA">NEXUS</text>
-            <text x="40" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#93C5FD">CORE</text>
-          </svg>
-        </div>
-        <!-- Out arrow -->
-        <div style="padding:0 8px;">
-          <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <path id="op1" d="M0,40 Q60,20 120,14"/>
-              <path id="op2" d="M0,40 Q60,60 120,66"/>
-            </defs>
-            <path d="M0,40 Q60,20 120,14" stroke="#374151" stroke-width="1.5" fill="none"/>
-            <path d="M0,40 Q60,60 120,66" stroke="#374151" stroke-width="1.5" fill="none"/>
-            <circle r="4" fill="#F59E0B"><animateMotion dur="2s" repeatCount="indefinite" begin="0.4s"><mpath href="#op1"/></animateMotion></circle>
-            <circle r="4" fill="#10B981"><animateMotion dur="2s" repeatCount="indefinite" begin="1.2s"><mpath href="#op2"/></animateMotion></circle>
-          </svg>
-        </div>
-        <!-- Outputs -->
-        <div style="display:flex;flex-direction:column;gap:10px;min-width:140px;">
-          <div style="background:#14532D;border:1px solid #166534;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ADE80;font-weight:600;">MEMORY</div>
-          <div style="background:#1E3A5F;border:1px solid #1D4ED8;border-radius:8px;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA;font-weight:600;">RESPONSE</div>
-        </div>
-      </div>
-
-      <!-- Stats bar -->
-      <div style="display:flex;gap:0;margin-top:36px;padding-top:28px;border-top:1px solid #374151;">
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:#2563EB;">&lt;60s</div>
-          <div style="font-size:12px;color:#6B7280;margin-top:4px;">Mean time to triage</div>
-        </div>
-        <div style="width:1px;background:#374151;"></div>
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:#10B981;">94.7%</div>
-          <div style="font-size:12px;color:#6B7280;margin-top:4px;">Alert accuracy rate</div>
-        </div>
-        <div style="width:1px;background:#374151;"></div>
-        <div style="flex:1;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:#F59E0B;">150:1</div>
-          <div style="font-size:12px;color:#6B7280;margin-top:4px;">Telemetry compression</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LAYER 01 -->
-<section style="background:#fff;border-top:1px solid #E9ECEF;border-bottom:1px solid #E9ECEF;padding:80px 32px;">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
-    <div>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#2563EB;letter-spacing:0.12em;margin:0 0 12px;">LAYER 01</p>
-      <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.02em;color:#212529;margin:0 0 18px;line-height:1.2;">Telemetry reasoning layer</h2>
-      <p style="font-size:16px;line-height:1.75;color:#495057;margin:0 0 28px;">Every log, alert, and signal from your environment is ingested, normalised, and reasoned over in real time — not batched, not queried, not manually triaged. Radiant Nexus converts raw telemetry into structured intelligence continuously.</p>
-      <div style="display:flex;flex-direction:column;gap:14px;">
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Passive ingest bus</strong><span style="font-size:14px;color:#6B7280;">Accepts any structured or semi-structured security telemetry at scale with no schema prerequisites.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Real-time reasoning</strong><span style="font-size:14px;color:#6B7280;">The engine evaluates signal chains as they arrive — no waiting for batch windows or query cycles.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Answers not queries</strong><span style="font-size:14px;color:#6B7280;">Analysts receive conclusions with evidence chains, not raw data sets to interpret manually.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">150:1 compression</strong><span style="font-size:14px;color:#6B7280;">Signal clustering reduces raw event volume by 150x before anything reaches the investigation engine.</span></div>
-        </div>
-      </div>
-    </div>
-    <!-- Right visual -->
-    <div>
-      <div style="background:#111827;border-radius:12px;overflow:hidden;font-family:'JetBrains Mono',monospace;">
-        <div style="background:#1F2937;padding:12px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #374151;">
-          <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;"></div>
-          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
-          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#6B7280;">ingest-bus // fuel conversion</span>
-        </div>
-        <div style="padding:24px 20px;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:12px;color:#4B5563;">// incoming telemetry stream — normalized</div>
-          <div style="font-size:12px;"><span style="color:#F59E0B;">&#8594;</span> <span style="color:#60A5FA;">[EDR]</span> <span style="color:#9CA3AF;">process_create:</span> <span style="color:#A3E635;">cmd.exe /c whoami</span> <span style="color:#6B7280;">&middot; host:WS-104</span></div>
-          <div style="font-size:12px;"><span style="color:#F59E0B;">&#8594;</span> <span style="color:#60A5FA;">[IAM]</span> <span style="color:#9CA3AF;">auth_failure x7:</span> <span style="color:#A3E635;">user@corp.io</span> <span style="color:#6B7280;">&middot; 04:12 UTC</span></div>
-          <div style="font-size:12px;"><span style="color:#F59E0B;">&#8594;</span> <span style="color:#60A5FA;">[NET]</span> <span style="color:#9CA3AF;">dns_query:</span> <span style="color:#A3E635;">evil.c2.io</span> <span style="color:#6B7280;">&middot; 150 reqs/min</span></div>
-          <div style="font-size:12px;"><span style="color:#F59E0B;">&#8594;</span> <span style="color:#60A5FA;">[CLOUD]</span> <span style="color:#9CA3AF;">s3_getobject:</span> <span style="color:#A3E635;">prod-secrets/</span> <span style="color:#6B7280;">&middot; anon role</span></div>
-          <div style="margin-top:14px;padding:12px 16px;background:#1E3A5F;border:1px solid #2563EB;border-radius:8px;">
-            <div style="font-size:11px;color:#60A5FA;font-weight:700;margin-bottom:6px;">&#9432; INGEST STATUS</div>
-            <div style="font-size:11px;color:#93C5FD;">4 streams active &middot; 12.4M events/hr &middot; 150:1 cluster ratio</div>
-            <div style="font-size:11px;color:#93C5FD;margin-top:4px;">Latency: 38ms p99 &middot; reasoning engine: READY</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LAYER 02 -->
-<section style="padding:80px 32px;">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
-    <!-- Visual left -->
-    <div>
-      <div style="background:#111827;border-radius:12px;overflow:hidden;font-family:'JetBrains Mono',monospace;">
-        <div style="background:#1F2937;padding:12px 18px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #374151;">
-          <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;"></div>
-          <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
-          <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
-          <span style="margin-left:8px;font-size:11px;color:#6B7280;">investigation-engine // directed graph</span>
-        </div>
-        <div style="padding:24px 20px;">
-          <div style="font-size:11px;color:#4B5563;margin-bottom:16px;">// attack graph — causal chain resolution</div>
-          <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;">
-            <div style="padding:9px 16px;background:#7C3AED22;border:1px solid #7C3AED;border-radius:7px;font-size:11px;color:#A78BFA;font-weight:700;">IDENTITY_COMPROMISE</div>
-            <div style="width:1px;height:22px;background:#374151;margin-left:28px;border-left:1.5px dashed #374151;"></div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="padding:9px 16px;background:#F59E0B22;border:1px solid #F59E0B;border-radius:7px;font-size:11px;color:#FCD34D;font-weight:700;">LATERAL_PIVOT</div>
-              <span style="font-size:10px;color:#6B7280;">&#8594; 3 hosts affected</span>
-            </div>
-            <div style="width:1px;height:22px;background:#374151;margin-left:28px;border-left:1.5px dashed #374151;"></div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div style="padding:9px 16px;background:#10B98122;border:1px solid #10B981;border-radius:7px;font-size:11px;color:#4ADE80;font-weight:700;">CONTAINMENT_READY</div>
-              <span style="font-size:10px;color:#4ADE80;">confidence: 97%</span>
-            </div>
-          </div>
-          <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #1F2937;">
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#1F2937;border-radius:7px;">
-              <span style="font-size:11px;color:#9CA3AF;">Competing hypotheses evaluated</span>
-              <span style="font-size:11px;color:#60A5FA;font-weight:600;">7 ruled out</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#14532D22;border:1px solid #14532D;border-radius:7px;">
-              <span style="font-size:11px;color:#9CA3AF;">Full timeline constructed</span>
-              <span style="font-size:11px;color:#4ADE80;font-weight:600;">DONE &middot; 41s</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Text right -->
-    <div>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#2563EB;letter-spacing:0.12em;margin:0 0 12px;">LAYER 02</p>
-      <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.02em;color:#212529;margin:0 0 18px;line-height:1.2;">Autonomous investigation orchestration</h2>
-      <p style="font-size:16px;line-height:1.75;color:#495057;margin:0 0 28px;">When a threat is detected, Nexus doesn't file a ticket. It opens a directed investigation, traverses entity relationships, evaluates competing hypotheses, and produces a full attack timeline — all before an analyst sees the first notification.</p>
-      <div style="display:flex;flex-direction:column;gap:14px;">
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Graph traversal</strong><span style="font-size:14px;color:#6B7280;">Entities, relationships, and signals are linked in a live knowledge graph updated in milliseconds.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Competing hypotheses</strong><span style="font-size:14px;color:#6B7280;">Multiple threat narratives are evaluated in parallel and ranked by posterior probability before surfacing.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Full attack timeline</strong><span style="font-size:14px;color:#6B7280;">A complete reconstruction of adversary actions from initial access to intended impact, ready in under 60 seconds.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Analyst in command</strong><span style="font-size:14px;color:#6B7280;">All autonomous actions require human approval before execution. You review, approve, or override at every step.</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LAYER 03 -->
-<section style="background:#fff;border-top:1px solid #E9ECEF;border-bottom:1px solid #E9ECEF;padding:80px 32px;">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
-    <div>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#2563EB;letter-spacing:0.12em;margin:0 0 12px;">LAYER 03</p>
-      <h2 style="font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.02em;color:#212529;margin:0 0 18px;line-height:1.2;">Persistent operational memory</h2>
-      <p style="font-size:16px;line-height:1.75;color:#495057;margin:0 0 28px;">Every incident Nexus closes becomes institutional knowledge. Playbooks are written, updated, and retrieved automatically. New threats are matched against historical patterns before a single analyst types a query.</p>
-      <div style="display:flex;flex-direction:column;gap:14px;">
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Incident retention</strong><span style="font-size:14px;color:#6B7280;">All resolved incidents are persisted with full context, evidence chains, and analyst decisions.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Learned playbooks</strong><span style="font-size:14px;color:#6B7280;">Response playbooks are auto-written and refined from each resolved investigation — no manual curation required.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Instant recall</strong><span style="font-size:14px;color:#6B7280;">Semantic search over all prior incidents gives analysts instant access to relevant precedent.</span></div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:12px;">
-          <div style="width:28px;height:28px;min-width:28px;border-radius:7px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
-          <div><strong style="font-size:14px;color:#212529;display:block;margin-bottom:2px;">Tenant isolation</strong><span style="font-size:14px;color:#6B7280;">Memory is cryptographically isolated per environment — MSSP customers share zero data across tenants.</span></div>
-        </div>
-      </div>
-    </div>
-    <!-- Right visual -->
-    <div>
-      <div style="background:#111827;border-radius:12px;overflow:hidden;font-family:'JetBrains Mono',monospace;">
-        <div style="background:#1F2937;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #374151;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="width:10px;height:10px;border-radius:50%;background:#EF4444;"></div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#F59E0B;"></div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
-            <span style="margin-left:8px;font-size:11px;color:#6B7280;">memory-layer // state recall</span>
-          </div>
-          <span style="font-size:10px;font-weight:700;color:#4ADE80;background:#14532D;padding:3px 8px;border-radius:4px;">SYNCED</span>
-        </div>
-        <div style="padding:24px 20px;display:flex;flex-direction:column;gap:12px;">
-          <div style="font-size:11px;color:#4B5563;">// semantic recall — prior incidents matched</div>
-          <div style="padding:14px;background:#1F2937;border:1px solid #374151;border-radius:8px;">
-            <div style="font-size:11px;color:#F59E0B;margin-bottom:6px;font-weight:600;">MATCH &middot; INC-3881 &middot; similarity: 0.94</div>
-            <div style="font-size:11px;color:#9CA3AF;">Credential spray &#8594; lateral pivot via SMB</div>
-            <div style="font-size:11px;color:#6B7280;margin-top:4px;">Resolved: isolate + force MFA reset</div>
-          </div>
-          <div style="padding:14px;background:#1F2937;border:1px solid #374151;border-radius:8px;">
-            <div style="font-size:11px;color:#60A5FA;margin-bottom:6px;font-weight:600;">MATCH &middot; INC-2447 &middot; similarity: 0.87</div>
-            <div style="font-size:11px;color:#9CA3AF;">Exfil attempt via DNS tunnelling</div>
-            <div style="font-size:11px;color:#6B7280;margin-top:4px;">Resolved: block resolver + rotate certs</div>
-          </div>
-          <div style="font-size:11px;color:#4B5563;padding-top:4px;">// playbook auto-loaded &middot; 2 action templates ready</div>
-        </div>
-      </div>
-      <!-- Stats row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:18px;">
-        <div style="background:#fff;border:1px solid #E9ECEF;border-radius:10px;padding:16px;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#2563EB;">&lt;60s</div>
-          <div style="font-size:11px;color:#6B7280;margin-top:4px;">Mean triage time</div>
-        </div>
-        <div style="background:#fff;border:1px solid #E9ECEF;border-radius:10px;padding:16px;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#10B981;">94.7%</div>
-          <div style="font-size:11px;color:#6B7280;margin-top:4px;">Alert accuracy</div>
-        </div>
-        <div style="background:#fff;border:1px solid #E9ECEF;border-radius:10px;padding:16px;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#F59E0B;">150:1</div>
-          <div style="font-size:11px;color:#6B7280;margin-top:4px;">Compression</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section style="padding:80px 32px;background:#1E3A8A;">
-  <div style="max-width:680px;margin:0 auto;text-align:center;">
-    <h2 style="font-size:clamp(26px,4vw,40px);font-weight:800;color:#fff;margin:0 0 18px;letter-spacing:-0.02em;">Ready to deploy operational intelligence?</h2>
-    <p style="font-size:16px;color:#93C5FD;line-height:1.7;margin:0 0 36px;">Talk to the team about how the platform fits your environment. Or explore the AI agents that power each investigation.</p>
-    <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;">
-      <a href="/pages/contact.html" class="cta-btn-white" style="display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1E3A8A;background:#fff;padding:13px 28px;border-radius:8px;">
-        Request Demo
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="/pages/agents.html" class="cta-btn-ghost" style="display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:#fff;border:1px solid rgba(255,255,255,0.3);padding:13px 28px;border-radius:8px;">
-        Explore AI Agents
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer style="background:#212529;">
-  <div style="max-width:1200px;margin:0 auto;padding:64px 32px 0;">
-    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;">
-      <div style="max-width:340px;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-          <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:32px;height:32px;border-radius:7px;" />
-          <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#fff;letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
-        </div>
-        <p style="font-size:14px;line-height:1.6;color:#ADB5BD;margin:0;">The autonomous operational intelligence platform for the modern SOC.</p>
-        <p style="margin-top:14px;font-size:12.5px;color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> &middot; Tarkwa, Ghana</p>
-      </div>
-      <div><h4 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 14px;">Platform</h4>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-          <li><a href="/pages/platform.html" style="font-size:14px;color:#ADB5BD;">Operational Layer</a></li>
-          <li><a href="/pages/agents.html" style="font-size:14px;color:#ADB5BD;">AI Constellation</a></li>
-          <li><a href="/pages/architecture.html" style="font-size:14px;color:#ADB5BD;">Architecture Flow</a></li>
-          <li><a href="/pages/security.html" style="font-size:14px;color:#ADB5BD;">Security &amp; Trust</a></li>
+  <!-- LAYER 01 -->
+  <section style="background:#fff; border-top:1px solid #E9ECEF; border-bottom:1px solid #E9ECEF;">
+    <div style="max-width:1200px; margin:0 auto; padding:88px 32px; display:grid; grid-template-columns:1fr 1.1fr; gap:56px; align-items:center;">
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:9px; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600; color:#2563EB; letter-spacing:0.12em; margin-bottom:16px;"><span style="width:26px; height:1px; background:linear-gradient(90deg,#2563EB,transparent); display:block;"></span>LAYER 01</div>
+        <h2 style="font-size:clamp(26px,3vw,34px); line-height:1.1; letter-spacing:-0.02em; font-weight:800; color:#212529; margin:0 0 16px;">Telemetry reasoning layer</h2>
+        <p style="font-size:16px; line-height:1.7; color:#495057; margin:0 0 24px;">Observability vendors treat log retention as the goal. Nexus treats incoming telemetry as fuel, continuously ingesting heterogeneous events and synthesising behaviour into answers, not more rows to search.</p>
+        <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px;">
+          <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5M9 8V2M15 8V2M18 8H6v4a6 6 0 0 0 12 0z"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Passive ingest bus.</b> Consumes cloud, EDR and identity streams in the background, no dashboards to watch.</span></li>
+          <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v1a3 3 0 0 0-1 5.8V15a3 3 0 0 0 4 2.8A3 3 0 0 0 16 15v-2.2A3 3 0 0 0 15 7V6a3 3 0 0 0-3-3z"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Real-time reasoning.</b> Validates causal relationships before anything reaches an analyst's screen.</span></li>
+          <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Answers, not queries.</b> Outputs synthesised verdicts instead of leaving you to write searches.</span></li>
+          <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">150:1 compression.</b> Correlation clustering folds raw stream noise into a handful of real incidents.</span></li>
         </ul>
       </div>
-      <div><h4 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 14px;">Solutions</h4>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">Enterprise SOCs</a></li>
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">MSSP / Managed SOC</a></li>
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">Banking &amp; Finance</a></li>
-          <li><a href="/pages/solutions.html" style="font-size:14px;color:#ADB5BD;">Critical Infrastructure</a></li>
-        </ul>
-      </div>
-      <div><h4 style="font-size:13px;font-weight:700;color:#fff;margin:0 0 14px;">Company</h4>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;">
-          <li><a href="/pages/about.html" style="font-size:14px;color:#ADB5BD;">About Us</a></li>
-          <li><a href="/pages/resources.html" style="font-size:14px;color:#ADB5BD;">Resources Hub</a></li>
-          <li><a href="/pages/contact.html" style="font-size:14px;color:#ADB5BD;">Request Demo</a></li>
-        </ul>
+      <div style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; box-shadow:0 12px 16px -4px rgba(16,24,40,0.06); overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:10px; padding:13px 18px; border-bottom:1px solid #E9ECEF; background:#F8F9FA;"><span style="display:inline-flex; gap:6px;"><i style="width:10px;height:10px;border-radius:50%;background:#DC2626;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#16A34A;display:block;"></i></span><span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">ingest-bus // fuel conversion</span></div>
+        <div style="padding:20px 20px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; margin-bottom:10px; display:flex; gap:11px;"><span style="color:#ADB5BD;">09:12:01</span><span style="color:#2563EB; font-weight:600;">INGEST</span><span style="color:#495057;">AWS CloudTrail log packets buffered</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; margin-bottom:10px; display:flex; gap:11px;"><span style="color:#ADB5BD;">09:12:01</span><span style="color:#B45309; font-weight:600;">REASON</span><span style="color:#495057;">anomalous STS AssumeRole pattern flagged</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; margin-bottom:10px; display:flex; gap:11px;"><span style="color:#ADB5BD;">09:12:02</span><span style="color:#2563EB; font-weight:600;">CORRELATE</span><span style="color:#495057;">linked to compromised Okta session token</span></div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12.5px; margin-bottom:10px; display:flex; gap:11px;"><span style="color:#ADB5BD;">09:12:02</span><span style="color:#15803D; font-weight:600;">SYNTHESIS</span><span style="color:#495057;">attack lineage graph assembled</span></div>
+          <div style="margin-top:16px; padding:13px 15px; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#2563EB; display:flex; gap:9px; align-items:flex-start; line-height:1.55;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:1px; flex:none;"><path d="M5 12h14M13 6l6 6-6 6"/></svg> Raw stream compressed. Operational intelligence ready for review.</div>
+        </div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:22px 0;border-top:1px solid #343A40;">
-      <p style="font-size:13px;color:#868E96;margin:0;">&copy; 2026 Radiant InnovaTech &middot; Globally ambitious AI security</p>
-      <div style="display:flex;gap:24px;">
-        <a href="#" style="font-size:13px;color:#868E96;">Privacy Policy</a>
-        <a href="#" style="font-size:13px;color:#868E96;">Security Assurance</a>
-        <a href="#" style="font-size:13px;color:#868E96;">Terms of Service</a>
-      </div>
-    </div>
-  </div>
-</footer>
+  </section>
 
+  <!-- LAYER 02 -->
+  <section style="max-width:1200px; margin:0 auto; padding:88px 32px; display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center;">
+    <div style="order:2;">
+      <div style="display:inline-flex; align-items:center; gap:9px; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600; color:#2563EB; letter-spacing:0.12em; margin-bottom:16px;"><span style="width:26px; height:1px; background:linear-gradient(90deg,#2563EB,transparent); display:block;"></span>LAYER 02</div>
+      <h2 style="font-size:clamp(26px,3vw,34px); line-height:1.1; letter-spacing:-0.02em; font-weight:800; color:#212529; margin:0 0 16px;">Autonomous investigation orchestration</h2>
+      <p style="font-size:16px; line-height:1.7; color:#495057; margin:0 0 24px;">When a signal clears the baseline loop, Nexus coordinates its constellation of specialised agents to traverse entity graphs, pull historical context, and test competing hypotheses, automatically, end to end.</p>
+      <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px;">
+        <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" rx="1"/><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="3" y="16" width="5" height="5" rx="1"/><rect x="16" y="16" width="5" height="5" rx="1"/><path d="M8 5.5h8M5.5 8v8M18.5 8v8M8 18.5h8"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Graph traversal.</b> Indexes endpoints, cloud perimeters and active sessions into one investigation surface.</span></li>
+        <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Competing hypotheses.</b> Explicit validation checks weigh alternatives to keep reasoning objective.</span></li>
+        <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Full attack timeline.</b> Delivers a high-fidelity sequence with complete root-cause traces.</span></li>
+        <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Analyst in command.</b> A collaboration console allows single-click override and verification.</span></li>
+      </ul>
+    </div>
+    <div style="order:1;">
+      <div style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; box-shadow:0 12px 16px -4px rgba(16,24,40,0.06); overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:10px; padding:13px 18px; border-bottom:1px solid #E9ECEF; background:#F8F9FA;"><span style="display:inline-flex; gap:6px;"><i style="width:10px;height:10px;border-radius:50%;background:#DC2626;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#16A34A;display:block;"></i></span><span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">investigation-engine // directed graph</span></div>
+        <div style="padding:22px 20px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-family:'JetBrains Mono',monospace; font-size:11px; margin-bottom:20px;">
+            <span style="padding:5px 9px; border-radius:5px; display:inline-flex; align-items:center; gap:6px; background:#FEE2E2; color:#B91C1C; border:1px solid #FECACA;">IDENTITY_COMPROMISE</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ADB5BD" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <span style="padding:5px 9px; border-radius:5px; display:inline-flex; align-items:center; gap:6px; background:#FEF3C7; color:#B45309; border:1px solid #FDE68A;">LATERAL_PIVOT</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ADB5BD" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <span style="padding:5px 9px; border-radius:5px; display:inline-flex; align-items:center; gap:6px; background:#EFF6FF; color:#2563EB; border:1px solid #DBEAFE;">CONTAINMENT_READY</span>
+          </div>
+          <div style="height:5px; background:#E9ECEF; border-radius:3px; margin-bottom:20px; overflow:hidden;"><div style="width:100%; height:100%; background:linear-gradient(90deg,#DC2626,#F59E0B,#2563EB); border-radius:3px;"></div></div>
+          <div style="display:flex; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid #E9ECEF;"><span style="width:30px; height:30px; border-radius:8px; display:grid; place-items:center; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; flex:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg></span><span style="font-size:13.5px; color:#495057;">Access boundaries resolved</span><span style="margin-left:auto; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; color:#2563EB;">EXACT</span></div>
+          <div style="display:flex; align-items:center; gap:14px; padding:13px 0;"><span style="width:30px; height:30px; border-radius:8px; display:grid; place-items:center; background:#DCFCE7; border:1px solid #BBF7D0; color:#15803D; flex:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg></span><span style="font-size:13.5px; color:#495057;">Temporal consistency score</span><span style="margin-left:auto; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; color:#15803D;">98.4%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYER 03 -->
+  <section style="background:#fff; border-top:1px solid #E9ECEF; border-bottom:1px solid #E9ECEF;">
+    <div style="max-width:1200px; margin:0 auto; padding:88px 32px;">
+      <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:56px; align-items:center;">
+        <div>
+          <div style="display:inline-flex; align-items:center; gap:9px; font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:600; color:#2563EB; letter-spacing:0.12em; margin-bottom:16px;"><span style="width:26px; height:1px; background:linear-gradient(90deg,#2563EB,transparent); display:block;"></span>LAYER 03</div>
+          <h2 style="font-size:clamp(26px,3vw,34px); line-height:1.1; letter-spacing:-0.02em; font-weight:800; color:#212529; margin:0 0 16px;">Persistent operational memory</h2>
+          <p style="font-size:16px; line-height:1.7; color:#495057; margin:0 0 24px;">Most assistants are stateless. Nexus commits incident verdicts, containment decisions and your team's playbooks to a persistent store, so the same adversary never gets a second easy run at you.</p>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px;">
+            <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Incident retention.</b> Every verdict feeds baseline optimisation for the next investigation.</span></li>
+            <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Learned playbooks.</b> Captures your containment patterns to accelerate future decisions.</span></li>
+            <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Instant recall.</b> Cross-references new signatures against prior memory markers in real time.</span></li>
+            <li style="display:flex; gap:13px; align-items:flex-start;"><span style="width:30px; height:30px; flex:none; border-radius:8px; background:#EFF6FF; border:1px solid #DBEAFE; color:#2563EB; display:grid; place-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span style="font-size:15px; line-height:1.55; color:#495057;"><b style="color:#212529; font-weight:600;">Tenant isolation.</b> Memory boundaries stay private to your environment, never shared.</span></li>
+          </ul>
+        </div>
+        <div>
+          <div style="background:#fff; border:1px solid #E9ECEF; border-left:3px solid #16A34A; border-radius:12px; box-shadow:0 12px 16px -4px rgba(16,24,40,0.06); overflow:hidden;">
+            <div style="display:flex; align-items:center; gap:10px; padding:13px 18px; border-bottom:1px solid #E9ECEF; background:#F8F9FA;"><span style="display:inline-flex; gap:6px;"><i style="width:10px;height:10px;border-radius:50%;background:#DC2626;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#F59E0B;display:block;"></i><i style="width:10px;height:10px;border-radius:50%;background:#16A34A;display:block;"></i></span><span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#868E96;">memory-layer // state recall</span><span style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; color:#15803D;"><span style="width:7px;height:7px;border-radius:50%;background:#16A34A;display:block; animation:ri-pulse 1.8s ease-in-out infinite;"></span>SYNCED</span></div>
+            <div style="padding:20px 20px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#868E96; letter-spacing:.06em; margin-bottom:12px;">PRIOR INCIDENT RECALLED FOR LIVE DECISION</div>
+              <div style="padding:14px; background:#ECFDF5; border:1px solid #BBF7D0; border-radius:8px; margin-bottom:12px;"><div style="display:flex; justify-content:space-between; align-items:center; font-size:13.5px; margin-bottom:5px;"><b style="color:#212529;">Endpoint ransomware containment</b><span style="font-family:'JetBrains Mono',monospace; color:#15803D; font-size:12px;">CAMPUS-2026-022</span></div><small style="font-size:12px; color:#868E96;">Pattern correlation match · <strong style="color:#15803D;">91%</strong></small></div>
+              <div style="padding:14px; background:#F8F9FA; border:1px solid #E9ECEF; border-radius:8px; margin-bottom:12px;"><div style="display:flex; justify-content:space-between; align-items:center; font-size:13.5px; margin-bottom:5px;"><b style="color:#212529;">Cross-account IAM abuse</b><span style="font-family:'JetBrains Mono',monospace; color:#2563EB; font-size:12px;">CLOUD-2026-441</span></div><small style="font-size:12px; color:#868E96;">Pattern correlation match · 74%</small></div>
+              <div style="padding:13px 15px; border-radius:8px; background:#ECFDF5; border:1px solid #BBF7D0; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#15803D; display:flex; gap:9px; align-items:flex-start; line-height:1.55;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-top:1px; flex:none;"><path d="M5 12l5 5L20 6"/></svg> Adaptation validated. Reasoning loop pre-authorised for matching state profiles.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:56px;">
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:28px; text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; color:#2563EB; line-height:1; margin-bottom:10px;">&lt;60s</div><p style="font-size:14px; color:#868E96; margin:0; line-height:1.5;">Median time from raw signal to an explainable, supervised verdict.</p></div>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:28px; text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; color:#16A34A; line-height:1; margin-bottom:10px;">94.7%</div><p style="font-size:14px; color:#868E96; margin:0; line-height:1.5;">Supervised reasoning confidence across production investigations.</p></div>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:28px; text-align:center;"><div style="font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; color:#212529; line-height:1; margin-bottom:10px;">150:1</div><p style="font-size:14px; color:#868E96; margin:0; line-height:1.5;">Alert-to-incident compression, noise folded into what matters.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section style="background:linear-gradient(135deg,#1D4ED8,#1E3A8A);">
+    <div style="max-width:1200px; margin:0 auto; padding:64px 32px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap;">
+        <div style="max-width:600px;">
+          <h2 style="font-size:clamp(28px,3vw,36px); line-height:1.15; letter-spacing:-0.02em; font-weight:700; color:#fff; margin:0 0 12px;">Ready to deploy <span style="color:#FCD34D;">operational intelligence?</span></h2>
+          <p style="font-size:16.5px; line-height:1.6; color:#BFDBFE; margin:0;">Run Radiant Nexus inside your own network boundary and watch an autonomous investigation play out against a real scenario.</p>
+        </div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="contact.html" class="cta-btn-white" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#1E3A8A; background:#fff; padding:13px 22px; border-radius:6px;">Request Blueprint Demo
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="agents.html" class="cta-btn-ghost" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); padding:13px 22px; border-radius:6px;">View AI Agents</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="background:#212529;">
+    <div style="max-width:1200px; margin:0 auto; padding:64px 32px 0;">
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; padding-bottom:48px;">
+        <div style="max-width:340px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <img src="../assets/logo-mark.png" alt="Radiant Nexus" style="width:32px; height:32px; border-radius:7px; display:block;" />
+            <span style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#fff; letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
+          </div>
+          <p style="font-size:14px; line-height:1.6; color:#ADB5BD; margin:0;">The autonomous operational intelligence platform for the modern SOC, continuously reasoning, correlating, and retaining persistent operational memory alongside your analysts.</p>
+          <p style="margin-top:14px; font-size:12.5px; color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
+        </div>
+        <div>
+          <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Platform</h4>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+            <li><a href="platform.html" style="font-size:14px; color:#ADB5BD;">Operational Layer</a></li>
+            <li><a href="agents.html" style="font-size:14px; color:#ADB5BD;">AI Constellation</a></li>
+            <li><a href="architecture.html" style="font-size:14px; color:#ADB5BD;">Architecture Flow</a></li>
+            <li><a href="security.html" style="font-size:14px; color:#ADB5BD;">Security &amp; Trust</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Solutions</h4>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">Enterprise SOCs</a></li>
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">MSSP / Managed SOC</a></li>
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">Banking &amp; Finance</a></li>
+            <li><a href="solutions.html" style="font-size:14px; color:#ADB5BD;">Critical Infrastructure</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Company</h4>
+          <ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;">
+            <li><a href="about.html" style="font-size:14px; color:#ADB5BD;">About Us</a></li>
+            <li><a href="resources.html" style="font-size:14px; color:#ADB5BD;">Resources Hub</a></li>
+            <li><a href="contact.html" style="font-size:14px; color:#ADB5BD;">Request Demo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:22px 0; border-top:1px solid #343A40;">
+        <p style="font-size:13px; color:#868E96; margin:0;">© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
+        <div style="display:flex; gap:24px;">
+          <a href="#" style="font-size:13px; color:#868E96;">Privacy Policy</a>
+          <a href="#" style="font-size:13px; color:#868E96;">Security Assurance</a>
+          <a href="#" style="font-size:13px; color:#868E96;">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
 </body>
 </html>
