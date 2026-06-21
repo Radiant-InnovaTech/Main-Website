@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pricing | Radiant Nexus</title>
-  <meta name="description" content="Transparent Radiant Nexus pricing tiers for SOC teams of every size — no hidden deployment fees, no surprise data charges." />
+  <meta name="description" content="Transparent Radiant Nexus pricing tiers for SOC teams of every size â€” no hidden deployment fees, no surprise data charges." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -21,7 +21,60 @@
     .cta-btn-white:hover{ background:#F1F3F5 !important; }
     .cta-btn-ghost:hover{ background:rgba(255,255,255,0.18) !important; border-color:rgba(255,255,255,0.4) !important; }
     footer a:hover{ color:#fff !important; }
-  </style>
+      /* ===== Responsive / mobile ===== */
+    @media (max-width: 900px){
+      [style*="grid-template-columns:1fr 1fr"],
+      [style*="grid-template-columns: 1fr 1fr"],
+      [style*="grid-template-columns:1fr 1.1fr"],
+      [style*="grid-template-columns:1.1fr 1fr"],
+      [style*="grid-template-columns:1.05fr 0.95fr"],
+      [style*="grid-template-columns:1.04fr 0.96fr"],
+      [style*="grid-template-columns:1.15fr 1fr"],
+      [style*="grid-template-columns:1fr 1.25fr"],
+      [style*="grid-template-columns:1fr 0.86fr"],
+      [style*="grid-template-columns:1fr 1.4fr"],
+      [style*="grid-template-columns: 1fr 1.4fr"],
+      [style*="grid-template-columns:1.4fr 1fr"],
+      [style*="grid-template-columns: 1.4fr 1fr"]{ grid-template-columns:1fr !important; }
+      [style*="grid-template-columns:repeat(3,1fr)"],
+      [style*="grid-template-columns: repeat(3, 1fr)"],
+      [style*="grid-template-columns:repeat(4,1fr)"],
+      [style*="grid-template-columns:repeat(5,1fr)"],
+      [style*="grid-template-columns:2fr 1fr 1fr 1fr"]{ grid-template-columns:repeat(2,1fr) !important; }
+      [style*="min-height:calc(100vh - 68px)"]{ min-height:0 !important; }
+    }
+    @media (max-width: 600px){
+      [style*="grid-template-columns:repeat(3,1fr)"],
+      [style*="grid-template-columns: repeat(3, 1fr)"],
+      [style*="grid-template-columns:repeat(4,1fr)"],
+      [style*="grid-template-columns:repeat(5,1fr)"],
+      [style*="grid-template-columns:repeat(2,1fr)"],
+      [style*="grid-template-columns:1fr 1fr 1fr"],
+      [style*="grid-template-columns:2fr 1fr 1fr 1fr"]{ grid-template-columns:1fr !important; }
+    }
+    @media (max-width: 768px){
+      [style*="padding:96px 32px"]{ padding:56px 20px !important; }
+      [style*="padding:88px 32px"]{ padding:54px 20px !important; }
+      [style*="padding:84px 32px 80px"]{ padding:50px 20px 46px !important; }
+      [style*="padding:80px 32px 88px"]{ padding:48px 20px 52px !important; }
+      [style*="padding:80px 32px 40px"]{ padding:48px 20px 24px !important; }
+      [style*="padding:76px 32px 72px"]{ padding:46px 20px 40px !important; }
+      [style*="padding:64px 32px"]{ padding:46px 20px !important; }
+      [style*="padding:72px 56px"]{ padding:40px 22px !important; }
+      [style*="padding:46px"]{ padding:24px !important; }
+      [style*="padding:36px"]{ padding:24px !important; }
+      [style*="padding:34px"]{ padding:24px !important; }
+      [style*="gap:56px"]{ gap:34px !important; }
+      [style*="gap:60px"]{ gap:34px !important; }
+      img, svg{ max-width:100%; }
+    }
+    @media (max-width: 820px){
+      nav ul{ display:none !important; }
+      nav > div{ gap:14px !important; padding-left:18px !important; padding-right:18px !important; }
+    }
+    @media (max-width: 520px){
+      .btn-primary, .btn-waitlist{ padding:8px 12px !important; font-size:12.5px !important; }
+    }  </style>
 </head>
 <body>
 
@@ -193,7 +246,7 @@
             <span style="font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:#fff; letter-spacing:0.08em;">RADIANT <span style="color:#F59E0B;">NEXUS</span></span>
           </div>
           <p style="font-size:14px; line-height:1.6; color:#ADB5BD; margin:0;">The autonomous operational intelligence platform for the modern SOC, continuously reasoning, correlating, and retaining persistent operational memory alongside your analysts.</p>
-          <p style="margin-top:14px; font-size:12.5px; color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> · Tarkwa, Ghana</p>
+          <p style="margin-top:14px; font-size:12.5px; color:#868E96;">A platform by <strong style="color:#CED4DA;">Radiant InnovaTech</strong> Â· Tarkwa, Ghana</p>
         </div>
         <div>
           <h4 style="font-size:13px; font-weight:700; color:#fff; margin:0 0 14px; letter-spacing:0.04em;">Platform</h4>
@@ -223,7 +276,7 @@
         </div>
       </div>
       <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:22px 0; border-top:1px solid #343A40;">
-        <p style="font-size:13px; color:#868E96; margin:0;">© 2026 Radiant InnovaTech · Globally ambitious AI security</p>
+        <p style="font-size:13px; color:#868E96; margin:0;">Â© 2026 Radiant InnovaTech Â· Globally ambitious AI security</p>
         <div style="display:flex; gap:24px;">
           <a href="#" style="font-size:13px; color:#868E96;">Privacy Policy</a>
           <a href="#" style="font-size:13px; color:#868E96;">Security Assurance</a>
