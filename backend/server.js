@@ -345,7 +345,7 @@ function buildApplicantEmail(entry) {
     <a class="cta" href="https://radiantinnovatech.com/pages/about.html">Learn more about Radiant Nexus →</a>
   </div>
   <div class="footer">
-    Radiant InnovaTech · Tarkwa, Western Region, Ghana<br/>
+    Radiant InnovaTech · Accra, Ghana<br/>
     <a href="https://radiantinnovatech.com" style="color:#3B82F6;text-decoration:none;">radiantinnovatech.com</a> ·
     <a href="https://radiantinnovatech.com/pages/contact.html" style="color:#3B82F6;text-decoration:none;">Contact us</a>
   </div>

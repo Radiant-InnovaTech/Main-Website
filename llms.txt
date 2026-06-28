@@ -1,12 +1,12 @@
 # Radiant InnovaTech — llms.txt
 # https://llmstxt.org
 
-# Radiant InnovaTech is a technology engineering firm headquartered in Tarkwa, Western Region, Ghana.
+# Radiant InnovaTech is a technology engineering firm headquartered in Accra, Ghana.
 # Its flagship product is Radiant Nexus, an autonomous operational intelligence platform for security operations.
 
 ## Company
 
-Radiant InnovaTech is a sovereign engineering firm founded and headquartered in Tarkwa, Ghana,
+Radiant InnovaTech is a sovereign engineering firm founded and headquartered in Accra, Ghana,
 near the University of Mines and Technology (UMaT). The firm builds industrial-grade digital
 infrastructure and security systems for demanding environments. Its flagship product, Radiant Nexus,
 extends that mission into autonomous security operations.
@@ -43,7 +43,7 @@ specialised AI agents to assist analysts and execute supervised response.
 
 ## Location
 
-Tarkwa, Western Region, Ghana. Deployed across Ghana and beyond.
+Accra, Ghana. Deployed across Ghana and beyond.
 
 ## Contact
 
