@@ -10,7 +10,6 @@ const morgan       = require('morgan');
 const { v4: uuidv4 } = require('uuid');
 const jwt          = require('jsonwebtoken');
 const rateLimit    = require('express-rate-limit');
-const nodemailer   = require('nodemailer');
 const Database     = require('better-sqlite3');
 const path         = require('path');
 const fs           = require('fs');
@@ -28,12 +27,13 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
-// Brevo / SMTP
-const SMTP_HOST = process.env.SMTP_HOST || 'smtp-relay.brevo.com';
-const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587', 10);
-const SMTP_USER = process.env.SMTP_USER;   // your Brevo login (email)
-const SMTP_PASS = process.env.SMTP_PASS;   // your Brevo SMTP key
-const SMTP_FROM = process.env.SMTP_FROM || 'waitlist@radiantinnovatech.com';
+// Brevo transactional email HTTP API (same integration the main NEXUS app
+// uses in backend/src/lib/escalation.ts -- switched from SMTP because the
+// SMTP_USER/SMTP_PASS credentials were never valid (every send failed with
+// "535 Authentication failed", silently, since deploy -- including admin
+// OTP login codes).
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const SMTP_FROM = process.env.SMTP_FROM || 'no-reply@radiantinnovatech.com';
 
 // Internal team addresses notified on every new signup
 const INTERNAL_NOTIFY = [
@@ -128,28 +128,10 @@ db.exec(`
 console.log('[DB] SQLite database ready at', path.join(DATA_DIR, 'waitlist.db'));
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  EMAIL TRANSPORTER (Brevo SMTP)
+//  EMAIL (Brevo transactional email HTTP API)
 // ─────────────────────────────────────────────────────────────────────────────
-let transporter = null;
-
-if (SMTP_USER && SMTP_PASS) {
-  transporter = nodemailer.createTransport({
-    host:   SMTP_HOST,
-    port:   SMTP_PORT,
-    secure: false, // STARTTLS on port 587
-    auth:   { user: SMTP_USER, pass: SMTP_PASS },
-    pool:   true,
-    maxConnections: 3,
-    logger: NODE_ENV !== 'production',
-    debug:  false,
-  });
-
-  transporter.verify((err) => {
-    if (err) console.error('[SMTP] Connection verification failed:', err.message);
-    else     console.log('[SMTP] Brevo SMTP connection verified — ready to send');
-  });
-} else {
-  console.warn('[SMTP] SMTP_USER or SMTP_PASS not set — email will be disabled. Set them in .env');
+if (!BREVO_API_KEY) {
+  console.warn('[EMAIL] BREVO_API_KEY not set — email will be disabled. Set it in .env');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -523,14 +505,37 @@ function escHtml(str) {
 }
 
 // Send mail and swallow errors gracefully (never crash the request on email failure)
+// Parses nodemailer-style "Name <email>" / "a@x.com, b@y.com" strings into
+// the {name, email} / [{email}] shapes Brevo's API expects -- kept so call
+// sites didn't need to change when this switched from SMTP to the API.
+function parseAddress(addr) {
+  const m = /^"?([^"<]*)"?\s*<([^>]+)>$/.exec(String(addr).trim());
+  return m ? { name: m[1].trim() || undefined, email: m[2].trim() } : { email: String(addr).trim() };
+}
+function parseAddressList(addr) {
+  return String(addr).split(',').map((a) => ({ email: parseAddress(a).email }));
+}
+
 async function sendMail(options) {
-  if (!transporter) {
-    console.warn('[EMAIL] Transporter not configured — skipping:', options.subject);
+  if (!BREVO_API_KEY) {
+    console.warn('[EMAIL] BREVO_API_KEY not configured — skipping:', options.subject);
     return;
   }
   try {
-    const info = await transporter.sendMail(options);
-    console.log('[EMAIL] Sent:', options.subject, '→', options.to, '| messageId:', info.messageId);
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'api-key': BREVO_API_KEY, 'Content-Type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({
+        sender: parseAddress(options.from || SMTP_FROM),
+        to: parseAddressList(options.to),
+        subject: options.subject,
+        htmlContent: options.html,
+        textContent: options.text,
+      }),
+    });
+    const text = await response.text();
+    if (!response.ok) throw new Error(`Brevo returned ${response.status}: ${text}`);
+    console.log('[EMAIL] Sent:', options.subject, '→', options.to);
   } catch (err) {
     console.error('[EMAIL] Failed to send:', options.subject, '→', options.to, '|', err.message);
   }
@@ -896,6 +901,123 @@ app.get('/api/admin/waitlist/export', (req, res) => {
     logAudit('admin_export', { count: rows.length, search, typeFilter }, claims.email, getClientIp(req));
   } catch (err) {
     console.error('[ADMIN] Export error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// ── Admin: list contact/demo requests ───────────────────────────────────────────
+app.get('/api/admin/contact', (req, res) => {
+  const claims = verifyToken(req, res);
+  if (!claims) return;
+
+  try {
+    const page   = Math.max(1, parseInt(req.query.page  || '1', 10));
+    const limit  = Math.min(200, Math.max(1, parseInt(req.query.limit || '50', 10)));
+    const search = String(req.query.search || '').trim();
+    const offset = (page - 1) * limit;
+
+    let where  = [];
+    let params = [];
+
+    if (search) {
+      where.push('(full_name LIKE ? OR email LIKE ? OR company LIKE ?)');
+      const s = `%${search}%`;
+      params.push(s, s, s);
+    }
+
+    const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
+
+    const total = db.prepare(`SELECT COUNT(*) AS n FROM contact_requests ${whereClause}`).get(...params).n;
+
+    const rows = db.prepare(`
+      SELECT id, full_name, email, company, company_size, soc_maturity, deployment_preference, created_at, ip_address
+      FROM contact_requests
+      ${whereClause}
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `).all(...params, limit, offset);
+
+    return res.json({ success: true, rows, total, page, limit });
+  } catch (err) {
+    console.error('[ADMIN] Get contact requests error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// ── Admin: delete contact/demo request ──────────────────────────────────────────
+app.delete('/api/admin/contact/:id', (req, res) => {
+  const claims = verifyToken(req, res);
+  if (!claims) return;
+
+  try {
+    const { id } = req.params;
+    const entry  = db.prepare('SELECT id, email, full_name FROM contact_requests WHERE id = ?').get(id);
+
+    if (!entry) {
+      return res.status(404).json({ error: 'Entry not found.' });
+    }
+
+    db.prepare('DELETE FROM contact_requests WHERE id = ?').run(id);
+
+    logAudit('admin_delete_contact',
+      { entry_id: id, email: entry.email, name: entry.full_name },
+      claims.email,
+      getClientIp(req)
+    );
+
+    return res.json({ success: true, message: 'Entry deleted.', deleted_id: id });
+  } catch (err) {
+    console.error('[ADMIN] Delete contact request error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// ── Admin: export contact/demo requests CSV ─────────────────────────────────────
+app.get('/api/admin/contact/export', (req, res) => {
+  const claims = verifyToken(req, res);
+  if (!claims) return;
+
+  try {
+    const search = String(req.query.search || '').trim();
+    let where  = [];
+    let params = [];
+
+    if (search) {
+      where.push('(full_name LIKE ? OR email LIKE ? OR company LIKE ?)');
+      const s = `%${search}%`;
+      params.push(s, s, s);
+    }
+
+    const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
+
+    const rows = db.prepare(`
+      SELECT id, full_name, email, company, company_size, soc_maturity, deployment_preference, created_at, ip_address
+      FROM contact_requests
+      ${whereClause}
+      ORDER BY created_at DESC
+    `).all(...params);
+
+    const header = 'ID,Full Name,Email,Company,Company Size,SOC Maturity,Deployment Preference,Submitted At,IP Address\n';
+    const csvRows = rows.map(r => [
+      r.id,
+      `"${(r.full_name || '').replace(/"/g, '""')}"`,
+      r.email,
+      `"${(r.company   || '').replace(/"/g, '""')}"`,
+      `"${(r.company_size || '').replace(/"/g, '""')}"`,
+      `"${(r.soc_maturity || '').replace(/"/g, '""')}"`,
+      `"${(r.deployment_preference || '').replace(/"/g, '""')}"`,
+      r.created_at,
+      r.ip_address || '',
+    ].join(',')).join('\n');
+
+    const filename = `contact_requests_${new Date().toISOString().slice(0, 10)}.csv`;
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send('﻿' + header + csvRows); // BOM for Excel UTF-8 compatibility
+
+    logAudit('admin_export_contact', { count: rows.length, search }, claims.email, getClientIp(req));
+  } catch (err) {
+    console.error('[ADMIN] Export contact requests error:', err);
     return res.status(500).json({ error: 'Internal server error.' });
   }
 });

@@ -378,6 +378,7 @@
     <!-- Tabs -->
     <div class="dash-tabs">
       <button class="dash-tab active" id="tab-waitlist" onclick="switchTab('waitlist')">Waitlist</button>
+      <button class="dash-tab"        id="tab-contact"  onclick="switchTab('contact')">Demo Requests</button>
       <button class="dash-tab"        id="tab-logs"     onclick="switchTab('logs')">Audit Logs</button>
     </div>
 
@@ -451,6 +452,63 @@
     </div>
     </div><!-- /pane-waitlist -->
 
+    <!-- Contact / demo requests pane -->
+    <div id="pane-contact" style="display:none">
+      <div class="stats-row" id="contact-stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Total Requests</div>
+          <div class="stat-value" id="c-stat-total">—</div>
+          <div class="stat-sub">All time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This Week</div>
+          <div class="stat-value" id="c-stat-week">—</div>
+          <div class="stat-sub">Last 7 days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Viewing</div>
+          <div class="stat-value" id="c-stat-showing">—</div>
+          <div class="stat-sub">Filtered results</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" class="search-input" id="c-search-input" placeholder="Search name, email, company…"/>
+        </div>
+        <button class="export-btn" onclick="exportContactCSV()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table id="c-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Company</th>
+                <th>Company Size</th>
+                <th>SOC Maturity</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="c-tbody">
+              <tr><td colspan="7" class="table-loading"><div class="loading-spin"></div>Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="c-pagination" style="display:none">
+          <span id="c-page-info"></span>
+          <div class="page-btns" id="c-page-btns"></div>
+        </div>
+      </div>
+    </div><!-- /pane-contact -->
+
     <!-- Logs pane -->
     <div id="pane-logs" style="display:none">
       <div class="table-wrap">
@@ -485,6 +543,11 @@
   var PAGE_SIZE = 50;
   var searchTimer = null;
   var allRows = [];
+  var contactLoaded = false;
+  var cCurrentPage = 1;
+  var cTotalRows = 0;
+  var cAllRows = [];
+  var cSearchTimer = null;
 
   // ── Auth helpers ──────────────────────────────────────────────────────────
   function getToken() { return localStorage.getItem(TOKEN_KEY); }
@@ -586,6 +649,7 @@
     loadWaitlist(1);
   }
 
+  window.loadWaitlist = loadWaitlist;
   async function loadWaitlist(page) {
     currentPage = page;
     var search = document.getElementById('search-input').value.trim();
@@ -796,6 +860,186 @@
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  // ── Contact / demo requests ──────────────────────────────────────────────────
+  async function loadContact(page) {
+    cCurrentPage = page;
+    var search = document.getElementById('c-search-input').value.trim();
+    var token = getToken();
+
+    document.getElementById('c-tbody').innerHTML =
+      '<tr><td colspan="7" class="table-loading"><div class="loading-spin"></div>Loading…</td></tr>';
+    document.getElementById('c-pagination').style.display = 'none';
+
+    var params = new URLSearchParams({ page, limit: PAGE_SIZE });
+    if (search) params.set('search', search);
+
+    try {
+      var r = await fetch('/api/admin/contact?' + params, {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (r.status === 401) { logout(); return; }
+      var data = await r.json();
+      cAllRows = data.rows;
+      cTotalRows = data.total;
+      renderContactTable(data.rows, data.total, page);
+      renderContactStats(data.total);
+    } catch(e) {
+      document.getElementById('c-tbody').innerHTML =
+        '<tr><td colspan="7" class="table-empty">Failed to load data. Please refresh.</td></tr>';
+    }
+  }
+
+  function renderContactStats(total) {
+    document.getElementById('c-stat-total').textContent = total.toLocaleString();
+    var week = cAllRows.filter(function(r) {
+      return new Date(r.created_at) > new Date(Date.now() - 7*24*60*60*1000);
+    }).length;
+    document.getElementById('c-stat-week').textContent = week.toLocaleString();
+    document.getElementById('c-stat-showing').textContent = cAllRows.length.toLocaleString();
+  }
+
+  function renderContactTable(rows, total, page) {
+    if (!rows.length) {
+      document.getElementById('c-tbody').innerHTML =
+        '<tr><td colspan="7" class="table-empty">No demo requests found.</td></tr>';
+      return;
+    }
+
+    var offset = (page - 1) * PAGE_SIZE;
+    var html = '';
+    rows.forEach(function(r, i) {
+      html += '<tr class="data-row" id="c-row-' + r.id + '" onclick="toggleContactDetail(\'' + r.id + '\')">' +
+        '<td class="mono muted">' + (offset + i + 1) + '</td>' +
+        '<td><strong style="font-size:0.88rem">' + escHtml(r.full_name) + '</strong></td>' +
+        '<td class="mono" style="font-size:0.78rem">' + escHtml(r.email) + '</td>' +
+        '<td style="font-size:0.85rem">' + escHtml(r.company) + '</td>' +
+        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.company_size || '—') + '</td>' +
+        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.soc_maturity || '—') + '</td>' +
+        '<td class="mono muted" style="font-size:0.78rem">' + fmtDate(r.created_at) + '</td>' +
+      '</tr>';
+
+      html += '<tr class="detail-row" id="c-detail-' + r.id + '">' +
+        '<td colspan="7"><div class="detail-panel">' +
+          '<div class="detail-field"><div class="df-label">Full Name</div><div class="df-value">' + escHtml(r.full_name) + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Email</div><div class="df-value"><a href="mailto:' + escHtml(r.email) + '" class="profile-link">' + escHtml(r.email) + '</a></div></div>' +
+          '<div class="detail-field"><div class="df-label">Company</div><div class="df-value">' + escHtml(r.company) + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Company Size</div><div class="df-value">' + escHtml(r.company_size || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">SOC Maturity</div><div class="df-value">' + escHtml(r.soc_maturity || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Deployment Preference</div><div class="df-value">' + escHtml(r.deployment_preference || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Submitted</div><div class="df-value">' + fmtDateTime(r.created_at) + '</div></div>' +
+          '<div class="detail-actions">' +
+            '<div id="c-del-ui-' + r.id + '">' +
+              '<button class="delete-btn" onclick="confirmDeleteContact(event,\'' + r.id + '\')">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
+                'Delete Entry' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div></td>' +
+      '</tr>';
+    });
+    document.getElementById('c-tbody').innerHTML = html;
+    renderContactPagination(total, page);
+  }
+
+  window.toggleContactDetail = function(id) {
+    var detailRow = document.getElementById('c-detail-' + id);
+    var dataRow   = document.getElementById('c-row-'    + id);
+    var isOpen = detailRow.classList.toggle('open');
+    dataRow.classList.toggle('expanded', isOpen);
+    document.querySelectorAll('#pane-contact .detail-row.open').forEach(function(el) {
+      if (el.id !== 'c-detail-' + id) {
+        el.classList.remove('open');
+        var rid = el.id.replace('c-detail-','');
+        var dr = document.getElementById('c-row-' + rid);
+        if (dr) dr.classList.remove('expanded');
+      }
+    });
+  };
+
+  window.confirmDeleteContact = function(e, id) {
+    e.stopPropagation();
+    var wrap = document.getElementById('c-del-ui-' + id);
+    wrap.innerHTML = '<div class="confirm-wrap">Remove this entry? ' +
+      '<button class="confirm-yes" onclick="doDeleteContact(event,\'' + id + '\')">Delete</button>' +
+      '<button class="confirm-no" onclick="cancelDeleteContact(event,\'' + id + '\')">Cancel</button>' +
+      '</div>';
+  };
+
+  window.cancelDeleteContact = function(e, id) {
+    e.stopPropagation();
+    var wrap = document.getElementById('c-del-ui-' + id);
+    wrap.innerHTML = '<button class="delete-btn" onclick="confirmDeleteContact(event,\'' + id + '\')">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
+      'Delete Entry</button>';
+  };
+
+  window.doDeleteContact = async function(e, id) {
+    e.stopPropagation();
+    var wrap = document.getElementById('c-del-ui-' + id);
+    wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--text-secondary)">Deleting…</span>';
+    try {
+      var r = await fetch('/api/admin/contact/' + id, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      });
+      if (r.status === 401) { logout(); return; }
+      if (r.ok) {
+        var dataRow   = document.getElementById('c-row-'    + id);
+        var detailRow = document.getElementById('c-detail-' + id);
+        [dataRow, detailRow].forEach(function(el) {
+          if (el) { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; }
+        });
+        setTimeout(function() {
+          if (dataRow)   dataRow.remove();
+          if (detailRow) detailRow.remove();
+          cTotalRows--;
+          document.getElementById('c-stat-total').textContent = cTotalRows.toLocaleString();
+        }, 300);
+      } else {
+        var j = await r.json().catch(function(){return{};});
+        wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--danger)">' + (j.error || 'Delete failed') + '</span>';
+      }
+    } catch(err) {
+      wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--danger)">Network error</span>';
+    }
+  };
+
+  function renderContactPagination(total, page) {
+    var pages = Math.ceil(total / PAGE_SIZE);
+    var info = document.getElementById('c-page-info');
+    var start = (page - 1) * PAGE_SIZE + 1;
+    var end = Math.min(page * PAGE_SIZE, total);
+    info.textContent = 'Showing ' + start + '–' + end + ' of ' + total.toLocaleString();
+
+    var btns = '';
+    btns += '<button class="page-btn" onclick="loadContact(' + (page-1) + ')" ' + (page<=1?'disabled':'') + '>← Prev</button>';
+    var lo = Math.max(1, page-2), hi = Math.min(pages, page+2);
+    for (var p = lo; p <= hi; p++) {
+      btns += '<button class="page-btn' + (p===page?' active':'') + '" onclick="loadContact('+p+')">' + p + '</button>';
+    }
+    btns += '<button class="page-btn" onclick="loadContact(' + (page+1) + ')" ' + (page>=pages?'disabled':'') + '>Next →</button>';
+    document.getElementById('c-page-btns').innerHTML = btns;
+    document.getElementById('c-pagination').style.display = 'flex';
+  }
+
+  window.exportContactCSV = async function() {
+    var token = getToken();
+    var r = await fetch('/api/admin/contact/export', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (r.status === 401) { logout(); return; }
+    var blob = await r.blob();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'contact_requests_' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  document.getElementById('c-search-input').addEventListener('input', function() {
+    clearTimeout(cSearchTimer);
+    cSearchTimer = setTimeout(function() { loadContact(1); }, 350);
+  });
+  window.loadContact = loadContact;
+
   // ── Search & filter ───────────────────────────────────────────────────────
   document.getElementById('search-input').addEventListener('input', function() {
     clearTimeout(searchTimer);
@@ -806,10 +1050,13 @@
   // ── Tabs ─────────────────────────────────────────────────────────────────
   window.switchTab = function(tab) {
     document.getElementById('pane-waitlist').style.display = tab === 'waitlist' ? 'block' : 'none';
+    document.getElementById('pane-contact').style.display  = tab === 'contact'  ? 'block' : 'none';
     document.getElementById('pane-logs').style.display     = tab === 'logs'     ? 'block' : 'none';
     document.getElementById('tab-waitlist').classList.toggle('active', tab === 'waitlist');
+    document.getElementById('tab-contact').classList.toggle('active',  tab === 'contact');
     document.getElementById('tab-logs').classList.toggle('active',     tab === 'logs');
     if (tab === 'logs') loadLogs();
+    if (tab === 'contact' && !contactLoaded) { contactLoaded = true; loadContact(1); }
   };
 
   var ACTION_CLASS = {
