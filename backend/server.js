@@ -152,7 +152,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc:   ["'self'", "'unsafe-inline'"],
       scriptSrc:  ["'self'"],
-      imgSrc:     ["'self'", 'data:', 'https://placehold.co'],
+      imgSrc:     ["'self'", 'data:', 'https://placehold.co', 'https://icons.duckduckgo.com', 'https://www.vectorlogo.zone', 'https://cdn.simpleicons.org'],
     },
   },
 }));
