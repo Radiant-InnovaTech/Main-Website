@@ -2,10 +2,11 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "site",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8765"],
-      "port": 8765
+      "name": "main-website",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["backend/server.js"],
+      "env": { "PORT": "8090" },
+      "port": 8090
     }
   ]
 }

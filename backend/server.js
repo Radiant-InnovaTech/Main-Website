@@ -14,6 +14,7 @@ const nodemailer   = require('nodemailer');
 const Database     = require('better-sqlite3');
 const path         = require('path');
 const fs           = require('fs');
+const crypto       = require('crypto');
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  CONFIG
@@ -210,6 +211,12 @@ function getClientIp(req) {
 
 function generateOtp() {
   return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+function hashOtp(email, otp) {
+  // ponytail: sha256(email+otp) via stdlib crypto instead of bcrypt — no new dep, and OTPs are
+  // 6-digit/10-min/single-use so a fast hash is fine (not a password at-rest scenario).
+  return crypto.createHash('sha256').update(`${email}:${otp}`).digest('hex');
 }
 
 function generateToken(email) {
@@ -581,9 +588,7 @@ app.post('/api/admin/auth/request-otp', otpRequestLimiter, async (req, res) => {
     db.prepare(`
       INSERT INTO admin_otps (id, email, otp_hash, expires_at, used, created_at)
       VALUES (?, ?, ?, ?, 0, ?)
-    `).run(uuidv4(), email, otp, expiresAt, new Date().toISOString());
-    // Note: storing OTP as plaintext here for simplicity.
-    // In a higher-security environment, store bcrypt(otp) and compare with bcrypt.compare.
+    `).run(uuidv4(), email, hashOtp(email, otp), expiresAt, new Date().toISOString());
 
     await sendMail(buildOtpEmail(email, otp));
 
@@ -633,8 +638,10 @@ app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, (req, res) => {
       return res.status(401).json({ error: 'Code has expired. Please request a new one.' });
     }
 
-    // Compare (constant-time safe for OTP strings)
-    if (code !== otpRow.otp_hash) {
+    // Constant-time compare of hashes (avoids leaking match progress via timing)
+    const expected = Buffer.from(hashOtp(email, code));
+    const actual   = Buffer.from(otpRow.otp_hash);
+    if (expected.length !== actual.length || !crypto.timingSafeEqual(expected, actual)) {
       return res.status(401).json({ error: 'Incorrect code. Please try again.' });
     }
 
@@ -819,9 +826,20 @@ app.get('/api/admin/logs', (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+//  STATIC SITE (public marketing pages + admin panel HTML/JS)
+//  API routes above already take precedence; auth for admin *data* is enforced
+//  by verifyToken on each /api/admin/* route, not by hiding this HTML.
+// ─────────────────────────────────────────────────────────────────────────────
+app.use(express.static(path.join(__dirname, '..', 'public-site')));
+app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));
+
+// ─────────────────────────────────────────────────────────────────────────────
 //  ERROR HANDLERS
 // ─────────────────────────────────────────────────────────────────────────────
 app.use((req, res) => {
+  if (req.method === 'GET' && !req.path.startsWith('/api/')) {
+    return res.status(404).sendFile(path.join(__dirname, '..', 'public-site', 'index.html'));
+  }
   res.status(404).json({ error: `Endpoint not found: ${req.method} ${req.path}` });
 });
 
