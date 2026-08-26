@@ -3,8 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Request a Demo | Radiant Nexus</title>
-  <meta name="description" content="Book an architecture briefing with the Radiant Nexus core systems team and watch an autonomous investigation run against real-world telemetry." />
+  <title>Pricing | Radiant Nexus</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <meta name="description" content="Transparent Radiant Nexus pricing tiers for SOC teams of every size — no hidden deployment fees, no surprise data charges." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -16,12 +20,11 @@
     nav a.ri-link:hover{ color:#212529 !important; }
     .btn-waitlist:hover{ color:#1D4ED8 !important; background:#EFF6FF !important; border-color:#1D4ED8 !important; }
     .btn-primary:hover{ background:#1D4ED8 !important; box-shadow:0 4px 8px -2px rgba(37,99,235,0.25) !important; }
+    .tier-outline:hover{ color:#1D4ED8 !important; background:#EFF6FF !important; border-color:#1D4ED8 !important; }
+    .tier-solid:hover{ background:#1D4ED8 !important; border-color:#1D4ED8 !important; box-shadow:0 8px 16px -4px rgba(37,99,235,0.30) !important; }
+    .cta-btn-white:hover{ background:#F1F3F5 !important; }
+    .cta-btn-ghost:hover{ background:rgba(255,255,255,0.18) !important; border-color:rgba(255,255,255,0.4) !important; }
     footer a:hover{ color:#fff !important; }
-    .ri-field{ width:100%; background:#fff; border:1px solid #DEE2E6; border-radius:4px; padding:11px 14px; color:#212529; font-family:'Plus Jakarta Sans',sans-serif; font-size:14.5px; transition:border-color .18s, box-shadow .18s; }
-    .ri-field::placeholder{ color:#ADB5BD; }
-    .ri-field:focus{ outline:none; border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.18); }
-    select.ri-field{ cursor:pointer; appearance:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%23868E96" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>'); background-repeat:no-repeat; background-position:right 14px center; padding-right:38px; }
-    .submit-btn:hover{ background:#1D4ED8 !important; box-shadow:0 8px 16px -4px rgba(37,99,235,0.30) !important; }
       /* ===== Responsive / mobile ===== */
     @media (max-width: 900px){
       [style*="grid-template-columns:1fr 1fr"],
@@ -118,7 +121,7 @@
           </div>
         </li>
         <li><a href="solutions.html" style="font-size:14px; font-weight:500; color:#495057;">Solutions</a></li>
-        <li><a href="pricing.html" style="font-size:14px; font-weight:500; color:#495057;">Pricing</a></li>
+        <li><a href="pricing.html" style="font-size:14px; font-weight:600; color:#2563EB;">Pricing</a></li>
         <li><a href="about.html" style="font-size:14px; font-weight:500; color:#495057;">About</a></li>
       </ul>
       <div style="margin-left:auto; display:flex; align-items:center; gap:14px;">
@@ -130,77 +133,93 @@
     </div>
   </nav>
 
-  <div style="display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 68px);">
+  <header style="border-bottom:1px solid #E9ECEF; background:#fff;">
+    <div style="max-width:1200px; margin:0 auto; padding:76px 32px 72px;">
+      <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.04em; color:#2563EB; background:#EFF6FF; border:1px solid #DBEAFE; padding:6px 12px; border-radius:9999px; margin-bottom:22px;">Pricing</span>
+      <h1 style="font-size:clamp(36px,4.6vw,54px); line-height:1.06; letter-spacing:-0.03em; font-weight:800; color:#212529; margin:0 0 20px; max-width:16ch;">Transparent pricing. <span style="color:#F59E0B;">No surprises.</span></h1>
+      <p style="font-size:18px; line-height:1.6; color:#495057; max-width:64ch; margin:0;">Flexible tiers built for SOC teams of every size. No hidden deployment fees. No surprise data charges. Scale as you grow.</p>
+    </div>
+  </header>
 
-    <!-- LEFT -->
-    <div style="background:#fff; border-right:1px solid #E9ECEF; padding:72px 56px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden;">
-      <div style="position:absolute; inset:0; background-image:radial-gradient(#EAEEF3 1px, transparent 1px); background-size:22px 22px; opacity:.6; pointer-events:none;"></div>
-      <div style="max-width:520px; position:relative; z-index:2;">
-        <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#2563EB; margin-bottom:18px;">Architectural evaluation</span>
-        <h1 style="font-size:clamp(32px,4vw,46px); font-weight:800; color:#212529; line-height:1.06; letter-spacing:-0.03em; margin:0 0 20px;">Experience operational autonomy <span style="color:#F59E0B;">live.</span></h1>
-        <p style="color:#495057; font-size:16.5px; line-height:1.7; margin:0 0 32px;">A demo session with our core systems team isn't a pre-recorded slide deck. We review your actual log-volume boundaries, map explicit multi-agent coordination loops, and show verifiable autonomous execution traces running against real-world sample telemetry.</p>
-        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:40px;">
-          <div style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#495057;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12l5 5L20 6"/></svg> Deep review of standard OCSF ingestion schema buffers</div>
-          <div style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#495057;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12l5 5L20 6"/></svg> Customisable human-in-the-loop fallback gates</div>
-          <div style="display:flex; align-items:center; gap:11px; font-size:14.5px; color:#495057;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M5 12l5 5L20 6"/></svg> Assessment of your target compliance reporting formats</div>
+  <!-- PRICING TIERS -->
+  <section style="max-width:1200px; margin:0 auto; padding:80px 32px 40px;">
+    <div style="max-width:760px; margin:0 auto;">
+      <div style="background:#fff; border:1px solid #E9ECEF; border-radius:12px; padding:44px 36px; box-shadow:0 1px 3px rgba(16,24,40,0.05); text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#2563EB; margin-bottom:14px;">Pricing</div>
+        <h3 style="font-size:clamp(24px,3vw,30px); font-weight:800; color:#212529; letter-spacing:-0.02em; margin:0 0 14px;">Pilot-first, and scoped to you</h3>
+        <p style="font-size:15.5px; color:#495057; max-width:600px; margin:0 auto 24px; line-height:1.7;">Radiant Nexus is early, and we are onboarding a small number of design partners &mdash; SOC teams and MSSPs &mdash; to run pilots on real alerts. Pricing is custom: we scope it to your data sources, team size, and investigation volume, with no per-alert surprises. Talk to us and we will put together a pilot that fits.</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <a href="contact.html" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#fff; background:#2563EB; padding:13px 24px; border-radius:6px; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Talk to us about a pilot
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
-        <div style="border-top:1px solid #E9ECEF; padding-top:28px;">
-          <span style="display:block; font-family:'JetBrains Mono',monospace; font-size:11px; color:#2563EB; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:14px;">Secured deployment boundaries</span>
-          <div style="display:flex; gap:10px; flex-wrap:wrap; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:#868E96;">
-            <span style="border:1px solid #E9ECEF; padding:5px 11px; border-radius:6px; background:#F8F9FA;">DEFENSE-TECH</span>
-            <span style="border:1px solid #E9ECEF; padding:5px 11px; border-radius:6px; background:#F8F9FA;">GLOBAL TIER-1 FIN</span>
-            <span style="border:1px solid #E9ECEF; padding:5px 11px; border-radius:6px; background:#F8F9FA;">MSSP SCALE</span>
-            <span style="border:1px solid #E9ECEF; padding:5px 11px; border-radius:6px; background:#F8F9FA;">CRITICAL OT</span>
-          </div>
-        </div>
+        <p style="font-size:13px; color:#868E96; margin:22px 0 0;">SaaS &middot; subscription, per-seat, or per-investigation &mdash; the model MSSPs prefer. In-VPC deployment so your telemetry never leaves your cloud.</p>
       </div>
     </div>
 
-    <!-- RIGHT -->
-    <div style="background:#F8F9FA; padding:72px 56px; display:flex; align-items:center; justify-content:center;">
-      <div style="width:100%; max-width:520px; background:#fff; border:1px solid #E9ECEF; padding:36px; border-radius:10px; box-shadow:0 20px 24px -4px rgba(16,24,40,0.08), 0 8px 8px -4px rgba(16,24,40,0.03);">
-        <h3 style="font-size:21px; font-weight:700; color:#212529; margin:0 0 24px; text-align:center; letter-spacing:-0.01em;">Schedule deep-dive session</h3>
+    <div style="margin-top:36px; text-align:center; padding:34px; background:#fff; border:1px solid #E9ECEF; border-radius:12px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#2563EB; margin-bottom:10px;">Early access program</div>
+      <h3 style="font-size:24px; font-weight:800; color:#212529; letter-spacing:-0.02em; margin:0 0 10px;">Join as a design partner</h3>
+      <p style="font-size:15px; color:#495057; max-width:540px; margin:0 auto 20px; line-height:1.7;">Get early access to Radiant Nexus in exchange for feedback and close collaboration. We are working with a small first cohort of design partners.</p>
+      <a href="contact.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#fff; background:#2563EB; padding:13px 24px; border-radius:6px; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Apply for early access
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
 
-        <div id="contact-success" style="display:none; text-align:center; padding:28px 12px;">
-          <span style="width:54px; height:54px; border-radius:50%; background:#DCFCE7; border:1px solid #BBF7D0; color:#15803D; display:grid; place-items:center; margin:0 auto 18px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span>
-          <h4 style="font-size:18px; font-weight:700; color:#212529; margin:0 0 8px;">Request received</h4>
-          <p style="font-size:14.5px; color:#495057; line-height:1.6; margin:0;">Our team will be in touch shortly to confirm your blueprint demo.</p>
+  <!-- FAQ -->
+  <section style="background:#fff; border-top:1px solid #E9ECEF; border-bottom:1px solid #E9ECEF;">
+    <div style="max-width:1100px; margin:0 auto; padding:88px 32px;">
+      <div style="text-align:center; max-width:540px; margin:0 auto 48px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#2563EB; margin-bottom:14px;">FAQ</div>
+        <h2 style="font-size:clamp(28px,3.2vw,38px); line-height:1.12; letter-spacing:-0.02em; font-weight:700; color:#212529; margin:0;">Common <span style="color:#F59E0B;">questions</span></h2>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:26px;">
+          <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 10px;">How is pricing determined?</h3>
+          <p style="font-size:14px; line-height:1.7; color:#495057; margin:0;">Pricing is based on event ingestion volume, number of environments managed, deployment model, and support tier. We scope every engagement to your actual usage, no paying for capacity you don't use.</p>
         </div>
-
-        <form id="contact-form" onsubmit="return submitContact(event)" style="display:flex; flex-direction:column; gap:18px;">
-          <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Full name</label>
-            <input id="c-name" type="text" class="ri-field" placeholder="Alistair Vance" />
-          </div>
-          <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Work email</label>
-            <input id="c-email" type="email" class="ri-field" placeholder="vance@enterprise-soc.com" />
-          </div>
-          <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Company</label>
-            <input id="c-company" type="text" class="ri-field" placeholder="Global Defense Infrastructure" />
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-            <div>
-              <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Company size</label>
-              <select class="ri-field"><option>1 – 50 employees</option><option>51 – 500 employees</option><option>501 – 2,000 employees</option><option>&gt; 2,000 employees</option></select>
-            </div>
-            <div>
-              <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">SOC maturity</label>
-              <select class="ri-field"><option>No dedicated SOC</option><option>Outsourced MSSP</option><option>Internal rule SIEM</option><option>Advanced hunt / SOAR</option></select>
-            </div>
-          </div>
-          <div>
-            <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Deployment preference</label>
-            <select class="ri-field"><option>SaaS hosted</option><option>Hybrid (SaaS ops + local logs)</option><option>Full on-premise boundary</option><option>Unrouted physical air-gap</option></select>
-          </div>
-          <div id="contact-error" style="display:none; padding:11px 14px; border-radius:6px; font-size:13px; font-weight:500; background:#FEE2E2; border:1px solid #FECACA; color:#B91C1C;">Please fill in your name, email, and company.</div>
-          <button type="submit" class="submit-btn" style="width:100%; margin-top:4px; background:#2563EB; color:#fff; border:none; padding:14px; border-radius:6px; font-weight:600; font-size:15px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Initialise blueprint demo</button>
-          <div style="font-size:12px; color:#868E96; text-align:center; display:flex; align-items:center; gap:7px; justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#868E96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Zero telemetric access, bound by default NDA structures.</div>
-        </form>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:26px;">
+          <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 10px;">Can I test before committing?</h3>
+          <p style="font-size:14px; line-height:1.7; color:#495057; margin:0;">Yes. We offer a structured 30-day pilot where we deploy Nexus against your real environment with full support. You see the value before signing any contract.</p>
+        </div>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:26px;">
+          <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 10px;">Does on-premise cost more?</h3>
+          <p style="font-size:14px; line-height:1.7; color:#495057; margin:0;">In-VPC / on-premise deployment is a core part of how Nexus works &mdash; it runs inside your own cloud so telemetry never leaves your network. It involves some infrastructure planning, but the AI capabilities are identical.</p>
+        </div>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:26px;">
+          <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 10px;">What integrations are included?</h3>
+          <p style="font-size:14px; line-height:1.7; color:#495057; margin:0;">Today we have live integrations with Wazuh, Microsoft Defender, and Microsoft Entra ID, with more on the roadmap. The architecture supports any system with a REST API or webhook, so new connectors come quickly.</p>
+        </div>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:26px;">
+          <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 10px;">How long does deployment take?</h3>
+          <p style="font-size:14px; line-height:1.7; color:#495057; margin:0;">A pilot can be stood up quickly once your data source is connected. In-VPC deployment timing depends on your environment; we scope it together during the pilot.</p>
+        </div>
+        <div style="background:#F8F9FA; border:1px solid #E9ECEF; border-radius:10px; padding:26px;">
+          <h3 style="font-size:16px; font-weight:700; color:#212529; margin:0 0 10px;">Is there a minimum commitment?</h3>
+          <p style="font-size:14px; line-height:1.7; color:#495057; margin:0;">Pilots are short and flexible &mdash; no long lock-in to try Nexus. Ongoing terms are agreed per engagement, and we work with your procurement process.</p>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:linear-gradient(135deg,#1D4ED8,#1E3A8A);">
+    <div style="max-width:1200px; margin:0 auto; padding:64px 32px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap;">
+        <div style="max-width:600px;">
+          <h2 style="font-size:clamp(28px,3vw,36px); line-height:1.15; letter-spacing:-0.02em; font-weight:700; color:#fff; margin:0 0 12px;">Ready to <span style="color:#FCD34D;">talk numbers?</span></h2>
+          <p style="font-size:16.5px; line-height:1.6; color:#BFDBFE; margin:0;">Every deployment is scoped individually. Tell us about your environment and we'll build a proposal that fits your budget and requirements.</p>
+        </div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="contact.html" class="cta-btn-white" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#1E3A8A; background:#fff; padding:13px 22px; border-radius:6px;">Talk to sales
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="contact.html" class="cta-btn-ghost" style="display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#fff; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); padding:13px 22px; border-radius:6px;">Early access</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ===== FOOTER ===== -->
   <footer style="background:#212529;">
@@ -253,21 +272,6 @@
   </footer>
 
 </div>
-
-<script>
-  function submitContact(e){
-    e.preventDefault();
-    var name = document.getElementById('c-name').value.trim();
-    var email = document.getElementById('c-email').value.trim();
-    var company = document.getElementById('c-company').value.trim();
-    var err = document.getElementById('contact-error');
-    if(!name || !email || !company){ err.style.display='block'; return false; }
-    err.style.display='none';
-    document.getElementById('contact-form').style.display='none';
-    document.getElementById('contact-success').style.display='block';
-    return false;
-  }
-</script>
 <script>function riToggleNav(b){var n=b.closest("nav");var o=n.classList.toggle("open");b.setAttribute("aria-expanded",o?"true":"false");}</script>
 </body>
 </html>
