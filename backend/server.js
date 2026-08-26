@@ -150,8 +150,13 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc:   ["'self'", "'unsafe-inline'"],
-      scriptSrc:  ["'self'"],
+      // Pages use inline <style> blocks (already allowed) and inline <script>
+      // blocks (e.g. riToggleNav, the mobile nav-drawer toggle) -- without
+      // 'unsafe-inline' on scriptSrc too, the browser silently blocks those,
+      // which is why the mobile/tablet drawer button did nothing on click.
+      styleSrc:   ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      scriptSrc:  ["'self'", "'unsafe-inline'"],
+      fontSrc:    ["'self'", 'https://fonts.gstatic.com', 'data:'],
       imgSrc:     ["'self'", 'data:', 'https://placehold.co', 'https://icons.duckduckgo.com', 'https://www.vectorlogo.zone', 'https://cdn.simpleicons.org'],
     },
   },
