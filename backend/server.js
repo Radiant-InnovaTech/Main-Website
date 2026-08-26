@@ -99,6 +99,20 @@ db.exec(`
 
   CREATE INDEX IF NOT EXISTS idx_otps_email ON admin_otps(email);
 
+  CREATE TABLE IF NOT EXISTS contact_requests (
+    id                      TEXT PRIMARY KEY,
+    full_name               TEXT NOT NULL,
+    email                   TEXT NOT NULL,
+    company                 TEXT NOT NULL,
+    company_size            TEXT,
+    soc_maturity            TEXT,
+    deployment_preference   TEXT,
+    ip_address              TEXT,
+    created_at              TEXT NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_contact_created_at ON contact_requests(created_at);
+
   CREATE TABLE IF NOT EXISTS audit_logs (
     id          TEXT PRIMARY KEY,
     action      TEXT NOT NULL,
@@ -183,6 +197,14 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 //  RATE LIMITERS
 // ─────────────────────────────────────────────────────────────────────────────
 const waitlistLimiter = rateLimit({
+  windowMs:         15 * 60 * 1000, // 15 minutes
+  max:              5,
+  standardHeaders:  true,
+  legacyHeaders:    false,
+  message:          { error: 'Too many submissions from this IP. Please try again in 15 minutes.' },
+});
+
+const contactLimiter = rateLimit({
   windowMs:         15 * 60 * 1000, // 15 minutes
   max:              5,
   standardHeaders:  true,
@@ -296,6 +318,22 @@ function validateWaitlistData(data) {
 
   if (!data.consent)
     errors.push('Consent is required.');
+
+  return errors;
+}
+
+function validateContactData(data) {
+  const errors = [];
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!data.full_name || String(data.full_name).trim().length < 2)
+    errors.push('Full name must be at least 2 characters.');
+
+  if (!data.email || !emailRe.test(String(data.email)))
+    errors.push('A valid work email is required.');
+
+  if (!data.company || String(data.company).trim().length < 2)
+    errors.push('Company name is required.');
 
   return errors;
 }
@@ -574,6 +612,59 @@ app.post('/api/waitlist/submit', waitlistLimiter, async (req, res) => {
     });
   } catch (err) {
     console.error('[WAITLIST] Submit error:', err);
+    return res.status(500).json({ error: 'Internal server error. Please try again.' });
+  }
+});
+
+// ── Contact / demo request submission ──────────────────────────────────────────
+app.post('/api/contact/submit', contactLimiter, async (req, res) => {
+  try {
+    const ip = getClientIp(req);
+
+    const errors = validateContactData(req.body);
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors[0], details: errors });
+    }
+
+    const entry = {
+      id:                    uuidv4(),
+      full_name:             String(req.body.full_name).trim(),
+      email:                 String(req.body.email).toLowerCase().trim(),
+      company:               String(req.body.company).trim(),
+      company_size:          req.body.company_size          ? String(req.body.company_size).trim()          : null,
+      soc_maturity:          req.body.soc_maturity           ? String(req.body.soc_maturity).trim()          : null,
+      deployment_preference: req.body.deployment_preference  ? String(req.body.deployment_preference).trim() : null,
+      ip_address:            ip,
+      created_at:            new Date().toISOString(),
+    };
+
+    db.prepare(`
+      INSERT INTO contact_requests
+        (id, full_name, email, company, company_size, soc_maturity, deployment_preference, ip_address, created_at)
+      VALUES
+        (@id, @full_name, @email, @company, @company_size, @soc_maturity, @deployment_preference, @ip_address, @created_at)
+    `).run(entry);
+
+    logAudit('contact_submit', { entry_id: entry.id, email: entry.email, name: entry.full_name, company: entry.company }, null, ip);
+
+    // Fire-and-forget notification to the team (no applicant confirmation
+    // email for this one -- ponytail: add a branded one if/when it's asked
+    // for, this reuses the same transporter and just needs the team to see it).
+    sendMail({
+      from:    `"Radiant Nexus Demo Requests" <${SMTP_FROM}>`,
+      to:      INTERNAL_NOTIFY.join(', '),
+      subject: `📅 New demo request — ${entry.full_name} (${entry.company})`,
+      text: `New blueprint demo request via radiantinnovatech.com/pages/contact.html\n\nName: ${entry.full_name}\nEmail: ${entry.email}\nCompany: ${entry.company}\nCompany size: ${entry.company_size || '—'}\nSOC maturity: ${entry.soc_maturity || '—'}\nDeployment preference: ${entry.deployment_preference || '—'}\nSubmitted: ${entry.created_at}\nIP: ${entry.ip_address}`,
+      html: `<p>New blueprint demo request via radiantinnovatech.com/pages/contact.html</p><ul><li><b>Name:</b> ${escHtml(entry.full_name)}</li><li><b>Email:</b> ${escHtml(entry.email)}</li><li><b>Company:</b> ${escHtml(entry.company)}</li><li><b>Company size:</b> ${escHtml(entry.company_size || '—')}</li><li><b>SOC maturity:</b> ${escHtml(entry.soc_maturity || '—')}</li><li><b>Deployment preference:</b> ${escHtml(entry.deployment_preference || '—')}</li></ul>`,
+    });
+
+    return res.status(200).json({
+      success:  true,
+      message:  'Request received.',
+      entry_id: entry.id,
+    });
+  } catch (err) {
+    console.error('[CONTACT] Submit error:', err);
     return res.status(500).json({ error: 'Internal server error. Please try again.' });
   }
 });
