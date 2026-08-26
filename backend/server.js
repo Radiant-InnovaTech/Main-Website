@@ -151,11 +151,14 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       // Pages use inline <style> blocks (already allowed) and inline <script>
-      // blocks (e.g. riToggleNav, the mobile nav-drawer toggle) -- without
-      // 'unsafe-inline' on scriptSrc too, the browser silently blocks those,
-      // which is why the mobile/tablet drawer button did nothing on click.
-      styleSrc:   ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      scriptSrc:  ["'self'", "'unsafe-inline'"],
+      // blocks + onclick="..." attributes (e.g. riToggleNav, the mobile
+      // nav-drawer toggle) -- helmet defaults scriptSrcAttr to 'none'
+      // independently of scriptSrc, so the onclick attribute itself was
+      // still blocked even with scriptSrc allowing inline <script> blocks.
+      // Both had to be relaxed for the drawer button to actually work.
+      styleSrc:     ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      scriptSrc:    ["'self'", "'unsafe-inline'"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       fontSrc:    ["'self'", 'https://fonts.gstatic.com', 'data:'],
       imgSrc:     ["'self'", 'data:', 'https://placehold.co', 'https://icons.duckduckgo.com', 'https://www.vectorlogo.zone', 'https://cdn.simpleicons.org'],
     },
