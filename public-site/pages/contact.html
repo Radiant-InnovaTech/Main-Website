@@ -187,19 +187,19 @@
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
             <div>
               <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Company size</label>
-              <select class="ri-field"><option>1 – 50 employees</option><option>51 – 500 employees</option><option>501 – 2,000 employees</option><option>&gt; 2,000 employees</option></select>
+              <select id="c-company-size" class="ri-field"><option>1 – 50 employees</option><option>51 – 500 employees</option><option>501 – 2,000 employees</option><option>&gt; 2,000 employees</option></select>
             </div>
             <div>
               <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">SOC maturity</label>
-              <select class="ri-field"><option>No dedicated SOC</option><option>Outsourced MSSP</option><option>Internal rule SIEM</option><option>Advanced hunt / SOAR</option></select>
+              <select id="c-soc-maturity" class="ri-field"><option>No dedicated SOC</option><option>Outsourced MSSP</option><option>Internal rule SIEM</option><option>Advanced hunt / SOAR</option></select>
             </div>
           </div>
           <div>
             <label style="display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#868E96; margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;">Deployment preference</label>
-            <select class="ri-field"><option>SaaS hosted</option><option>Hybrid (SaaS ops + local logs)</option><option>Full on-premise boundary</option><option>Unrouted physical air-gap</option></select>
+            <select id="c-deployment" class="ri-field"><option>SaaS hosted</option><option>Hybrid (SaaS ops + local logs)</option><option>Full on-premise boundary</option><option>Unrouted physical air-gap</option></select>
           </div>
           <div id="contact-error" style="display:none; padding:11px 14px; border-radius:6px; font-size:13px; font-weight:500; background:#FEE2E2; border:1px solid #FECACA; color:#B91C1C;">Please fill in your name, email, and company.</div>
-          <button type="submit" class="submit-btn" style="width:100%; margin-top:4px; background:#2563EB; color:#fff; border:none; padding:14px; border-radius:6px; font-weight:600; font-size:15px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Initialise blueprint demo</button>
+          <button type="submit" id="contact-submit" class="submit-btn" style="width:100%; margin-top:4px; background:#2563EB; color:#fff; border:none; padding:14px; border-radius:6px; font-weight:600; font-size:15px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; box-shadow:0 1px 3px rgba(16,24,40,0.12);">Initialise blueprint demo</button>
           <div style="font-size:12px; color:#868E96; text-align:center; display:flex; align-items:center; gap:7px; justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#868E96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Zero telemetric access, bound by default NDA structures.</div>
         </form>
       </div>
@@ -261,14 +261,60 @@
 <script>
   function submitContact(e){
     e.preventDefault();
-    var name = document.getElementById('c-name').value.trim();
-    var email = document.getElementById('c-email').value.trim();
+    var name    = document.getElementById('c-name').value.trim();
+    var email   = document.getElementById('c-email').value.trim();
     var company = document.getElementById('c-company').value.trim();
     var err = document.getElementById('contact-error');
-    if(!name || !email || !company){ err.style.display='block'; return false; }
-    err.style.display='none';
-    document.getElementById('contact-form').style.display='none';
-    document.getElementById('contact-success').style.display='block';
+
+    if(!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !company){
+      err.textContent = 'Please fill in your name, a valid email, and company.';
+      err.style.display = 'block';
+      return false;
+    }
+    err.style.display = 'none';
+
+    var btn = document.getElementById('contact-submit');
+    btn.disabled = true;
+    var originalLabel = btn.textContent;
+    btn.textContent = 'Submitting…';
+
+    var payload = {
+      full_name:             name,
+      email:                 email,
+      company:               company,
+      company_size:          document.getElementById('c-company-size').value,
+      soc_maturity:          document.getElementById('c-soc-maturity').value,
+      deployment_preference: document.getElementById('c-deployment').value,
+    };
+
+    fetch('/api/contact/submit', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    })
+    .then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(data){
+        return { ok: res.ok, data: data };
+      });
+    })
+    .then(function(r){
+      if (r.ok && r.data && r.data.success) {
+        document.getElementById('contact-form').style.display = 'none';
+        document.getElementById('contact-success').style.display = 'block';
+        return;
+      }
+      err.textContent = (r.data && r.data.error) ? r.data.error : 'Something went wrong. Please try again in a moment.';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    })
+    .catch(function(){
+      err.textContent = 'Could not reach the server. Please check your connection and try again.';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = originalLabel;
+    });
+
     return false;
   }
 </script>
