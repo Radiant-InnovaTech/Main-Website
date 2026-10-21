@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Hydra investigates an alert | Hydra</title>
+<meta name="description" content="What Hydra does with each security alert, what it checks, how the verdict is made, where your data goes, and where its limits are.">
+<link rel="canonical" href="https://radiantinnovatech.com/pages/how-it-works.html">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Hydra"><meta property="og:title" content="How Hydra investigates an alert | Hydra"><meta property="og:description" content="What Hydra does with each security alert, what it checks, how the verdict is made, where your data goes, and where its limits are."><meta property="og:url" content="https://radiantinnovatech.com/pages/how-it-works.html"><meta property="og:image" content="https://radiantinnovatech.com/assets/brand/og-image-light.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap bar">
+<a class="brand" href="/"><img src="/assets/brand/hydra-logo.svg" alt="Hydra" width="132" height="34"></a>
+<nav aria-label="Main"><a href="/pages/how-it-works.html" aria-current="page">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html">Our test results</a><a href="/pages/working-with-us.html">Working with us</a><a href="/pages/about.html">About</a></nav>
+<div class="actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+</div></header>
+<main id="main">
+<section class="hero"><div class="wrap narrow">
+<h1>How Hydra investigates an alert</h1>
+<p class="lead">This page explains what Hydra does with each alert, what it checks, how the verdict is made, and where its limits are. We wrote it for a security manager who wants to know exactly what they would be switching on.</p>
+<figure><svg class="diagram" viewBox="0 0 880 150" role="img" aria-labelledby="dg-t dg-d" xmlns="http://www.w3.org/2000/svg">
+<title id="dg-t">The path of an alert through Hydra</title>
+<desc id="dg-d">Your tools send the alert to Hydra. Hydra investigates and writes a verdict. Your analysts decide. Your tools carry out an action only when a person approves.</desc>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#071B2E"/></marker></defs>
+<g font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="15" fill="#071B2E">
+<rect x="4" y="30" width="180" height="90" rx="8" fill="#fff" stroke="#071B2E" stroke-width="1.5"/><text x="94" y="68" text-anchor="middle" font-weight="700">Your tools</text><text x="94" y="92" text-anchor="middle" font-size="13">send the alert</text>
+<rect x="232" y="30" width="180" height="90" rx="8" fill="#071B2E"/><text x="322" y="68" text-anchor="middle" font-weight="700" fill="#fff">Hydra</text><text x="322" y="92" text-anchor="middle" font-size="13" fill="#fff">investigates, writes a verdict</text>
+<rect x="460" y="30" width="180" height="90" rx="8" fill="#fff" stroke="#071B2E" stroke-width="1.5"/><text x="550" y="68" text-anchor="middle" font-weight="700">Your analysts</text><text x="550" y="92" text-anchor="middle" font-size="13">decide</text>
+<rect x="688" y="30" width="188" height="90" rx="8" fill="#fff" stroke="#071B2E" stroke-width="1.5" stroke-dasharray="6 4"/><text x="782" y="62" text-anchor="middle" font-weight="700">Your tools act</text><text x="782" y="84" text-anchor="middle" font-size="13">only when a person</text><text x="782" y="102" text-anchor="middle" font-size="13">approves</text>
+<path d="M186 75H228" stroke="#071B2E" stroke-width="2" marker-end="url(#ar)"/><path d="M414 75H456" stroke="#071B2E" stroke-width="2" marker-end="url(#ar)"/><path d="M642 75H684" stroke="#071B2E" stroke-width="2" marker-end="url(#ar)"/>
+</g></svg><figcaption>The path of an alert through Hydra.</figcaption></figure>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>1. The path of an alert</h2>
+<ol><li><strong>The alert arrives.</strong> Your monitoring tools send it to Hydra, or Hydra collects it from them. Hydra stores it under your organisation's own workspace and keeps the full original event, not only a summary.</li><li><strong>Hydra checks the event.</strong> It looks at what the event itself shows, using the built-in patterns described in section 2. This step needs no AI and no network.</li><li><strong>Hydra gathers context.</strong> It links the alert to the machine, user and addresses involved, finds other alerts that share them, and reads what your analysts decided about similar alerts before. If a reputation lookup has been run for the addresses and files involved, Hydra uses its result.</li><li><strong>An AI model writes the verdict.</strong> The model reads everything Hydra gathered and returns one of three verdicts: attack, harmless, or needs a person. It must cite the numbered steps its verdict relies on.</li><li><strong>Hydra's rules check the model.</strong> The rules can overrule the model. Section 3 explains how.</li><li><strong>Hydra saves the result.</strong> The verdict, the evidence score, every step and an audit entry are stored. If the verdict is a likely attack, Hydra can notify the contact you chose and prepare recommended actions for a person to approve.</li></ol>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>2. What the built-in checks look for</h2>
+<p>Hydra has 35 built-in checks. Some recognise attack patterns and some recognise routine activity, so the same kind of event can be cleared as well as flagged. Each check names the technique or the normal activity it recognises, so every point it adds can be explained. Here are eight families, each with a harmless look-alike.</p>
+<div class="tablewrap"><table><thead><tr><th>What the event looks like</th><th>Why it matters</th><th>A look-alike Hydra treats differently</th></tr></thead><tbody><tr><td>A program in a user's Downloads folder opens the process that holds passwords</td><td>A common way to steal credentials</td><td>Security software in a system folder reading the same memory is only a weak signal, because abused system tools can do it too</td></tr><tr><td>Word or Excel starts PowerShell or another script program</td><td>A typical sign of a malicious document</td><td>Installed software started by another system program, with nothing odd in its arguments, is treated as routine</td></tr><tr><td>PowerShell with an encoded command and a hidden window</td><td>Used to hide what a script does</td><td>An ordinary command with readable arguments does not trigger it</td></tr><tr><td>Shadow copies or backups deleted with built-in tools</td><td>Often the step before ransomware</td><td>None needed: this is rarely done for ordinary reasons, so it carries a high weight</td></tr><tr><td>Failed logons across ten or more accounts from an outside address</td><td>Password spraying</td><td>Three failures on one account from an internal address look like a mistyped password</td></tr><tr><td>Five or more Kerberos tickets requested with weak encryption</td><td>Kerberoasting, an attack on service accounts</td><td>One or two tickets with strong encryption are ordinary service access</td></tr><tr><td>Someone added to Domain Admins, especially from a machine that is not a domain controller</td><td>Privilege escalation</td><td>Someone added to the ordinary Users group is routine onboarding</td></tr><tr><td>A program starts listening on an unusual port</td><td>Can be a hidden backdoor</td><td>A vendor agent using a high temporary port is normal</td></tr></tbody></table></div>
+<p><strong>Where these checks apply.</strong> Today the built-in checks cover Windows events, as recorded by Sysmon or the Windows security log. For alerts from Okta, AWS, Google Cloud or Linux hosts, Hydra relies on the AI model and the evidence it gathers, because we have not yet written built-in checks for them. We are adding them, and we will say so here when they exist.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>3. How the verdict is made</h2>
+<p>There are three verdicts: <strong>attack</strong> (a true positive), <strong>harmless</strong> (a false positive), and <strong>needs a person</strong> (needs context). The AI model proposes one. Hydra's rules then check it.</p>
+<ul><li>If the event shows a strong attack pattern, the model cannot dismiss it. A model that says "harmless" is overruled and the alert goes to a person.</li><li>If the event matches routine activity and shows no attack pattern, the model's "harmless" is accepted only with evidence cited.</li><li>A verdict with no cited evidence becomes "needs a person". So does any verdict whose citations do not point to real steps.</li><li>If the evidence is thin, a model that says "attack" is not accepted on its own. The verdict becomes "needs a person".</li><li>The AI never sets the evidence score. Hydra calculates it.</li></ul>
+<p>If the AI model is unavailable, Hydra does not make up a verdict. The alert waits, and an analyst can press Run investigation.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>4. The evidence score</h2>
+<p>Every verdict has an evidence score from 0 to 100. It measures how much evidence points to an attack. It is not a probability, and a score of 95 does not mean "right 95 times out of 100".</p>
+<p>The score starts low and adds up evidence. It rises when the event itself shows attack patterns, when other alerts on the same machine or user agree, and when a reputation lookup flags an address or file. It falls when the event matches routine activity, or when your analysts have often called this alert harmless. Each factor is listed beside the score, so you can see why it is what it is.</p>
+<p>On its own, what the event shows can lift the score to at most 80. Going higher needs something outside the event to agree. That is deliberate: the score that could ever allow an action without a person is set high on purpose.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>5. Actions and approvals</h2>
+<p>Hydra can recommend isolating a computer, disabling an account, resetting a user's sessions, blocking an address, or revoking a cloud access key. It does this through Microsoft Defender, CrowdStrike, Microsoft Entra ID, Okta, Google Workspace, Palo Alto Networks and AWS, depending on where the alert came from.</p>
+<ul><li><strong>A person approves each one.</strong> Only people with the manager, admin or owner role can approve. Analysts and viewers cannot.</li><li><strong>Advice-only today.</strong> Hydra does not run any of these actions yet. It records the approval, and your team carries it out in your own tools.</li><li><strong>A kill switch</strong> stops every action at once.</li><li><strong>Most actions can be undone,</strong> and the undo is recorded too.</li><li><strong>Every decision is logged</strong> in an audit trail in which a changed or deleted entry can be detected.</li><li><strong>An optional setting</strong> can let one kind of action run without a person, but only above a very high evidence score. It is off by default and we do not turn it on in evaluations.</li></ul>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>6. What else an analyst can do</h2>
+<ul><li><strong>Ask questions about an alert</strong> in a chat. The assistant is told to rely on the alert's evidence and never to claim that an action was taken.</li><li><strong>Produce an incident report</strong> from an alert, review it, and export it as a PDF.</li><li><strong>Mark a verdict agree or disagree.</strong> Those marks feed how often Hydra's calls match your analysts' calls, and the false-positive rate it uses next time.</li></ul>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>7. Where your data goes</h2>
+<p>Hydra is hosted by us on Google Cloud in Iowa, in the United States. The AI model can be Google's Gemini on Vertex AI, or an open model that we run ourselves. Alert text is sent to whichever model you choose. We do not train models on your data. Hydra reads alert details, not file contents, email contents, passwords or payment card data. The full list of providers is on our <a href="/pages/security.html">Security page</a>.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>8. What Hydra does not do yet</h2>
+<ul><li>The built-in checks cover Windows events only.</li><li>While it investigates, Hydra does not run new queries against your own tools. It works from the alert and from what it has stored.</li><li>Hydra does not run reputation lookups on its own yet. An analyst can run one, and Hydra then uses the result.</li><li>We have measured accuracy only on our own test of 42 alerts. <a href="/pages/our-test-results.html">Read it in full</a>.</li><li>We have no customers yet.</li><li>We do not offer on-premises or air-gapped deployment. We host Hydra.</li><li>Today we do not run your security monitoring. Your analysts do. Running it for you as a licensed service is the plan, and it waits for our licence.</li></ul>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>9. What we are working on next</h2>
+<p>These are plans, not features, and we are not giving dates.</p>
+<ul><li>Read-only questions to your own tools during an investigation, inside limits you set.</li><li>Keeping the full evidence behind each step, not only a summary of it.</li><li>Built-in checks for identity and cloud alerts.</li><li>Scheduled threat hunts.</li><li>An operated service: once we hold our licence, we plan to run Hydra for you, with our analysts handling the alerts that need a person.</li></ul>
+<p><a class="btn btn-lg" href="/pages/contact.html">Talk to us about an evaluation</a></p>
+<p class="note">Last reviewed: 21 October 2026 by Samuel Maclar.</p>
+</div></section>
+</main>
+<footer class="site-footer"><div class="wrap">
+<div class="foot-grid">
+<div><img src="/assets/brand/hydra-logo-on-dark.svg" alt="Hydra" width="120" height="31"><p class="foot-line">An AI analyst for your security team. Built in Accra.</p></div>
+<div><h2>Hydra</h2><ul><li><a href="/pages/how-it-works.html">How it works</a></li><li><a href="/pages/solutions.html">Who it is for</a></li><li><a href="/pages/our-test-results.html">Our test results</a></li><li><a href="/pages/resources.html">Resources</a></li></ul></div>
+<div><h2>Company</h2><ul><li><a href="/pages/about.html">About</a></li><li><a href="/pages/security.html">Security</a></li><li><a href="/pages/working-with-us.html">Working with us</a></li><li><a href="/pages/contact.html">Talk to us</a></li></ul></div>
+<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li></ul></div>
+</div>
+<p class="copy">&copy; 2026 Radiant InnovaTech</p>
+</div></footer>
+
+</body>
+</html>

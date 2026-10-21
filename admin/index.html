@@ -492,8 +492,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Company</th>
-                <th>Company Size</th>
-                <th>SOC Maturity</th>
+                <th>Role</th>
+                <th>Monitors with</th>
                 <th>Submitted</th>
               </tr>
             </thead>
@@ -913,8 +913,8 @@
         '<td><strong style="font-size:0.88rem">' + escHtml(r.full_name) + '</strong></td>' +
         '<td class="mono" style="font-size:0.78rem">' + escHtml(r.email) + '</td>' +
         '<td style="font-size:0.85rem">' + escHtml(r.company) + '</td>' +
-        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.company_size || '—') + '</td>' +
-        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.soc_maturity || '—') + '</td>' +
+        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.role || r.company_size || '—') + '</td>' +
+        '<td class="muted" style="font-size:0.83rem">' + escHtml(r.monitoring || r.soc_maturity || '—') + '</td>' +
         '<td class="mono muted" style="font-size:0.78rem">' + fmtDate(r.created_at) + '</td>' +
       '</tr>';
 
@@ -923,9 +923,11 @@
           '<div class="detail-field"><div class="df-label">Full Name</div><div class="df-value">' + escHtml(r.full_name) + '</div></div>' +
           '<div class="detail-field"><div class="df-label">Email</div><div class="df-value"><a href="mailto:' + escHtml(r.email) + '" class="profile-link">' + escHtml(r.email) + '</a></div></div>' +
           '<div class="detail-field"><div class="df-label">Company</div><div class="df-value">' + escHtml(r.company) + '</div></div>' +
-          '<div class="detail-field"><div class="df-label">Company Size</div><div class="df-value">' + escHtml(r.company_size || '—') + '</div></div>' +
-          '<div class="detail-field"><div class="df-label">SOC Maturity</div><div class="df-value">' + escHtml(r.soc_maturity || '—') + '</div></div>' +
-          '<div class="detail-field"><div class="df-label">Deployment Preference</div><div class="df-value">' + escHtml(r.deployment_preference || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Role</div><div class="df-value">' + escHtml(r.role || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Monitors with</div><div class="df-value">' + escHtml(r.monitoring || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Message</div><div class="df-value">' + escHtml(r.message || '—') + '</div></div>' +
+          '<div class="detail-field"><div class="df-label">Consent given</div><div class="df-value">' + (r.consent == null ? '—' : (r.consent ? 'Yes' : 'No')) + '</div></div>' +
+          ((r.company_size || r.soc_maturity || r.deployment_preference) ? '<div class="detail-field"><div class="df-label">Earlier form</div><div class="df-value">' + escHtml([r.company_size, r.soc_maturity, r.deployment_preference].filter(Boolean).join(' · ')) + '</div></div>' : '') +
           '<div class="detail-field"><div class="df-label">Submitted</div><div class="df-value">' + fmtDateTime(r.created_at) + '</div></div>' +
           '<div class="detail-actions">' +
             '<div id="c-del-ui-' + r.id + '">' +

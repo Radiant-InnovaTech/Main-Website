@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "nodemailer": "^9.0.1"
+  },
+  "scripts": {
+    "check": "node scripts/check-site.js",
+    "build:pages": "python3 site-src/build_site.py"
   }
 }

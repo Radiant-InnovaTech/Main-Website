@@ -125,6 +125,15 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_audit_created_at ON audit_logs(created_at);
 `);
 
+// Columns added for the Talk to us form (consent, role, how the team monitors, message).
+// SQLite has no "ADD COLUMN IF NOT EXISTS", so check the table first.
+{
+  const have = new Set(db.prepare('PRAGMA table_info(contact_requests)').all().map(c => c.name));
+  for (const [col, type] of [['role', 'TEXT'], ['monitoring', 'TEXT'], ['message', 'TEXT'], ['consent', 'INTEGER']]) {
+    if (!have.has(col)) db.exec(`ALTER TABLE contact_requests ADD COLUMN ${col} ${type}`);
+  }
+}
+
 console.log('[DB] SQLite database ready at', path.join(DATA_DIR, 'waitlist.db'));
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -141,6 +150,18 @@ const app = express();
 
 // Trust proxy (important when behind Nginx on Lightsail)
 app.set('trust proxy', 1);
+
+// Preview gate: when PREVIEW_PASSWORD is set (never on the live site), every request needs it
+// (browser sign-in box, any user name) and search engines are told to stay away.
+if (process.env.PREVIEW_PASSWORD) {
+  const want = Buffer.from(process.env.PREVIEW_PASSWORD);
+  app.use((req, res, next) => {
+    res.set('X-Robots-Tag', 'noindex, nofollow');
+    const given = Buffer.from((Buffer.from((req.headers.authorization || '').slice(6), 'base64').toString().split(':').slice(1).join(':')));
+    if (given.length === want.length && crypto.timingSafeEqual(given, want)) return next();
+    res.set('WWW-Authenticate', 'Basic realm="Hydra site preview"').status(401).send('Preview. Password needed.');
+  });
+}
 
 app.use(helmet({
   contentSecurityPolicy: {
@@ -222,7 +243,8 @@ function getClientIp(req) {
 }
 
 function generateOtp() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  // crypto.randomInt, not Math.random: a login code must not be predictable.
+  return String(crypto.randomInt(100000, 1000000));
 }
 
 function hashOtp(email, otp) {
@@ -272,6 +294,15 @@ function logAudit(action, details, adminEmail = null, ip = null) {
   }
 }
 
+
+// One CSV cell. Quotes are doubled, and a value that starts with = + - @ is prefixed with an apostrophe so a
+// spreadsheet does not run it as a formula (form submissions are written by strangers).
+function csvCell(value) {
+  let v = String(value == null ? '' : value);
+  if (/^[=+\-@\t\r]/.test(v)) v = "'" + v;
+  return `"${v.replace(/"/g, '""')}"`;
+}
+
 function validateWaitlistData(data) {
   const errors = [];
   const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -315,7 +346,16 @@ function validateContactData(data) {
     errors.push('A valid work email is required.');
 
   if (!data.company || String(data.company).trim().length < 2)
-    errors.push('Company name is required.');
+    errors.push('Organisation is required.');
+
+  if (!data.role || String(data.role).trim().length < 2)
+    errors.push('Your role is required.');
+
+  if (data.message && String(data.message).length > 2000)
+    errors.push('Your message is too long (2,000 characters at most).');
+
+  if (!data.consent)
+    errors.push('Please tick the box to agree that we may contact you.');
 
   return errors;
 }
@@ -324,70 +364,33 @@ function validateContactData(data) {
 //  EMAIL TEMPLATES
 // ─────────────────────────────────────────────────────────────────────────────
 function buildApplicantEmail(entry) {
+  const text = `Hello ${entry.full_name},
+
+Thank you for joining the early access list for Hydra.
+
+We are talking to two to four security teams about a free six-week shadow evaluation: Hydra reads your alerts, records what it would conclude, and changes nothing. We cannot give you a start date yet. We do not start with a team until the Cyber Security Authority has confirmed our licence position in writing.
+
+A founder will write to you at this address. If you have a question before then, reply to this email.
+
+How we work with a new team: https://radiantinnovatech.com/pages/working-with-us.html
+
+Radiant InnovaTech, Accra, Ghana`;
   return {
     from:    `"Radiant InnovaTech" <${SMTP_FROM}>`,
     to:      entry.email,
-    subject: 'You\'re on the Radiant Nexus AI SOC Copilot waitlist ✓',
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Waitlist Confirmation</title>
-<style>
-  body{margin:0;padding:0;background:#050816;font-family:'Helvetica Neue',Arial,sans-serif;}
-  .wrap{max-width:580px;margin:40px auto;background:#0F1626;border:1px solid rgba(148,163,184,0.12);border-radius:12px;overflow:hidden;}
-  .hero{background:linear-gradient(135deg,#0a1628 0%,#0f1d3d 100%);padding:40px 36px 32px;border-bottom:1px solid rgba(59,130,246,0.2);}
-  .logo{font-size:12px;font-weight:700;letter-spacing:0.15em;color:#6AA2FF;text-transform:uppercase;margin-bottom:24px;}
-  .hero h1{font-size:22px;font-weight:700;color:#F1F5FB;margin:0 0 10px;line-height:1.3;}
-  .hero p{font-size:14px;color:#97A2B6;margin:0;line-height:1.6;}
-  .body{padding:32px 36px;}
-  .label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#6AA2FF;margin-bottom:14px;}
-  .card{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.18);border-radius:8px;padding:18px 20px;margin-bottom:24px;}
-  .row{display:flex;padding:6px 0;border-bottom:1px solid rgba(148,163,184,0.07);}
-  .row:last-child{border-bottom:none;}
-  .k{font-size:12px;color:#5C6678;min-width:120px;flex-shrink:0;}
-  .v{font-size:12px;color:#F1F5FB;font-weight:500;word-break:break-all;}
-  .msg{font-size:14px;color:#97A2B6;line-height:1.7;margin-bottom:24px;}
-  .cta{display:inline-block;background:#3B82F6;color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;}
-  .footer{padding:20px 36px;border-top:1px solid rgba(148,163,184,0.08);font-size:11px;color:#5C6678;text-align:center;line-height:1.6;}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="hero">
-    <div class="logo">Radiant InnovaTech</div>
-    <h1>You're on the waitlist. 🎉</h1>
-    <p>Thank you for applying to the Radiant Nexus AI SOC Copilot pilot program. We've received your application and will review it personally.</p>
-  </div>
-  <div class="body">
-    <div class="label">Your application</div>
-    <div class="card">
-      <div class="row"><span class="k">Name</span><span class="v">${escHtml(entry.full_name)}</span></div>
-      <div class="row"><span class="k">Email</span><span class="v">${escHtml(entry.email)}</span></div>
-      <div class="row"><span class="k">Job Title</span><span class="v">${escHtml(entry.role)}</span></div>
-      <div class="row"><span class="k">Company</span><span class="v">${escHtml(entry.company)}</span></div>
-      <div class="row"><span class="k">Country</span><span class="v">${escHtml(entry.country)}</span></div>
-      <div class="row"><span class="k">Role Type</span><span class="v">${escHtml(entry.user_type)}</span></div>
-      ${entry.profile_url ? `<div class="row"><span class="k">Profile URL</span><span class="v">${escHtml(entry.profile_url)}</span></div>` : ''}
-    </div>
-    <p class="msg">
-      We're opening the pilot program in limited batches. Waitlist members are reviewed first when new spots open. You'll hear from us directly at this email address.
-    </p>
-    <p class="msg" style="margin-bottom:28px;">
-      If you have any questions in the meantime, feel free to reply to this email — it reaches our team directly.
-    </p>
-    <a class="cta" href="https://radiantinnovatech.com/pages/about.html">Learn more about Radiant Nexus →</a>
-  </div>
-  <div class="footer">
-    Radiant InnovaTech · Accra, Ghana<br/>
-    <a href="https://radiantinnovatech.com" style="color:#3B82F6;text-decoration:none;">radiantinnovatech.com</a> ·
-    <a href="https://radiantinnovatech.com/pages/contact.html" style="color:#3B82F6;text-decoration:none;">Contact us</a>
-  </div>
-</div>
-</body>
-</html>`,
-    text: `You're on the Radiant Nexus waitlist!\n\nHi ${entry.full_name},\n\nThank you for applying to the Radiant Nexus AI SOC Copilot pilot program. We've received your application and will review it personally.\n\nYour details:\n- Name: ${entry.full_name}\n- Email: ${entry.email}\n- Job Title: ${entry.role}\n- Company: ${entry.company}\n- Country: ${entry.country}\n- Role Type: ${entry.user_type}\n\nWe'll be in touch when pilot spots open.\n\nRadiant InnovaTech\nhttps://radiantinnovatech.com`,
+    subject: 'You are on the Hydra early access list',
+    html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Hydra early access</title></head>
+<body style="margin:0;padding:24px;background:#F4F8FB;font-family:Helvetica,Arial,sans-serif;color:#0E2236;">
+<div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #D5DEE6;border-radius:8px;padding:28px;">
+<p style="font-weight:700;color:#071B2E;margin:0 0 16px;">Hydra</p>
+<p>Hello ${escHtml(entry.full_name)},</p>
+<p>Thank you for joining the early access list for Hydra.</p>
+<p>We are talking to two to four security teams about a free six-week shadow evaluation: Hydra reads your alerts, records what it would conclude, and changes nothing. We cannot give you a start date yet. We do not start with a team until the Cyber Security Authority has confirmed our licence position in writing.</p>
+<p>A founder will write to you at this address. If you have a question before then, reply to this email.</p>
+<p><a href="https://radiantinnovatech.com/pages/working-with-us.html" style="color:#02727A;">How we work with a new team</a></p>
+<p style="font-size:12px;color:#4A5B6B;margin-top:24px;">Radiant InnovaTech, Accra, Ghana</p>
+</div></body></html>`,
+    text,
   };
 }
 
@@ -398,9 +401,9 @@ function buildTeamNotificationEmail(entry) {
   }) + ' UTC';
 
   return {
-    from:    `"Radiant Nexus Waitlist" <${SMTP_FROM}>`,
+    from:    `"Hydra website" <${SMTP_FROM}>`,
     to:      INTERNAL_NOTIFY.join(', '),
-    subject: `🚀 New waitlist signup — ${entry.full_name} (${entry.company})`,
+    subject: `New early access signup: ${entry.full_name} (${entry.company})`,
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -446,7 +449,7 @@ function buildTeamNotificationEmail(entry) {
     ${entry.use_case ? `<div class="uc-label">Use Case / Notes</div><div class="uc">${escHtml(entry.use_case)}</div>` : ''}
     <a class="cta" href="https://radiantinnovatech.com/admin/" target="_blank">View in Admin Dashboard →</a>
   </div>
-  <div class="footer">Radiant Nexus Waitlist System · Auto-generated notification</div>
+  <div class="footer">Radiant InnovaTech website · Auto-generated notification</div>
 </div>
 </body>
 </html>`,
@@ -456,7 +459,7 @@ function buildTeamNotificationEmail(entry) {
 
 function buildOtpEmail(email, otp) {
   return {
-    from:    `"Radiant Nexus Admin" <${SMTP_FROM}>`,
+    from:    `"Radiant InnovaTech website admin" <${SMTP_FROM}>`,
     to:      email,
     subject: `Your admin login code: ${otp}`,
     html: `<!DOCTYPE html>
@@ -480,7 +483,7 @@ function buildOtpEmail(email, otp) {
 <div class="wrap">
   <div class="header"><h1>Admin Login Verification</h1></div>
   <div class="body">
-    <p class="note" style="margin-top:0;">Your one-time login code for the Radiant Nexus admin dashboard:</p>
+    <p class="note" style="margin-top:0;">Your one-time login code for the Radiant InnovaTech website admin dashboard:</p>
     <div class="otp-box"><div class="otp">${otp}</div></div>
     <p class="note">This code expires in <strong style="color:#F1F5FB;">10 minutes</strong>. Do not share it with anyone.</p>
     <p class="note">If you did not request this code, ignore this email — your account is safe.</p>
@@ -489,7 +492,7 @@ function buildOtpEmail(email, otp) {
 </div>
 </body>
 </html>`,
-    text: `Your Radiant Nexus admin login code is: ${otp}\n\nThis code expires in 10 minutes. Do not share it with anyone.\n\nIf you didn't request this, ignore this email.`,
+    text: `Your website admin login code is: ${otp}\n\nThis code expires in 10 minutes. Do not share it with anyone.\n\nIf you didn't request this, ignore this email.`,
   };
 }
 
@@ -621,46 +624,55 @@ app.post('/api/waitlist/submit', waitlistLimiter, async (req, res) => {
   }
 });
 
-// ── Contact / demo request submission ──────────────────────────────────────────
+// ── Contact (Talk to us) submission ────────────────────────────────────────────
 app.post('/api/contact/submit', contactLimiter, async (req, res) => {
   try {
     const ip = getClientIp(req);
+
+    // Honeypot: bots fill the hidden field. Accept quietly and store nothing.
+    if (req.body._hp) {
+      return res.status(200).json({ success: true, message: 'Request received.' });
+    }
 
     const errors = validateContactData(req.body);
     if (errors.length > 0) {
       return res.status(400).json({ error: errors[0], details: errors });
     }
 
+    const clip = (v, n) => (v ? String(v).trim().slice(0, n) : null);
     const entry = {
       id:                    uuidv4(),
-      full_name:             String(req.body.full_name).trim(),
-      email:                 String(req.body.email).toLowerCase().trim(),
-      company:               String(req.body.company).trim(),
-      company_size:          req.body.company_size          ? String(req.body.company_size).trim()          : null,
-      soc_maturity:          req.body.soc_maturity           ? String(req.body.soc_maturity).trim()          : null,
-      deployment_preference: req.body.deployment_preference  ? String(req.body.deployment_preference).trim() : null,
+      full_name:             clip(req.body.full_name, 200),
+      email:                 String(req.body.email).toLowerCase().trim().slice(0, 200),
+      company:               clip(req.body.company, 200),
+      role:                  clip(req.body.role, 200),
+      monitoring:            clip(req.body.monitoring, 200),
+      message:               clip(req.body.message, 2000),
+      consent:               req.body.consent ? 1 : 0,
+      // Older columns from the first form. Kept so existing rows still display in the admin panel.
+      company_size:          null,
+      soc_maturity:          null,
+      deployment_preference: null,
       ip_address:            ip,
       created_at:            new Date().toISOString(),
     };
 
     db.prepare(`
       INSERT INTO contact_requests
-        (id, full_name, email, company, company_size, soc_maturity, deployment_preference, ip_address, created_at)
+        (id, full_name, email, company, role, monitoring, message, consent, company_size, soc_maturity, deployment_preference, ip_address, created_at)
       VALUES
-        (@id, @full_name, @email, @company, @company_size, @soc_maturity, @deployment_preference, @ip_address, @created_at)
+        (@id, @full_name, @email, @company, @role, @monitoring, @message, @consent, @company_size, @soc_maturity, @deployment_preference, @ip_address, @created_at)
     `).run(entry);
 
     logAudit('contact_submit', { entry_id: entry.id, email: entry.email, name: entry.full_name, company: entry.company }, null, ip);
 
-    // Fire-and-forget notification to the team (no applicant confirmation
-    // email for this one -- ponytail: add a branded one if/when it's asked
-    // for, this reuses the same transporter and just needs the team to see it).
+    // Fire-and-forget notification to the team.
     sendMail({
-      from:    `"Radiant Nexus Demo Requests" <${SMTP_FROM}>`,
+      from:    `"Hydra website" <${SMTP_FROM}>`,
       to:      INTERNAL_NOTIFY.join(', '),
-      subject: `📅 New demo request — ${entry.full_name} (${entry.company})`,
-      text: `New blueprint demo request via radiantinnovatech.com/pages/contact.html\n\nName: ${entry.full_name}\nEmail: ${entry.email}\nCompany: ${entry.company}\nCompany size: ${entry.company_size || '—'}\nSOC maturity: ${entry.soc_maturity || '—'}\nDeployment preference: ${entry.deployment_preference || '—'}\nSubmitted: ${entry.created_at}\nIP: ${entry.ip_address}`,
-      html: `<p>New blueprint demo request via radiantinnovatech.com/pages/contact.html</p><ul><li><b>Name:</b> ${escHtml(entry.full_name)}</li><li><b>Email:</b> ${escHtml(entry.email)}</li><li><b>Company:</b> ${escHtml(entry.company)}</li><li><b>Company size:</b> ${escHtml(entry.company_size || '—')}</li><li><b>SOC maturity:</b> ${escHtml(entry.soc_maturity || '—')}</li><li><b>Deployment preference:</b> ${escHtml(entry.deployment_preference || '—')}</li></ul>`,
+      subject: `New enquiry: ${entry.full_name} (${entry.company})`,
+      text: `New enquiry through radiantinnovatech.com/pages/contact.html\n\nName: ${entry.full_name}\nEmail: ${entry.email}\nOrganisation: ${entry.company}\nRole: ${entry.role}\nMonitors with: ${entry.monitoring || 'not given'}\nMessage: ${entry.message || 'none'}\nSubmitted: ${entry.created_at}\n\nReply within two working days.`,
+      html: `<p>New enquiry through radiantinnovatech.com/pages/contact.html</p><ul><li><b>Name:</b> ${escHtml(entry.full_name)}</li><li><b>Email:</b> ${escHtml(entry.email)}</li><li><b>Organisation:</b> ${escHtml(entry.company)}</li><li><b>Role:</b> ${escHtml(entry.role)}</li><li><b>Monitors with:</b> ${escHtml(entry.monitoring || 'not given')}</li><li><b>Message:</b> ${escHtml(entry.message || 'none')}</li></ul><p>Reply within two working days.</p>`,
     });
 
     return res.status(200).json({
@@ -880,14 +892,14 @@ app.get('/api/admin/waitlist/export', (req, res) => {
     const header = 'ID,Full Name,Email,Job Title,Company,Country,Role Type,Profile URL,Use Case,Consent,Submitted At,IP Address\n';
     const csvRows = rows.map(r => [
       r.id,
-      `"${(r.full_name   || '').replace(/"/g, '""')}"`,
-      r.email,
-      `"${(r.role        || '').replace(/"/g, '""')}"`,
-      `"${(r.company     || '').replace(/"/g, '""')}"`,
-      r.country,
-      r.user_type,
-      r.profile_url || '',
-      `"${(r.use_case    || '').replace(/"/g, '""')}"`,
+      csvCell(r.full_name),
+      csvCell(r.email),
+      csvCell(r.role),
+      csvCell(r.company),
+      csvCell(r.country),
+      csvCell(r.user_type),
+      csvCell(r.profile_url),
+      csvCell(r.use_case),
       r.consent ? 'Yes' : 'No',
       r.created_at,
       r.ip_address || '',
@@ -930,7 +942,7 @@ app.get('/api/admin/contact', (req, res) => {
     const total = db.prepare(`SELECT COUNT(*) AS n FROM contact_requests ${whereClause}`).get(...params).n;
 
     const rows = db.prepare(`
-      SELECT id, full_name, email, company, company_size, soc_maturity, deployment_preference, created_at, ip_address
+      SELECT id, full_name, email, company, role, monitoring, message, consent, company_size, soc_maturity, deployment_preference, created_at, ip_address
       FROM contact_requests
       ${whereClause}
       ORDER BY created_at DESC
@@ -991,21 +1003,25 @@ app.get('/api/admin/contact/export', (req, res) => {
     const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
 
     const rows = db.prepare(`
-      SELECT id, full_name, email, company, company_size, soc_maturity, deployment_preference, created_at, ip_address
+      SELECT id, full_name, email, company, role, monitoring, message, consent, company_size, soc_maturity, deployment_preference, created_at, ip_address
       FROM contact_requests
       ${whereClause}
       ORDER BY created_at DESC
     `).all(...params);
 
-    const header = 'ID,Full Name,Email,Company,Company Size,SOC Maturity,Deployment Preference,Submitted At,IP Address\n';
+    const header = 'ID,Full Name,Email,Organisation,Role,Monitors With,Message,Consent,Old: Company Size,Old: SOC Maturity,Old: Deployment Preference,Submitted At,IP Address\n';
     const csvRows = rows.map(r => [
       r.id,
-      `"${(r.full_name || '').replace(/"/g, '""')}"`,
-      r.email,
-      `"${(r.company   || '').replace(/"/g, '""')}"`,
-      `"${(r.company_size || '').replace(/"/g, '""')}"`,
-      `"${(r.soc_maturity || '').replace(/"/g, '""')}"`,
-      `"${(r.deployment_preference || '').replace(/"/g, '""')}"`,
+      csvCell(r.full_name),
+      csvCell(r.email),
+      csvCell(r.company),
+      csvCell(r.role),
+      csvCell(r.monitoring),
+      csvCell(r.message),
+      r.consent == null ? '' : (r.consent ? 'yes' : 'no'),
+      csvCell(r.company_size),
+      csvCell(r.soc_maturity),
+      csvCell(r.deployment_preference),
       r.created_at,
       r.ip_address || '',
     ].join(',')).join('\n');
@@ -1051,6 +1067,17 @@ app.get('/api/admin/logs', (req, res) => {
 //  API routes above already take precedence; auth for admin *data* is enforced
 //  by verifyToken on each /api/admin/* route, not by hiding this HTML.
 // ─────────────────────────────────────────────────────────────────────────────
+// Pages that were merged or renamed. Permanent redirects so old links and search results still work.
+const MOVED = {
+  '/pages/platform.html':     '/pages/how-it-works.html',
+  '/pages/agents.html':       '/pages/how-it-works.html',
+  '/pages/architecture.html': '/pages/how-it-works.html',
+  '/pages/pricing.html':      '/pages/working-with-us.html',
+  '/pages/services.html':     '/',
+  '/pages/sectors.html':      '/pages/solutions.html',
+};
+app.get(Object.keys(MOVED), (req, res) => res.redirect(301, MOVED[req.path]));
+
 app.use(express.static(path.join(__dirname, '..', 'public-site')));
 app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));
 
@@ -1074,7 +1101,7 @@ app.use((err, req, res, _next) => {
 //  START
 // ─────────────────────────────────────────────────────────────────────────────
 const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[SERVER] Radiant Nexus Backend running in ${NODE_ENV} mode`);
+  console.log(`[SERVER] Radiant InnovaTech website backend running in ${NODE_ENV} mode`);
   console.log(`[SERVER] Listening on http://0.0.0.0:${PORT}`);
   console.log(`[SERVER] Health check: http://localhost:${PORT}/api/health`);
 });
