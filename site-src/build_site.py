@@ -33,7 +33,7 @@ SOLUTIONS = {"file": "pages/solutions.html", "path": "/pages/solutions.html",
   ("h2", "Not yet"),
   ("p", "We are not built for air-gapped government networks, industrial control systems or telecom-scale traffic, and we would rather say so."),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
@@ -52,7 +52,7 @@ RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
   ("p", "Every security control marked in place, in progress or planned. Our Security Overview gives the full detail, and we will send it to you on request."),
   ("link", "Read the Security page", "/pages/security.html"),
   ("link", "Ask for the Security Overview", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 PRIVACY = {"file": "pages/privacy.html", "path": "/pages/privacy.html",
@@ -63,7 +63,7 @@ PRIVACY = {"file": "pages/privacy.html", "path": "/pages/privacy.html",
   ("h1", "Privacy notice for this website"),
   ("lead", "This notice explains what we do with the details you give us through the forms on this website."),
   ("h2", "Who we are"),
-  ("p", "Radiant InnovaTech, Accra, Ghana. [[Add the registered company name and number once the company is registered.]] We decide why and how your details are used, so we are the data controller under Ghana's Data Protection Act, 2012 (Act 843). [[Say here whether we are registered with the Data Protection Commission, and the registration number, once it exists.]]"),
+  ("p", "Radiant InnovaTech, Accra, Ghana. Company registration is in progress, and we will add the registered name and number here once we have them. We decide why and how your details are used, so we are the data controller under Ghana's Data Protection Act, 2012 (Act 843). We are not yet registered with the Data Protection Commission. We will register once the company is registered, and add the registration number here."),
   ("h2", "What we collect"),
   ("ul", [
     "**When you use Talk to us:** your name, work email, organisation, role, how your team monitors today, your message, and your consent.",
@@ -78,18 +78,18 @@ PRIVACY = {"file": "pages/privacy.html", "path": "/pages/privacy.html",
   ]),
   ("h2", "Who sees it"),
   ("ul", [
-    "[[List the people at Radiant who read form submissions. Today the notification email goes to three company mailboxes.]]",
+    "The four founders of Radiant: Samuel Maclar, Christian Dwamena Agyapong, Priscilla Anane and Jojo K. O. Boateng. They read the form submissions and the notification emails.",
     "Brevo, our email provider (European Union), which sends our reply and notifications.",
     "Google Cloud, which hosts this website and stores the submissions (United States).",
     "We do not sell your details and we do not share them for advertising.",
   ]),
   ("h2", "How long we keep it"),
-  ("p", "[[Decide and state a period, for example: We keep an enquiry for 12 months after our last contact with you, then delete it.]]"),
+  ("p", "We keep an enquiry for 12 months after our last contact with you, then delete it."),
   ("h2", "Your rights"),
   ("p", "You can ask us to show you what we hold about you, correct it, delete it, or stop using it, and you can withdraw your consent at any time. Write to privacy@radiantinnovatech.com. You can also complain to Ghana's Data Protection Commission."),
   ("h2", "Changes"),
   ("p", "We will change this page if what we do changes, and say so here."),
-  ("small", "Last updated: [[date]]."),
+  ("small", "Last updated: [[date]]. Owner: Priscilla Anane."),
  ]}
 
 PAGES = [

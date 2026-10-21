@@ -40,7 +40,7 @@ HOME = {
   ("p", "Today you run Hydra. Your analysts read what it writes and decide. That is how we are testing it."),
   ("p", "The plan is for us to run it for you. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to has to be run by a company accredited by the Cyber Security Authority and owned mostly by Ghanaians. So we are not planning to sell you software and step back. Radiant is preparing to apply for that licence. Hydra will do the first look at every alert, and our analysts will handle the ones that need a person."),
   ("p", "It would come as one annual subscription, set by your institution's Bank of Ghana tier, covering the software, the operation and the reports the regulator asks for. We have not fixed prices, and nobody pays us yet."),
-  ("small", "This is our reading of the directive. We are asking Ghanaian counsel to confirm it. [How we handle licensing](/pages/security.html)"),
+  ("small", "This is our reading of the directive. A Ghanaian lawyer has not checked it yet. [How we handle licensing](/pages/security.html)"),
 
   ("h2", "What we have measured, and what we have not"),
   ("p", "We tested Hydra's built-in checks on 42 labelled alerts: 18 real attacks and 24 harmless look-alikes. 20 came from recorded real-world attack data and 22 we wrote ourselves."),
@@ -68,7 +68,7 @@ HOME = {
   ("p", "An evaluation comes first. Running Hydra as a service for you starts only once we hold our licence."),
   ("p", "We will not start with a customer until the Cyber Security Authority has confirmed our licence position in writing. We are glad to talk before then."),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 WORKING = {
@@ -101,11 +101,11 @@ WORKING = {
     ("Does Hydra change anything in our systems?", "No. Hydra is advice-only today. A person carries out any action it recommends, in your own tools."),
     ("Can we run it on our own servers?", "Not yet. We host it today."),
     ("Do you run our security monitoring?", "Not today. In an evaluation your analysts stay in charge and Hydra is a tool for them. The plan is for us to run it for you under our own licence, with Hydra doing the first look and our analysts handling the alerts that need a person. That starts only once we hold the licence."),
-    ("How long does an evaluation take to set up?", "[[CHRISTIAN: give a real figure from the lab, for example how long it took to connect Wazuh, or say we will tell you once we have scoped your tools.]]"),
-    ("Who can I call?", "[[Name]], [[phone]], [[email]]."),
+    ("How long does an evaluation take to set up?", "We will tell you once we have scoped your tools. We would rather give you a real number than guess before we have a customer."),
+    ("Who can I call?", "Samuel Maclar, 050 455 5100, samuelmaclar@radiantinnovatech.com."),
   ]),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 SECURITY = {
@@ -115,7 +115,7 @@ SECURITY = {
  "blocks": [
   ("h1", "How we keep Hydra safe, and where we are"),
   ("lead", "We mark every control as in place, in progress or planned, so you can see exactly where we are. Where something is not done, we say so."),
-  ("p", "The full description is our Security Overview. [[Link: Download the Security Overview (PDF) once it is published]]. We will also send it to you on request."),
+  ("p", "The full description is our Security Overview. We will send it to you on request."),
 
   ("h2", "In place today"),
   ("h3", "Hydra recommends. A person decides."),
@@ -166,7 +166,7 @@ SECURITY = {
     "**Recovery drills.** We will test a restore from backup into a clean database at least twice a year. The first drill is scheduled.",
     "**Mandatory second review** of every code change, and automated checks on every pull request.",
     "**Dependency updates.** We audit dependencies on each release and are completing an update of our main framework and database packages.",
-    "**Our licence.** We are preparing our application to Ghana's Cyber Security Authority for the licence to provide managed cybersecurity services, because we plan to run Hydra for customers ourselves. The company is not registered yet, and registration comes first.",
+    "**Our licence.** We are preparing our application to Ghana's Cyber Security Authority for the licence to provide managed cybersecurity services, because we plan to run Hydra for customers ourselves. Company registration is in progress, and the application follows it.",
   ]),
 
   ("h2", "Planned, not yet started"),
@@ -187,12 +187,12 @@ SECURITY = {
   ("p", "We will tell you 14 days before we add a provider that handles your data. You can also choose an open AI model that we run ourselves, so that alerts are not sent to Google's model."),
 
   ("h2", "Licensing, stated plainly"),
-  ("p", "We plan to run Hydra for customers ourselves, under a licence from Ghana's Cyber Security Authority for managed cybersecurity services. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to must be run by a company accredited by the Authority and owned mostly by Ghanaians. That is why we will be the operator and not only the software maker. This is our reading, and we are asking Ghanaian counsel to confirm it."),
-  ("p", "Where we are: the company is not registered yet, and registration comes before the licence application. We do not hold the licence. We will not provide Hydra to a customer until we are licensed or the Authority has confirmed in writing that the activity does not need a licence. Today we do not run anyone's security operations centre."),
+  ("p", "We plan to run Hydra for customers ourselves, under a licence from Ghana's Cyber Security Authority for managed cybersecurity services. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to must be run by a company accredited by the Authority and owned mostly by Ghanaians. That is why we will be the operator and not only the software maker. This is our reading, and a Ghanaian lawyer has not checked it yet."),
+  ("p", "Where we are: company registration is in progress, and the licence application follows it. We do not hold the licence. We will not provide Hydra to a customer until we are licensed or the Authority has confirmed in writing that the activity does not need a licence. Today we do not run anyone's security operations centre."),
 
   ("h2", "Report a problem"),
-  ("p", "To report a vulnerability or ask a security question, write to [[security email address]]. We reply within two business days and will not take action against anyone who reports in good faith."),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("p", "To report a vulnerability or ask a security question, write to security@radiantinnovatech.com. We reply within two business days and will not take action against anyone who reports in good faith."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 HOWITWORKS = {
@@ -286,7 +286,7 @@ HOWITWORKS = {
     "An operated service: once we hold our licence, we plan to run Hydra for you, with our analysts handling the alerts that need a person.",
   ]),
   ("cta", "Talk to us about an evaluation", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 RESULTS = {
@@ -360,7 +360,7 @@ RESULTS = {
     "Run a shadow evaluation at a customer: Hydra reads real alerts and records what it would conclude, your analysts do their normal work, and we compare. This is the only evidence that really counts.",
   ]),
   ("p", "We will run the test in front of you if you want to see it. [Talk to us](/pages/contact.html)."),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 ABOUT = {
@@ -397,16 +397,16 @@ ABOUT = {
   ("h2", "What we have not done yet"),
   ("ul", [
     "We have no customers.",
-    "We do not yet have our Cyber Security Authority licence, and the company is not registered yet. We plan to run Hydra for customers ourselves, so we are preparing to apply for the licence once the company is registered. We will not provide Hydra to a customer until we are licensed or the Authority confirms in writing that we do not need one.",
+    "We do not yet have our Cyber Security Authority licence, and company registration is in progress. We plan to run Hydra for customers ourselves, so we are preparing to apply for the licence once the company is registered. We will not provide Hydra to a customer until we are licensed or the Authority confirms in writing that we do not need one.",
     "We do not hold ISO 27001 or SOC 2. Both are planned and not started.",
     "Nobody outside the company has tested our accuracy. [Our test results](/pages/our-test-results.html) say exactly what we have measured and what we have not.",
   ]),
   ("p", "We are working on each of these. We will update this list as they change."),
 
   ("h2", "The company"),
-  ("p", "Radiant InnovaTech, Accra, Ghana. [[Add the registered name, registration number and registered address once the company is registered. Until then, do not write \"Limited\".]]"),
+  ("p", "Radiant InnovaTech, Accra, Ghana. Company registration is in progress. We will add the registered name, number and address here once we have them."),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by [[name]]. Each founder has read their own entry."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar. Each founder has read their own entry."),
  ]}
 
 CONTACT = {
@@ -425,8 +425,8 @@ CONTACT = {
     ("Anything you want us to know (optional)", "message", "textarea", False, None),
     ("I agree that Radiant InnovaTech may contact me about this request. We use your details only to reply. [Privacy Policy](/pages/privacy.html)", "consent", "checkbox", True, None),
   ], "Send", True),
-  ("state", "success", "Thank you. We have your note and will reply by [[day]]. If it is urgent, call [[phone]]."),
-  ("state", "error", "That did not send. Please try again, or write to [[email address]]."),
+  ("state", "success", "Thank you. We have your note and will reply within two working days. If it is urgent, call 050 455 5100."),
+  ("state", "error", "That did not send. Please try again, or write to samuelmaclar@radiantinnovatech.com."),
 
   ("h2", "What happens next"),
   ("ol", [
@@ -438,11 +438,11 @@ CONTACT = {
 
   ("h2", "Other ways to reach us"),
   ("ul", [
-    "Security teams: [[name]], [[phone]], [[email address]].",
-    "Investors and partners: [[name]], [[email address]].",
-    "To report a security problem: [[security email address]]. See our [Security page](/pages/security.html).",
+    "Security teams: Samuel Maclar, 050 455 5100, samuelmaclar@radiantinnovatech.com.",
+    "Investors and partners: Samuel Maclar, samuelmaclar@radiantinnovatech.com.",
+    "To report a security problem: security@radiantinnovatech.com. See our [Security page](/pages/security.html).",
   ]),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
 
 EARLY = {
@@ -475,8 +475,8 @@ EARLY = {
     ("I agree to be contacted about Hydra evaluations. We only email about this. [Privacy Policy](/pages/privacy.html)", "consent", "checkbox", True, None),
   ], "Join the list", True),
   ("state", "success", "Thank you. You are on the list. A founder will write to you at the address you gave."),
-  ("state", "error", "That did not send. Please try again, or write to [[email address]]."),
+  ("state", "error", "That did not send. Please try again, or write to samuelmaclar@radiantinnovatech.com."),
 
   ("p", "Investors and advisers: please [write to us directly](/pages/contact.html) instead of using this form."),
-  ("small", "Last reviewed: [[date]] by [[name]]."),
+  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
  ]}
