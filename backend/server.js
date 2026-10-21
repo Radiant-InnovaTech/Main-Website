@@ -136,6 +136,19 @@ db.exec(`
 
 console.log('[DB] SQLite database ready at', path.join(DATA_DIR, 'waitlist.db'));
 
+// Retention. The privacy notice says form entries are deleted 12 months after they are sent.
+const RETENTION_MONTHS = 12;
+function purgeOldSubmissions() {
+  const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - RETENTION_MONTHS);
+  const iso = cutoff.toISOString();
+  const contacts = db.prepare('DELETE FROM contact_requests WHERE created_at < ?').run(iso).changes;
+  const waitlist = db.prepare('DELETE FROM waitlist_entries WHERE created_at < ?').run(iso).changes;
+  db.prepare('DELETE FROM admin_otps WHERE created_at < ?').run(new Date(Date.now() - 24 * 3600 * 1000).toISOString());
+  if (contacts || waitlist) console.log(`[RETENTION] Deleted ${contacts} contact and ${waitlist} early-access entries older than ${RETENTION_MONTHS} months`);
+}
+purgeOldSubmissions();
+setInterval(purgeOldSubmissions, 24 * 3600 * 1000).unref();
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  EMAIL (Brevo transactional email HTTP API)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -163,6 +176,9 @@ if (process.env.PREVIEW_PASSWORD) {
   });
 }
 
+// Our own Matomo server, only when MATOMO_URL is set on the service (see site-src/build_site.py).
+const MATOMO_ORIGIN = (() => { try { return process.env.MATOMO_URL ? new URL(process.env.MATOMO_URL).origin : null; } catch { return null; } })();
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -174,10 +190,11 @@ app.use(helmet({
       // still blocked even with scriptSrc allowing inline <script> blocks.
       // Both had to be relaxed for the drawer button to actually work.
       styleSrc:     ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      scriptSrc:    ["'self'", "'unsafe-inline'"],
+      scriptSrc:    ["'self'", "'unsafe-inline'", ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
+      connectSrc:   ["'self'", ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
       scriptSrcAttr: ["'unsafe-inline'"],
       fontSrc:    ["'self'", 'https://fonts.gstatic.com', 'data:'],
-      imgSrc:     ["'self'", 'data:', 'https://placehold.co', 'https://icons.duckduckgo.com', 'https://www.vectorlogo.zone', 'https://cdn.simpleicons.org'],
+      imgSrc:     ["'self'", 'data:', 'https://placehold.co', 'https://icons.duckduckgo.com', 'https://www.vectorlogo.zone', 'https://cdn.simpleicons.org', ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
     },
   },
 }));
@@ -561,8 +578,16 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+// Forms are switched off until the company is registered with the Data Protection Commission.
+// Set FORMS_ENABLED=true on the service to turn them on (and flip FORMS_PAUSED in site-src/build_site.py).
+const FORMS_ENABLED = process.env.FORMS_ENABLED === 'true';
+function formsGate(_req, res, next) {
+  if (FORMS_ENABLED) return next();
+  res.status(503).json({ success: false, error: 'Our forms are switched off for now. Please write to samuelmaclar@radiantinnovatech.com or call 050 455 5100.' });
+}
+
 // ── Waitlist submission ────────────────────────────────────────────────────────
-app.post('/api/waitlist/submit', waitlistLimiter, async (req, res) => {
+app.post('/api/waitlist/submit', formsGate, waitlistLimiter, async (req, res) => {
   try {
     const ip = getClientIp(req);
 
@@ -625,7 +650,7 @@ app.post('/api/waitlist/submit', waitlistLimiter, async (req, res) => {
 });
 
 // ── Contact (Talk to us) submission ────────────────────────────────────────────
-app.post('/api/contact/submit', contactLimiter, async (req, res) => {
+app.post('/api/contact/submit', formsGate, contactLimiter, async (req, res) => {
   try {
     const ip = getClientIp(req);
 
@@ -1077,6 +1102,11 @@ const MOVED = {
   '/pages/sectors.html':      '/pages/solutions.html',
 };
 app.get(Object.keys(MOVED), (req, res) => res.redirect(301, MOVED[req.path]));
+
+// express.static skips dot-directories, so serve security.txt (RFC 9116) directly.
+app.get('/.well-known/security.txt', (_req, res) => {
+  res.type('text/plain; charset=utf-8').sendFile(path.join(__dirname, '..', 'public-site', '.well-known', 'security.txt'));
+});
 
 app.use(express.static(path.join(__dirname, '..', 'public-site')));
 app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));

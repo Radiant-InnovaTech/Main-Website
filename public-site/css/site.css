@@ -58,6 +58,8 @@ figure{margin:1.5rem 0}
 figure img{display:block;width:100%;max-width:666px;height:auto;border-radius:8px;border:1px solid var(--line)}
 figcaption{font-size:.9rem;color:var(--muted);margin-top:.5rem}
 .diagram{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:1rem}
+.notice{border-left:4px solid var(--navy);background:var(--soft);padding:1rem 1.25rem;border-radius:0 8px 8px 0;margin:1.5rem 0}
+.notice p{margin:.4rem 0}
 .todo-image{border:2px dashed #C9A400;background:var(--warn);padding:2rem 1rem;border-radius:8px;margin:0}
 mark.todo{background:var(--warn);padding:0 .15em;border-radius:3px}
 /* founders */

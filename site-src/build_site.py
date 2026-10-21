@@ -11,6 +11,15 @@ REPO = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.
 OUT = os.path.join(REPO, "public-site")
 SITE = "https://radiantinnovatech.com"
 
+# Switches. Flip FORMS_PAUSED to False only after the company is registered with the Data Protection
+# Commission, and set FORMS_ENABLED=true on the Cloud Run service. Fill MATOMO_* only when our own
+# Matomo server is running; the privacy notice then says so and the content security policy needs
+# MATOMO_URL set on the service too.
+FORMS_PAUSED = True
+MATOMO_URL = ""      # for example https://stats.radiantinnovatech.com
+MATOMO_SITE_ID = ""  # for example 1
+ANALYTICS_ON = bool(MATOMO_URL and MATOMO_SITE_ID)
+
 # ---------------------------------------------------------------------------------------- extra pages
 SOLUTIONS = {"file": "pages/solutions.html", "path": "/pages/solutions.html",
  "title": "Who Hydra is for | Hydra",
@@ -55,42 +64,8 @@ RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
   ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
-PRIVACY = {"file": "pages/privacy.html", "path": "/pages/privacy.html",
- "title": "Privacy notice | Hydra",
- "description": "What we do with the details you give us through this website.",
- "legal_review": True,
- "blocks": [
-  ("h1", "Privacy notice for this website"),
-  ("lead", "This notice explains what we do with the details you give us through the forms on this website."),
-  ("h2", "Who we are"),
-  ("p", "Radiant InnovaTech, Accra, Ghana. Company registration is in progress, and we will add the registered name and number here once we have them. We decide why and how your details are used, so we are the data controller under Ghana's Data Protection Act, 2012 (Act 843). We are not yet registered with the Data Protection Commission. We will register once the company is registered, and add the registration number here."),
-  ("h2", "What we collect"),
-  ("ul", [
-    "**When you use Talk to us:** your name, work email, organisation, role, how your team monitors today, your message, and your consent.",
-    "**When you join the early access list:** your name, work email, job title, organisation, country, what best describes you, what you would want Hydra to help with, and your consent.",
-    "**With every form:** your IP address, stored with the submission and used to limit abuse.",
-    "**When you visit any page:** our web server records the request (address, page and time) in its logs. This website sets no cookies of its own and uses no analytics. The pages load their fonts from Google Fonts, so your browser contacts Google when a page loads.",
-  ]),
-  ("h2", "Why we use it"),
-  ("ul", [
-    "To reply to your message, and to decide whom to invite to a shadow evaluation. Our basis is your consent.",
-    "To keep the forms from being abused, using your IP address. Our basis is our legitimate interest in running a safe site.",
-  ]),
-  ("h2", "Who sees it"),
-  ("ul", [
-    "The four founders of Radiant: Samuel Maclar, Christian Dwamena Agyapong, Priscilla Anane and Jojo K. O. Boateng. They read the form submissions and the notification emails.",
-    "Brevo, our email provider (European Union), which sends our reply and notifications.",
-    "Google Cloud, which hosts this website and stores the submissions (United States).",
-    "We do not sell your details and we do not share them for advertising.",
-  ]),
-  ("h2", "How long we keep it"),
-  ("p", "We keep an enquiry for 12 months after our last contact with you, then delete it."),
-  ("h2", "Your rights"),
-  ("p", "You can ask us to show you what we hold about you, correct it, delete it, or stop using it, and you can withdraw your consent at any time. Write to privacy@radiantinnovatech.com. You can also complain to Ghana's Data Protection Commission."),
-  ("h2", "Changes"),
-  ("p", "We will change this page if what we do changes, and say so here."),
-  ("small", "Last updated: 21 October 2026. Owner: Priscilla Anane."),
- ]}
+from legal_pages import privacy as _privacy, TERMS
+PRIVACY = _privacy(ANALYTICS_ON)
 
 PAGES = [
   dict(HOME, file="index.html", path="/"),
@@ -104,6 +79,7 @@ PAGES = [
   dict(EARLY, file="waitlist/index.html", path="/waitlist/"),
   dict(RESOURCES),
   dict(PRIVACY),
+  dict(TERMS),
 ]
 
 FORM_FIELDS = {  # page form id -> {our name: backend field}
@@ -150,7 +126,7 @@ FOOTER = '''<footer class="site-footer"><div class="wrap">
 <div><img src="/assets/brand/hydra-logo-on-dark.svg" alt="Hydra" width="120" height="31"><p class="foot-line">An AI analyst for your security team. Built in Accra.</p></div>
 <div><h2>Hydra</h2><ul><li><a href="/pages/how-it-works.html">How it works</a></li><li><a href="/pages/solutions.html">Who it is for</a></li><li><a href="/pages/our-test-results.html">Our test results</a></li><li><a href="/pages/resources.html">Resources</a></li></ul></div>
 <div><h2>Company</h2><ul><li><a href="/pages/about.html">About</a></li><li><a href="/pages/security.html">Security</a></li><li><a href="/pages/working-with-us.html">Working with us</a></li><li><a href="/pages/contact.html">Talk to us</a></li></ul></div>
-<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li></ul></div>
+<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li><li><a href="/pages/terms.html">Terms of use</a></li><li><a href="/.well-known/security.txt">Report a vulnerability</a></li></ul></div>
 </div>
 <p class="copy">&copy; 2026 Radiant InnovaTech</p>
 </div></footer>'''
@@ -226,6 +202,11 @@ def render_block(b, p):
         return '<div class="founders">' + "".join(
             f'<article class="founder"><img src="{img}" alt="Portrait of {html.escape(name)}" width="220" height="220" loading="lazy"><div><h3>{html.escape(title)}</h3><p>{inline(bio)}</p></div></article>'
             for name, title, bio, img in b[1]) + "</div>"
+    if k == "form" and FORMS_PAUSED:
+        return ('<div class="notice" role="note"><p><strong>Our forms are switched off for now.</strong> We are not yet registered with Ghana\'s Data Protection Commission, '
+                'and we will not collect your details through this website until we are.</p>'
+                '<p>To reach us, write to <a href="mailto:samuelmaclar@radiantinnovatech.com">samuelmaclar@radiantinnovatech.com</a> or call 050 455 5100. One of the founders replies within two working days.</p></div>')
+    if k == "state" and FORMS_PAUSED: return ""
     if k == "form":
         fid, fields, label, hp = b[1], b[2], b[3], b[4]
         m = FORM_FIELDS[fid]
@@ -265,9 +246,17 @@ def about_blocks(blocks):
         if b[0] == "h2" and b[1] == "The founders": out.append(("founders", founders))
     return out
 
+PAUSED_LEAD = "Write or call us. One of the founders reads every message and replies within two working days. If it helps, we will show you Hydra investigating a test alert, using data from our lab."
+
+MATOMO_SNIPPET = ('<script>var _paq=window._paq=window._paq||[];_paq.push(["setDoNotTrack",true]);_paq.push(["disableCookies"]);_paq.push(["trackPageView"]);'
+  '_paq.push(["enableLinkTracking"]);(function(){var u="%s/";_paq.push(["setTrackerUrl",u+"matomo.php"]);_paq.push(["setSiteId","%s"]);'
+  'var d=document,g=d.createElement("script"),s=d.getElementsByTagName("script")[0];g.async=true;g.src=u+"matomo.js";s.parentNode.insertBefore(g,s);})();</script>') % (MATOMO_URL.rstrip("/"), MATOMO_SITE_ID)
+
 def page_html(p):
     path = p["path"]
     blocks = about_blocks(p["blocks"]) if p["file"].endswith("pages/about.html") else p["blocks"]
+    if FORMS_PAUSED and any(x[0] == "form" for x in blocks):
+        blocks = [("lead", PAUSED_LEAD) if x[0] == "lead" else x for x in blocks]
     q = dict(p, blocks=blocks)
     body = render_blocks(q)
     title = html.escape(p["title"]); desc = html.escape(p["description"])
@@ -295,6 +284,7 @@ def page_html(p):
 </main>
 {FOOTER}
 {FORM_JS if "<form" in body else ""}
+{MATOMO_SNIPPET if ANALYTICS_ON else ""}
 </body>
 </html>
 '''
