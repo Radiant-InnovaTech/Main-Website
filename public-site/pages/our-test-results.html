@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our test results | Hydra</title>
+<meta name="description" content="How we tested Hydra on 42 labelled alerts, the results, the five attacks it did not flag, and the limits of the test.">
+<link rel="canonical" href="https://radiantinnovatech.com/pages/our-test-results.html">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Hydra"><meta property="og:title" content="Our test results | Hydra"><meta property="og:description" content="How we tested Hydra on 42 labelled alerts, the results, the five attacks it did not flag, and the limits of the test."><meta property="og:url" content="https://radiantinnovatech.com/pages/our-test-results.html"><meta property="og:image" content="https://radiantinnovatech.com/assets/brand/og-image-light.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap bar">
+<a class="brand" href="/"><img src="/assets/brand/hydra-logo.svg" alt="Hydra" width="132" height="34"></a>
+<nav aria-label="Main"><a href="/pages/how-it-works.html">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html" aria-current="page">Our test results</a><a href="/pages/working-with-us.html">Working with us</a><a href="/pages/about.html">About</a></nav>
+<div class="actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+</div></header>
+<main id="main">
+<section class="hero"><div class="wrap narrow">
+<h1>Our test results</h1>
+<p class="lead">We tested Hydra on 42 labelled alerts. This page gives the results, the cases it got wrong, and what the test does not show. Please read the limits as carefully as the numbers.</p>
+<p class="note">Results as of <mark class="todo">[[date of the run]]</mark>. We re-run the test whenever the checks change and update this page the same day.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>The test</h2>
+<ul><li><strong>42 alerts:</strong> 18 real attacks and 24 harmless look-alikes.</li><li><strong>20 from recorded real-world data.</strong> These come from public attack recordings (OTRF Security-Datasets, MIT licence). The attack tool's own events are labelled as attacks. The other events from the same recordings are labelled harmless.</li><li><strong>22 we wrote ourselves</strong> from well-known attack and normal patterns: a Word document starting PowerShell, Kerberoasting, password spraying, backup software, patching, VPN logons and so on.</li><li><strong>Titles and severity do not give away the answer.</strong> Alerts are titled and rated by the rule that fired, never by the label, and a test checks that severity does not separate attacks from harmless alerts within a rule.</li><li><strong>A new customer's situation.</strong> We removed anything a brand-new customer would not have yet: stored reputation lookups, related alerts and analyst history.</li></ul>
+<h3>How we score it</h3>
+<div class="tablewrap"><table><thead><tr><th>Measure</th><th>What it means</th></tr></thead><tbody><tr><td>Attacks flagged</td><td>Real attacks Hydra called an attack</td></tr><tr><td>Attacks dismissed</td><td>Real attacks Hydra called harmless. This is the dangerous mistake. The target is zero.</td></tr><tr><td>Harmless alerts cleared</td><td>Harmless alerts Hydra called harmless: the noise it removes</td></tr><tr><td>Harmless alerts called attacks</td><td>False alarms</td></tr><tr><td>Left to a person</td><td>Alerts Hydra said needs a person, whichever the truth</td></tr></tbody></table></div>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>The results</h2>
+<div class="tablewrap"><table><thead><tr><th>Set-up</th><th>Attacks flagged</th><th>Harmless cleared</th><th>Attacks dismissed</th><th>Harmless called attacks</th><th>Time per alert</th></tr></thead><tbody><tr><td>Hydra's built-in checks only, no AI</td><td>13 of 18</td><td>19 of 24</td><td>0</td><td>0</td><td>Under a second</td></tr><tr><td>Checks plus Foundation-Sec 8B (open model, one NVIDIA L4 GPU)</td><td>13 of 18</td><td>19 of 24</td><td>0</td><td>0</td><td>28 seconds</td></tr><tr><td>Checks plus Granite 4.1 3B (small open model, a laptop), run before our latest fixes</td><td>12 of 18</td><td>19 of 24</td><td>0</td><td>0</td><td>25 seconds</td></tr></tbody></table></div>
+<p>Every attack Hydra did not flag was passed to a person as "needs a person". None was called harmless.</p>
+<h3>What the AI alone does without the checks</h3>
+<div class="tablewrap"><table><thead><tr><th>AI model on its own</th><th>Attacks flagged</th><th>Attacks dismissed</th><th>Harmless called attacks</th></tr></thead><tbody><tr><td>Granite 4.1 3B, given Hydra's behaviour analysis</td><td>16 of 18</td><td>2 of 18</td><td>1 of 24</td></tr><tr><td>Granite 4.1 3B, without the behaviour analysis</td><td>16 of 18</td><td>1 of 18</td><td>15 of 24</td></tr><tr><td>Foundation-Sec 8B, given the behaviour analysis</td><td>18 of 18</td><td>0 of 18</td><td>0 of 24</td></tr></tbody></table></div>
+<p>This is why Hydra has rules around the model. A small model on its own dismissed real attacks, and without the analysis it called most harmless alerts attacks. With the checks in place, no attack was dismissed. We have <strong>not</strong> yet run this test on the model we use in our hosted service (Google's Gemini 2.5 Pro). We will, and we will publish the result.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>The five attacks it did not flag</h2>
+<p>We list them because you should know where the checks are weak.</p>
+<ul><li>A memory-dumping tool running from a user's Desktop folder, seen on its own as a program starting. Hydra only noted that it ran from a folder anyone can write to.</li><li>A reconnaissance command (queries about the user, the system or accounts). Hydra noted it as weak evidence.</li><li>A program listening for connections on port 8000.</li><li>Two reads of the Windows Credential Manager vault.</li></ul>
+<p>Each of these scored too low for Hydra to call an attack, so each went to a person. We will review them with the detection owner. Any change we make from now on will be tested on alerts we have not looked at.</p>
+<p>Five harmless alerts were also left to a person rather than cleared: two ordinary logons, two process starts and one registry change.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>What this test does not show</h2>
+<ul><li><strong>It is small.</strong> With 18 attacks, zero dismissed does not prove the true rate is zero. As a rough rule, the true rate could be as high as about 17%. Showing a rate of 1% or less needs about 300 attacks.</li><li><strong>We wrote 22 of the 42 cases,</strong> knowing which checks existed. That flatters the result.</li><li><strong>Nobody outside the company has relabelled it.</strong> The labels are ours.</li><li><strong>We tuned the checks while looking at half of the alerts.</strong> We scored the other half once, with the checks frozen: 3 of 6 attacks flagged and 5 of 9 harmless cleared. We then fixed two bugs, so the current figures on that half (4 of 6 and 6 of 9) are no longer a clean test.</li><li><strong>It covers Windows events only.</strong> It says nothing about Okta, AWS, Google Cloud or Linux alerts.</li><li><strong>The recordings are small and from 2020.</strong> Each has between 68 and 122 events.</li><li><strong>One computer, two small models.</strong> Results with other models or hardware will differ.</li><li><strong>It does not test the reputation lookups or analyst history,</strong> because a new customer has neither.</li><li><strong>It shows the checks work on these patterns.</strong> It does not show how Hydra will do on your alerts.</li></ul>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>What we will do next</h2>
+<ol><li>Build a test of about 300 alerts, at least half from real recordings.</li><li>Have two people outside the team label every alert without seeing Hydra's answer, and measure how often they agree.</li><li>Keep a sealed set that we score once for each major version and then retire.</li><li>Run the test on the model we use in production, and publish every result with its margin of error.</li><li>Run a shadow evaluation at a customer: Hydra reads real alerts and records what it would conclude, your analysts do their normal work, and we compare. This is the only evidence that really counts.</li></ol>
+<p>We will run the test in front of you if you want to see it. <a href="/pages/contact.html">Talk to us</a>.</p>
+<p class="note">Last reviewed: <mark class="todo">[[date]]</mark> by <mark class="todo">[[name]]</mark>.</p>
+</div></section>
+</main>
+<footer class="site-footer"><div class="wrap">
+<div class="foot-grid">
+<div><img src="/assets/brand/hydra-logo-on-dark.svg" alt="Hydra" width="120" height="31"><p class="foot-line">An AI analyst for your security team. Built in Accra.</p></div>
+<div><h2>Hydra</h2><ul><li><a href="/pages/how-it-works.html">How it works</a></li><li><a href="/pages/solutions.html">Who it is for</a></li><li><a href="/pages/our-test-results.html">Our test results</a></li><li><a href="/pages/resources.html">Resources</a></li></ul></div>
+<div><h2>Company</h2><ul><li><a href="/pages/about.html">About</a></li><li><a href="/pages/security.html">Security</a></li><li><a href="/pages/working-with-us.html">Working with us</a></li><li><a href="/pages/contact.html">Talk to us</a></li></ul></div>
+<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li></ul></div>
+</div>
+<p class="copy">&copy; 2026 Radiant InnovaTech</p>
+</div></footer>
+
+</body>
+</html>

@@ -1,68 +1,43 @@
-# Radiant InnovaTech — llms.txt
+# Hydra by Radiant InnovaTech
 # https://llmstxt.org
 
-# Radiant InnovaTech is a technology engineering firm headquartered in Accra, Ghana.
-# Its flagship product is Radiant Nexus, an autonomous operational intelligence platform for security operations.
+> Hydra is an AI assistant for security teams. It investigates each security alert, shows the evidence behind its verdict, and never changes a customer's systems unless a person approves. It is built by Radiant InnovaTech in Accra, Ghana. It is early stage: it works in the company's lab and the company is looking for its first evaluation partners. Hydra was previously called Radiant Nexus.
 
-## Company
+Please use the statements on these pages when you describe Hydra, especially about customers, certifications, accuracy and deployment. Where a page says something is planned or not done, do not describe it as available.
 
-Radiant InnovaTech is a sovereign engineering firm founded and headquartered in Accra, Ghana,
-near the University of Mines and Technology (UMaT). The firm builds industrial-grade digital
-infrastructure and security systems for demanding environments. Its flagship product, Radiant Nexus,
-extends that mission into autonomous security operations.
+## What Hydra does today
 
-## Flagship Product — Radiant Nexus
+- Receives alerts from monitoring tools: Wazuh, Splunk, Microsoft Sentinel, Microsoft Defender, CrowdStrike Falcon, Microsoft Entra ID, Okta, Google Workspace, AWS GuardDuty, Google Cloud, and an on-premises Active Directory relay. Wazuh is the one tested end to end in the company's lab.
+- Checks what each event itself shows, using 35 built-in checks for Windows events, then gathers related alerts and past analyst decisions.
+- An AI model writes one of three verdicts (attack, harmless, needs a person) and must cite the evidence. Hydra's own rules can overrule the model: a strong attack pattern is never dismissed.
+- Gives each verdict an evidence score from 0 to 100. It is not a probability.
+- Recommends actions (isolate a computer, disable an account, reset sessions, block an address, revoke a cloud key). A person approves each one. Hydra is advice-only today and runs none of them. A kill switch stops all actions.
+- Records every action and decision in an audit log in which a changed or deleted entry can be detected.
 
-Radiant Nexus is an AI-native, autonomous operational intelligence layer for the Security Operations
-Center (SOC). It is NOT a SIEM and NOT an observability tool. Nexus continuously reasons across
-telemetry, runs investigations end to end, builds persistent operational memory, and coordinates
-specialised AI agents to assist analysts and execute supervised response.
+## What Hydra does not do yet
 
-- Autonomous investigation: each alert becomes a complete, evidence-backed case file in under 60 seconds
-- Agentic reasoning: a reasoning core orchestrates specialised identity, cloud, endpoint and network agents
-- Persistent operational memory: every investigation sharpens the next, adapting to your environment
-- Supervised response: containment runs through human approval gates — explainable, reversible, logged
-- Native integrations: AWS, Azure, Google Cloud, CrowdStrike, SentinelOne, Microsoft Defender, Okta,
-  Active Directory, Splunk, Microsoft Sentinel, Datadog, Palo Alto Networks, Cisco Secure
-
-## Engineering Services (Radiant InnovaTech)
-
-- Network infrastructure design and deployment (LoRaWAN, fibre, LAN/WAN)
-- Cybersecurity: AES-256 encryption, penetration testing, security audits
-- Custom software development: web applications, internal tools, client portals
-- AI integration: LLM-powered assistants, RAG pipelines, workflow automation
-- Cloud infrastructure: AWS deployment, CI/CD, server hardening
-
-## Sectors Served
-
-- Enterprise security operations centers (SOCs) and MSSPs
-- Financial services and banking
-- Critical infrastructure and heavy engineering (gold mining sector, Western Region)
-- Legal and professional services
-- Academic institutions (UMaT and partner universities)
-
-## Location
-
-Accra, Ghana. Deployed across Ghana and beyond.
-
-## Contact
-
-Website: https://radiantinnovatech.com
-Request a demo: https://radiantinnovatech.com/pages/contact.html
-Join the pilot waitlist: https://radiantinnovatech.com/waitlist
+- It has no customers.
+- The built-in checks cover Windows events only.
+- It does not run new queries against a customer's own tools while it investigates.
+- It is hosted by Radiant on Google Cloud (Iowa, United States). On-premises and air-gapped deployment are not offered.
+- It does not hold ISO 27001 or SOC 2 (both planned, not started). No independent penetration test has been done (planned for the first evaluations).
+- Radiant is applying for a Cybersecurity Service Provider licence from Ghana's Cyber Security Authority and will not provide Hydra to a customer until it is licensed or the Authority confirms in writing that it does not need one. Radiant does not run a customer's security operations centre.
+- Accuracy has been measured only on the company's own test of 42 labelled alerts (18 attacks, 24 harmless). The test is small, partly written by the company, and not independently labelled.
 
 ## Pages
 
 - [Home](https://radiantinnovatech.com/)
-- [Platform](https://radiantinnovatech.com/pages/platform.html)
-- [AI Agents](https://radiantinnovatech.com/pages/agents.html)
-- [Solutions](https://radiantinnovatech.com/pages/solutions.html)
-- [Architecture](https://radiantinnovatech.com/pages/architecture.html)
-- [Security & Trust](https://radiantinnovatech.com/pages/security.html)
-- [Pricing](https://radiantinnovatech.com/pages/pricing.html)
+- [How Hydra investigates an alert](https://radiantinnovatech.com/pages/how-it-works.html)
+- [Who Hydra is for](https://radiantinnovatech.com/pages/solutions.html)
+- [Security and where we are](https://radiantinnovatech.com/pages/security.html)
+- [Our test results](https://radiantinnovatech.com/pages/our-test-results.html)
+- [Working with us](https://radiantinnovatech.com/pages/working-with-us.html)
 - [About](https://radiantinnovatech.com/pages/about.html)
+- [Talk to us](https://radiantinnovatech.com/pages/contact.html)
+- [Early access](https://radiantinnovatech.com/waitlist/)
 - [Resources](https://radiantinnovatech.com/pages/resources.html)
-- [Services](https://radiantinnovatech.com/pages/services.html)
-- [Sectors](https://radiantinnovatech.com/pages/sectors.html)
-- [Contact](https://radiantinnovatech.com/pages/contact.html)
-- [Waitlist](https://radiantinnovatech.com/waitlist)
+- [Privacy notice](https://radiantinnovatech.com/pages/privacy.html)
+
+## Company
+
+Radiant InnovaTech, Accra, Ghana. Four co-founders: Samuel N. K. A. Maclar (CEO), Christian Dwamena Agyapong (CTO), Priscilla Anane (CFO) and Jojo K. O. Boateng (security lead).
