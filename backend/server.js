@@ -151,6 +151,18 @@ const app = express();
 // Trust proxy (important when behind Nginx on Lightsail)
 app.set('trust proxy', 1);
 
+// Preview gate: when PREVIEW_PASSWORD is set (never on the live site), every request needs it
+// (browser sign-in box, any user name) and search engines are told to stay away.
+if (process.env.PREVIEW_PASSWORD) {
+  const want = Buffer.from(process.env.PREVIEW_PASSWORD);
+  app.use((req, res, next) => {
+    res.set('X-Robots-Tag', 'noindex, nofollow');
+    const given = Buffer.from((Buffer.from((req.headers.authorization || '').slice(6), 'base64').toString().split(':').slice(1).join(':')));
+    if (given.length === want.length && crypto.timingSafeEqual(given, want)) return next();
+    res.set('WWW-Authenticate', 'Basic realm="Hydra site preview"').status(401).send('Preview. Password needed.');
+  });
+}
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
