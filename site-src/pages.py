@@ -51,7 +51,7 @@ HOME = {
              ["Attacks dismissed", "0"],
              ["Harmless alerts called attacks", "0"]]),
   ("p", "That is a small test, partly written by us, and nobody outside the company has relabelled it. It shows the checks work on these patterns. It does not show how Hydra will do on your alerts. That is what a shadow evaluation is for."),
-  ("small", "Figures from [[date of the benchmark run]]. We re-run the test whenever the checks change and update this page the same day."),
+  ("small", "Figures from 17 October 2026. We re-run the test whenever the checks change and update this page the same day."),
   ("link", "Read the test in full", "/pages/our-test-results.html"),
 
   ("h2", "Connectors we have built"),
@@ -60,7 +60,7 @@ HOME = {
   ("small", "On our list, not built yet: SentinelOne, VMware Carbon Black, Cisco Umbrella, Fortinet, Elastic, Sumo Logic, ServiceNow, PagerDuty, Jira, Qualys."),
 
   ("h2", "Four people in Accra"),
-  ("p", "We met on a security internship at Telecel Ghana. Three of us are cybersecurity engineers and one is a finance lead. [[SAMUEL: add two or three sentences in your own words about one specific thing you saw that made you build this.]]"),
+  ("p", "We met on a security internship at Telecel Ghana. Three of us are cybersecurity engineers and one is a finance lead. Samuel puts it this way: \"I had a huge list of alerts to sort through, and it took me five days. I built a prototype of our current investigation engine in my homelab.\""),
   ("link", "Meet the team", "/pages/about.html"),
 
   ("h2", "Start with a shadow evaluation"),
@@ -68,7 +68,7 @@ HOME = {
   ("p", "An evaluation comes first. Running Hydra as a service for you starts only once we hold our licence."),
   ("p", "We will not start with a customer until the Cyber Security Authority has confirmed our licence position in writing. We are glad to talk before then."),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 WORKING = {
@@ -105,7 +105,7 @@ WORKING = {
     ("Who can I call?", "Samuel Maclar, 050 455 5100, samuelmaclar@radiantinnovatech.com."),
   ]),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 SECURITY = {
@@ -192,7 +192,7 @@ SECURITY = {
 
   ("h2", "Report a problem"),
   ("p", "To report a vulnerability or ask a security question, write to security@radiantinnovatech.com. We reply within two business days and will not take action against anyone who reports in good faith."),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 HOWITWORKS = {
@@ -286,7 +286,7 @@ HOWITWORKS = {
     "An operated service: once we hold our licence, we plan to run Hydra for you, with our analysts handling the alerts that need a person.",
   ]),
   ("cta", "Talk to us about an evaluation", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 RESULTS = {
@@ -296,7 +296,7 @@ RESULTS = {
  "blocks": [
   ("h1", "Our test results"),
   ("lead", "We tested Hydra on 42 labelled alerts. This page gives the results, the cases it got wrong, and what the test does not show. Please read the limits as carefully as the numbers."),
-  ("small", "Results as of [[date of the run]]. We re-run the test whenever the checks change and update this page the same day."),
+  ("small", "Results as of 17 October 2026. We re-run the test whenever the checks change and update this page the same day."),
 
   ("h2", "The test"),
   ("ul", [
@@ -360,7 +360,7 @@ RESULTS = {
     "Run a shadow evaluation at a customer: Hydra reads real alerts and records what it would conclude, your analysts do their normal work, and we compare. This is the only evidence that really counts.",
   ]),
   ("p", "We will run the test in front of you if you want to see it. [Talk to us](/pages/contact.html)."),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 ABOUT = {
@@ -373,7 +373,7 @@ ABOUT = {
 
   ("h2", "Why we are building this"),
   ("p", "We met on a security internship at Telecel Ghana. We saw how much of an analyst's day goes on alerts that turn out to be nothing, and how hard it is to show afterwards why a call was made. We built Hydra to do the first pass and to show its working."),
-  ("p", "[[SAMUEL: add two or three sentences in your own words. One specific moment: what you saw, what it cost, what you decided. Do not summarise. Tell one thing that happened.]]"),
+  ("p", "Samuel: \"I had a huge list of alerts to sort through, and it took me five days. I built a prototype of our current investigation engine in my homelab.\""),
 
   ("h2", "What we believe"),
   ("ul", [
@@ -406,7 +406,7 @@ ABOUT = {
   ("h2", "The company"),
   ("p", "Radiant InnovaTech, Accra, Ghana. Company registration is in progress. We will add the registered name, number and address here once we have them."),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar. Each founder has read their own entry."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar. Each founder has read their own entry."),
  ]}
 
 CONTACT = {
@@ -442,7 +442,7 @@ CONTACT = {
     "Investors and partners: Samuel Maclar, samuelmaclar@radiantinnovatech.com.",
     "To report a security problem: security@radiantinnovatech.com. See our [Security page](/pages/security.html).",
   ]),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 EARLY = {
@@ -478,5 +478,5 @@ EARLY = {
   ("state", "error", "That did not send. Please try again, or write to samuelmaclar@radiantinnovatech.com."),
 
   ("p", "Investors and advisers: please [write to us directly](/pages/contact.html) instead of using this form."),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}

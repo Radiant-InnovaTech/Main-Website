@@ -33,7 +33,7 @@ SOLUTIONS = {"file": "pages/solutions.html", "path": "/pages/solutions.html",
   ("h2", "Not yet"),
   ("p", "We are not built for air-gapped government networks, industrial control systems or telecom-scale traffic, and we would rather say so."),
   ("cta", "Talk to us", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
@@ -52,7 +52,7 @@ RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
   ("p", "Every security control marked in place, in progress or planned. Our Security Overview gives the full detail, and we will send it to you on request."),
   ("link", "Read the Security page", "/pages/security.html"),
   ("link", "Ask for the Security Overview", "/pages/contact.html"),
-  ("small", "Last reviewed: [[date]] by Samuel Maclar."),
+  ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
 PRIVACY = {"file": "pages/privacy.html", "path": "/pages/privacy.html",
@@ -89,7 +89,7 @@ PRIVACY = {"file": "pages/privacy.html", "path": "/pages/privacy.html",
   ("p", "You can ask us to show you what we hold about you, correct it, delete it, or stop using it, and you can withdraw your consent at any time. Write to privacy@radiantinnovatech.com. You can also complain to Ghana's Data Protection Commission."),
   ("h2", "Changes"),
   ("p", "We will change this page if what we do changes, and say so here."),
-  ("small", "Last updated: [[date]]. Owner: Priscilla Anane."),
+  ("small", "Last updated: 21 October 2026. Owner: Priscilla Anane."),
  ]}
 
 PAGES = [
