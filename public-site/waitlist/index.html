@@ -23,26 +23,16 @@
 <main id="main">
 <section class="hero"><div class="wrap narrow">
 <h1>Be one of our first evaluation partners</h1>
-<p class="lead">We are talking to two to four security teams about a free six-week shadow evaluation. Tell us who you are and we will be in touch.</p>
+<p class="lead">Write or call us. One of the founders reads every message and replies within two working days. If it helps, we will show you Hydra investigating a test alert, using data from our lab.</p>
 </div></section>
 <section class="sec"><div class="wrap narrow">
 <h2>What an evaluation is</h2>
 <ul><li>Hydra reads your alerts for six weeks and writes down what it would conclude.</li><li>It changes nothing in your systems. Your analysts work as normal.</li><li>Every week we show you where Hydra and your analysts agreed and where they did not, and why.</li><li>At the end you get a written report and decide what to do next.</li><li>It is free. If it is useful, we quote in writing afterwards.</li></ul>
 <p>We will not start with a team until the Cyber Security Authority has confirmed our licence position in writing, so we cannot give you a start date today. Joining now means we talk to you first.</p>
 <p><a class="more" href="/pages/working-with-us.html">How we work with a new team &rarr;</a></p>
-<form id="early-access-form" method="post" action="/api/waitlist/submit" data-endpoint="/api/waitlist/submit">
-<p class="visually-hidden" aria-hidden="true"><label>Leave this empty <input type="text" name="_hp" tabindex="-1" autocomplete="off"></label></p>
-<p><label for="early-access-form-full_name">Your name</label><input id="early-access-form-full_name" name="full_name" type="text" maxlength="200" required></p>
-<p><label for="early-access-form-email">Work email</label><input id="early-access-form-email" name="email" type="email" maxlength="200" required></p>
-<p><label for="early-access-form-role">Job title</label><input id="early-access-form-role" name="role" type="text" maxlength="200" required></p>
-<p><label for="early-access-form-company">Organisation</label><input id="early-access-form-company" name="company" type="text" maxlength="200" required></p>
-<p><label for="early-access-form-country">Country</label><input id="early-access-form-country" name="country" type="text" maxlength="200" required></p>
-<p><label for="early-access-form-user_type">What best describes you?</label><select id="early-access-form-user_type" name="user_type" required><option value="">Select</option><option>Security analyst</option><option>Security engineer</option><option>Threat hunter</option><option>Head of security or CISO</option><option>Managed security provider</option><option>Other</option></select></p>
-<p><label for="early-access-form-use_case">What would you want Hydra to help with? (optional)</label><textarea id="early-access-form-use_case" name="use_case" rows="5" maxlength="2000"></textarea></p>
-<p class="check"><label><input type="checkbox" name="consent" required> <span>I agree to be contacted about Hydra evaluations. We only email about this. <a href="/pages/privacy.html">Privacy Policy</a></span></label></p>
-<p><button class="btn btn-lg" type="submit">Join the list</button></p></form>
-<p class="form-success" role="status" tabindex="-1" hidden>Thank you. You are on the list. A founder will write to you at the address you gave.</p>
-<p class="form-error" role="status" tabindex="-1" hidden>That did not send. Please try again, or write to samuelmaclar@radiantinnovatech.com.</p>
+<div class="notice" role="note"><p><strong>Our forms are switched off for now.</strong> We are not yet registered with Ghana's Data Protection Commission, and we will not collect your details through this website until we are.</p><p>To reach us, write to <a href="mailto:samuelmaclar@radiantinnovatech.com">samuelmaclar@radiantinnovatech.com</a> or call 050 455 5100. One of the founders replies within two working days.</p></div>
+
+
 <p>Investors and advisers: please <a href="/pages/contact.html">write to us directly</a> instead of using this form.</p>
 <p class="note">Last reviewed: 21 October 2026 by Samuel Maclar.</p>
 </div></section>
@@ -52,30 +42,11 @@
 <div><img src="/assets/brand/hydra-logo-on-dark.svg" alt="Hydra" width="120" height="31"><p class="foot-line">An AI analyst for your security team. Built in Accra.</p></div>
 <div><h2>Hydra</h2><ul><li><a href="/pages/how-it-works.html">How it works</a></li><li><a href="/pages/solutions.html">Who it is for</a></li><li><a href="/pages/our-test-results.html">Our test results</a></li><li><a href="/pages/resources.html">Resources</a></li></ul></div>
 <div><h2>Company</h2><ul><li><a href="/pages/about.html">About</a></li><li><a href="/pages/security.html">Security</a></li><li><a href="/pages/working-with-us.html">Working with us</a></li><li><a href="/pages/contact.html">Talk to us</a></li></ul></div>
-<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li></ul></div>
+<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li><li><a href="/pages/terms.html">Terms of use</a></li><li><a href="/.well-known/security.txt">Report a vulnerability</a></li></ul></div>
 </div>
 <p class="copy">&copy; 2026 Radiant InnovaTech</p>
 </div></footer>
-<script>
-(function () {
-  document.querySelectorAll("form[data-endpoint]").forEach(function (form) {
-    var ok = form.parentNode.querySelector(".form-success"), bad = form.parentNode.querySelector(".form-error");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (ok) ok.hidden = true; if (bad) bad.hidden = true;
-      var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
-      data.consent = form.querySelector('[name="consent"]').checked;
-      var btn = form.querySelector("button[type=submit]"); btn.disabled = true;
-      fetch(form.getAttribute("data-endpoint"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
-        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-        .then(function (res) {
-          if (res.ok) { form.hidden = true; if (ok) { ok.hidden = false; ok.focus(); } }
-          else { if (bad) { bad.textContent = res.body && res.body.error ? res.body.error : bad.textContent; bad.hidden = false; } btn.disabled = false; }
-        })
-        .catch(function () { if (bad) bad.hidden = false; btn.disabled = false; });
-    });
-  });
-})();
-</script>
+
+
 </body>
 </html>
