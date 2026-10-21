@@ -55,6 +55,7 @@ th{background:var(--soft);color:var(--navy);font-weight:700}
 tr:last-child td{border-bottom:0}
 /* figures */
 figure{margin:1.5rem 0}
+figure img{display:block;width:100%;max-width:666px;height:auto;border-radius:8px;border:1px solid var(--line)}
 figcaption{font-size:.9rem;color:var(--muted);margin-top:.5rem}
 .diagram{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:1rem}
 .todo-image{border:2px dashed #C9A400;background:var(--warn);padding:2rem 1rem;border-radius:8px;margin:0}

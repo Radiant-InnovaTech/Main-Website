@@ -217,6 +217,9 @@ def render_block(b, p):
     if k == "figure":
         if p["file"].endswith("how-it-works.html"):
             return f'<figure>{DIAGRAM}<figcaption>{inline(b[2])}</figcaption></figure>'
+        if b[1].startswith("/assets/"):
+            src, alt = b[1].split("|", 1)
+            return f'<figure><img src="{src}" alt="{alt}" width="666" height="659" loading="lazy"><figcaption>{inline(b[2])}</figcaption></figure>'
         return f'<figure><p class="todo-image">{inline(b[1])}</p><figcaption>{inline(b[2])}</figcaption></figure>'
     if k == "faq": return "".join(f"<h3>{inline(q)}</h3><p>{inline(a)}</p>" for q, a in b[1])
     if k == "founders":

@@ -27,8 +27,9 @@ HOME = {
   ]),
 
   ("h2", "An investigation, opened"),
-  ("figure", "[[SCREENSHOT: one real investigation from our lab. Show the verdict, the evidence score and its reasons, the numbered steps and the evidence list. Use test data only. Remove this line before publishing.]]",
-             "A real investigation from our lab. The names and addresses are test data. Each line of evidence points to a numbered step."),
+  ("figure", "/assets/screenshots/investigation-lsass.png|A Hydra investigation of a credential-dumping alert: four numbered steps, the verdict 'True positive' with a score of 62 out of 100, the reason for the score, and what the verdict cites.",
+             "A real investigation from our lab, run on recorded public attack test data with a made-up laptop and user. Each line of evidence points to a numbered step. The product screen labels the evidence score \"Confidence\"."),
+
   ("p", "The evidence score runs from 0 to 100 and measures how much evidence points to an attack. It is not a probability. It rises when the event shows attack patterns or other alerts on the same machine or user agree. It falls when the event matches routine activity."),
 
   ("h2", "You stay in charge"),
