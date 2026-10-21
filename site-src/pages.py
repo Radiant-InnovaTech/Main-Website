@@ -3,18 +3,18 @@
 HOME = {
  "file": "home",
  "title": "Hydra | An AI analyst for your security team",
- "description": "Hydra investigates each security alert, shows the evidence behind its verdict, and never acts without a person's approval. Built in Accra for banks and fintechs.",
+ "description": "Hydra investigates each security alert, shows the evidence behind its verdict, and never acts without a person's approval. Built in Accra. We plan to run it for Ghana's regulated institutions under our own licence.",
  "blocks": [
-  ("eyebrow", "Built in Accra for security teams"),
+  ("eyebrow", "Built in Accra for Ghana's regulated institutions"),
   ("h1", "Hydra investigates every alert and shows its working."),
-  ("lead", "Your analysts get a verdict on each alert, with the evidence behind it, before they open it. Hydra never changes your systems unless a person approves."),
+  ("lead", "Every alert gets a verdict and the evidence behind it. We are building to run Hydra for you as a licensed security operation, and nothing changes in your systems unless a person approves."),
   ("cta", "Talk to us about an evaluation", "/pages/contact.html"),
   ("link", "See how an investigation works", "/pages/how-it-works.html"),
-  ("small", "Early stage. Hydra works in our lab and we are looking for our first evaluation partners."),
+  ("small", "Early stage. Hydra works in our lab. We have no customers yet, and we do not hold our licence yet."),
 
   ("h2", "Too many alerts, too few people"),
   ("p", "Most of what your monitoring tools raise is harmless. A few alerts are not, and they look the same until someone digs. That digging is slow, it depends on who is on shift, and it is hard to show an auditor afterwards."),
-  ("p", "The Bank of Ghana's 2026 cybersecurity directive expects regulated institutions to detect threats and respond to them. Good analysts are hard to find. We built Hydra to give a small team a first pass on every alert."),
+  ("p", "The Bank of Ghana's 2026 cybersecurity directive expects regulated institutions to detect threats and respond to them. Good analysts are hard to find, and most smaller institutions cannot staff a team around the clock. We built Hydra to do the first pass on every alert, and we are building the service around it."),
 
   ("h2", "What Hydra does with an alert"),
   ("ol", [
@@ -35,6 +35,12 @@ HOME = {
   ("h2", "You stay in charge"),
   ("p", "Hydra recommends. You decide. A person with the right role approves every action before anything runs. A kill switch stops all actions at once. Every decision goes into an audit log in which a changed or deleted entry can be detected."),
   ("p", "Today Hydra runs in advice-only mode: it does not change anything in your systems at all. [How we keep Hydra safe, and where we are](/pages/security.html)"),
+
+  ("h2", "Who runs it"),
+  ("p", "Today you run Hydra. Your analysts read what it writes and decide. That is how we are testing it."),
+  ("p", "The plan is for us to run it for you. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to has to be run by a company accredited by the Cyber Security Authority and owned mostly by Ghanaians. So we are not planning to sell you software and step back. Radiant is preparing to apply for that licence. Hydra will do the first look at every alert, and our analysts will handle the ones that need a person."),
+  ("p", "It would come as one annual subscription, set by your institution's Bank of Ghana tier, covering the software, the operation and the reports the regulator asks for. We have not fixed prices, and nobody pays us yet."),
+  ("small", "This is our reading of the directive. We are asking Ghanaian counsel to confirm it. [How we handle licensing](/pages/security.html)"),
 
   ("h2", "What we have measured, and what we have not"),
   ("p", "We tested Hydra's built-in checks on 42 labelled alerts: 18 real attacks and 24 harmless look-alikes. 20 came from recorded real-world attack data and 22 we wrote ourselves."),
@@ -59,6 +65,7 @@ HOME = {
 
   ("h2", "Start with a shadow evaluation"),
   ("p", "Hydra reads your alerts for six weeks and writes down what it would conclude. It changes nothing. Your analysts keep doing their work, and at the end you compare the two."),
+  ("p", "An evaluation comes first. Running Hydra as a service for you starts only once we hold our licence."),
   ("p", "We will not start with a customer until the Cyber Security Authority has confirmed our licence position in writing. We are glad to talk before then."),
   ("cta", "Talk to us", "/pages/contact.html"),
   ("small", "Last reviewed: [[date]] by [[name]]."),
@@ -82,10 +89,10 @@ WORKING = {
   ("h2", "4. Compare"),
   ("p", "Every week we show you where Hydra and your analysts agreed and where they did not, and why. At the end you get a written report."),
   ("h2", "5. You decide"),
-  ("p", "If it is useful, we agree terms to continue. If not, we delete your data within 30 days, and from our backups within 90 days, and confirm in writing."),
+  ("p", "If it is useful, we agree terms to continue. Running Hydra as a service for you starts once we hold our licence. If it is not useful, we delete your data within 30 days, and from our backups within 90 days, and confirm in writing."),
 
   ("h2", "What it costs"),
-  ("p", "The evaluation is free. After that we quote in writing, based on the size of your institution and what you want Hydra to cover. We have not published a price list because we have not yet had a customer to test one with."),
+  ("p", "The evaluation is free. After that, the plan is one annual subscription set by your institution's Bank of Ghana tier. It would cover the software, the service we run for you once we are licensed, and the reports the regulator asks for. We have not published a price list because nobody has paid us yet, and we will test the prices in the first evaluations. We quote in writing."),
 
   ("h2", "Questions"),
   ("faq", [
@@ -93,7 +100,7 @@ WORKING = {
     ("What access do you need?", "Read-only access to the tools you connect. We send you the list of permissions before you set anything up. Hydra reads alert details. It does not read file contents, email contents, passwords or payment card data, and we ask you not to send those."),
     ("Does Hydra change anything in our systems?", "No. Hydra is advice-only today. A person carries out any action it recommends, in your own tools."),
     ("Can we run it on our own servers?", "Not yet. We host it today."),
-    ("Do you run our security monitoring?", "No. Your analysts do. Hydra is a tool for them."),
+    ("Do you run our security monitoring?", "Not today. In an evaluation your analysts stay in charge and Hydra is a tool for them. The plan is for us to run it for you under our own licence, with Hydra doing the first look and our analysts handling the alerts that need a person. That starts only once we hold the licence."),
     ("How long does an evaluation take to set up?", "[[CHRISTIAN: give a real figure from the lab, for example how long it took to connect Wazuh, or say we will tell you once we have scoped your tools.]]"),
     ("Who can I call?", "[[Name]], [[phone]], [[email]]."),
   ]),
@@ -159,7 +166,7 @@ SECURITY = {
     "**Recovery drills.** We will test a restore from backup into a clean database at least twice a year. The first drill is scheduled.",
     "**Mandatory second review** of every code change, and automated checks on every pull request.",
     "**Dependency updates.** We audit dependencies on each release and are completing an update of our main framework and database packages.",
-    "**Our licence.** We are applying to Ghana's Cyber Security Authority for a Cybersecurity Service Provider licence.",
+    "**Our licence.** We are preparing our application to Ghana's Cyber Security Authority for the licence to provide managed cybersecurity services, because we plan to run Hydra for customers ourselves. The company is not registered yet, and registration comes first.",
   ]),
 
   ("h2", "Planned, not yet started"),
@@ -180,7 +187,8 @@ SECURITY = {
   ("p", "We will tell you 14 days before we add a provider that handles your data. You can also choose an open AI model that we run ourselves, so that alerts are not sent to Google's model."),
 
   ("h2", "Licensing, stated plainly"),
-  ("p", "Radiant is a Ghanaian company applying for a Cybersecurity Service Provider licence from Ghana's Cyber Security Authority. We will not provide Hydra to a customer until we are licensed or the Authority has confirmed in writing that the activity does not need a licence. We do not run a customer's security operations centre. Your analysts run the monitoring."),
+  ("p", "We plan to run Hydra for customers ourselves, under a licence from Ghana's Cyber Security Authority for managed cybersecurity services. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to must be run by a company accredited by the Authority and owned mostly by Ghanaians. That is why we will be the operator and not only the software maker. This is our reading, and we are asking Ghanaian counsel to confirm it."),
+  ("p", "Where we are: the company is not registered yet, and registration comes before the licence application. We do not hold the licence. We will not provide Hydra to a customer until we are licensed or the Authority has confirmed in writing that the activity does not need a licence. Today we do not run anyone's security operations centre."),
 
   ("h2", "Report a problem"),
   ("p", "To report a vulnerability or ask a security question, write to [[security email address]]. We reply within two business days and will not take action against anyone who reports in good faith."),
@@ -265,7 +273,7 @@ HOWITWORKS = {
     "We have measured accuracy only on our own test of 42 alerts. [Read it in full](/pages/our-test-results.html).",
     "We have no customers yet.",
     "We do not offer on-premises or air-gapped deployment. We host Hydra.",
-    "We do not run your security monitoring. Your analysts do.",
+    "Today we do not run your security monitoring. Your analysts do. Running it for you as a licensed service is the plan, and it waits for our licence.",
   ]),
 
   ("h2", "9. What we are working on next"),
@@ -275,6 +283,7 @@ HOWITWORKS = {
     "Keeping the full evidence behind each step, not only a summary of it.",
     "Built-in checks for identity and cloud alerts.",
     "Scheduled threat hunts.",
+    "An operated service: once we hold our licence, we plan to run Hydra for you, with our analysts handling the alerts that need a person.",
   ]),
   ("cta", "Talk to us about an evaluation", "/pages/contact.html"),
   ("small", "Last reviewed: [[date]] by [[name]]."),
@@ -388,7 +397,7 @@ ABOUT = {
   ("h2", "What we have not done yet"),
   ("ul", [
     "We have no customers.",
-    "We do not yet have our Cyber Security Authority licence. We are applying, and we will not provide Hydra to a customer until we are licensed or the Authority confirms in writing that we do not need one.",
+    "We do not yet have our Cyber Security Authority licence, and the company is not registered yet. We plan to run Hydra for customers ourselves, so we are preparing to apply for the licence once the company is registered. We will not provide Hydra to a customer until we are licensed or the Authority confirms in writing that we do not need one.",
     "We do not hold ISO 27001 or SOC 2. Both are planned and not started.",
     "Nobody outside the company has tested our accuracy. [Our test results](/pages/our-test-results.html) say exactly what we have measured and what we have not.",
   ]),
