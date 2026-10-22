@@ -3,7 +3,7 @@
 HOME = {
  "file": "home",
  "title": "Hydra | An AI analyst for your security team",
- "description": "Hydra investigates each security alert, shows the evidence behind its verdict, and never acts without a person's approval. Built in Accra. We plan to run it for Ghana's regulated institutions under our own licence.",
+ "description": "Hydra investigates each security alert, shows its evidence, and never acts without a person's approval. Built in Accra for Ghana's regulated institutions.",
  "blocks": [
   ("eyebrow", "Built in Accra for Ghana's regulated institutions"),
   ("h1", "Hydra investigates every alert and shows its working."),
@@ -56,7 +56,7 @@ HOME = {
 
   ("h2", "Connectors we have built"),
   ("p", "Hydra can read alerts from Wazuh, Splunk, Microsoft Sentinel, Microsoft Defender, CrowdStrike Falcon, Microsoft Entra ID, Okta, Google Workspace, AWS GuardDuty and Google Cloud, and from an on-premises Active Directory relay. A Palo Alto Networks connector can block an address once a person approves it."),
-  ("p", "Wazuh is the one we have tested end to end in our own lab. The others are built, most of them with automated tests, and we will prove each one with the first team that uses it."),
+  ("p", "Real events have reached Hydra in our own lab from Wazuh, Okta, CrowdStrike Falcon, Splunk and an Active Directory relay. The other connectors are built, most of them with automated tests, and we will prove each one with the first team that uses it."),
   ("small", "On our list, not built yet: SentinelOne, VMware Carbon Black, Cisco Umbrella, Fortinet, Elastic, Sumo Logic, ServiceNow, PagerDuty, Jira, Qualys."),
 
   ("h2", "Four people in Accra"),
@@ -74,7 +74,7 @@ HOME = {
 WORKING = {
  "file": "working-with-us",
  "title": "Working with us | Hydra",
- "description": "How we work with a new security team: a conversation, clear terms, a free six-week shadow evaluation, a weekly comparison, and your decision.",
+ "description": "How we work with a new security team: a conversation, clear terms, a six-week shadow evaluation, a weekly comparison, and your decision. Free for our first evaluation partners.",
  "blocks": [
   ("h1", "Working with us"),
   ("lead", "We are early, so we work closely with each team. Here is what happens, in order."),
@@ -92,7 +92,7 @@ WORKING = {
   ("p", "If it is useful, we agree terms to continue. Running Hydra as a service for you starts once we hold our licence. If it is not useful, we delete your data within 30 days, and from our backups within 90 days, and confirm in writing."),
 
   ("h2", "What it costs"),
-  ("p", "The evaluation is free. After that, the plan is one annual subscription set by your institution's Bank of Ghana tier. It would cover the software, the service we run for you once we are licensed, and the reports the regulator asks for. We have not published a price list because nobody has paid us yet, and we will test the prices in the first evaluations. We quote in writing."),
+  ("p", "The evaluation is free for our first evaluation partners. After that, the plan is one annual subscription set by your institution's Bank of Ghana tier. It would cover the software, the service we run for you once we are licensed, and the reports the regulator asks for. We have not published a price list because nobody has paid us yet, and we will test the prices in the first evaluations. We quote in writing."),
 
   ("h2", "Questions"),
   ("faq", [
@@ -115,7 +115,7 @@ SECURITY = {
  "blocks": [
   ("h1", "How we keep Hydra safe, and where we are"),
   ("lead", "We mark every control as in place, in progress or planned, so you can see exactly where we are. Where something is not done, we say so."),
-  ("p", "The full description is our Security Overview. We will send it to you on request."),
+  ("p", "The full description is our Security Overview. [Download the Security Overview (PDF)](/assets/documents/hydra-security-overview.pdf), or ask us and we will send it to you."),
 
   ("h2", "In place today"),
   ("h3", "Hydra recommends. A person decides."),
@@ -448,10 +448,10 @@ CONTACT = {
 EARLY = {
  "file": "early-access",
  "title": "Early access | Hydra",
- "description": "We are talking to two to four security teams about a free six-week shadow evaluation of Hydra. Tell us who you are and we will be in touch.",
+ "description": "We are talking to two to four security teams about a six-week shadow evaluation of Hydra, free for our first partners. Tell us who you are and we will be in touch.",
  "blocks": [
   ("h1", "Be one of our first evaluation partners"),
-  ("lead", "We are talking to two to four security teams about a free six-week shadow evaluation. Tell us who you are and we will be in touch."),
+  ("lead", "We are talking to two to four security teams about a six-week shadow evaluation, free for our first partners. Tell us who you are and we will be in touch."),
 
   ("h2", "What an evaluation is"),
   ("ul", [
@@ -459,7 +459,7 @@ EARLY = {
     "It changes nothing in your systems. Your analysts work as normal.",
     "Every week we show you where Hydra and your analysts agreed and where they did not, and why.",
     "At the end you get a written report and decide what to do next.",
-    "It is free. If it is useful, we quote in writing afterwards.",
+    "It is free for our first evaluation partners. If it is useful, we quote in writing afterwards.",
   ]),
   ("p", "We will not start with a team until the Cyber Security Authority has confirmed our licence position in writing, so we cannot give you a start date today. Joining now means we talk to you first."),
   ("link", "How we work with a new team", "/pages/working-with-us.html"),
