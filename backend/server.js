@@ -10,9 +10,8 @@ const morgan       = require('morgan');
 const { v4: uuidv4 } = require('uuid');
 const jwt          = require('jsonwebtoken');
 const rateLimit    = require('express-rate-limit');
-const Database     = require('better-sqlite3');
+const store        = require('./store');
 const path         = require('path');
-const fs           = require('fs');
 const crypto       = require('crypto');
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -56,95 +55,19 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
 const OTP_TTL_MS = 10 * 60 * 1000;
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  DATABASE SETUP
+//  DATABASE: see store.js (DATA_STORE=firestore in production, a SQLite file for local work)
 // ─────────────────────────────────────────────────────────────────────────────
-const DATA_DIR = path.join(__dirname, 'data');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-
-const db = new Database(path.join(DATA_DIR, 'waitlist.db'));
-
-// Enable WAL mode for better concurrent read performance
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
-
-// Run schema migrations on startup
-db.exec(`
-  CREATE TABLE IF NOT EXISTS waitlist_entries (
-    id          TEXT PRIMARY KEY,
-    full_name   TEXT NOT NULL,
-    email       TEXT NOT NULL UNIQUE,
-    role        TEXT NOT NULL,
-    company     TEXT NOT NULL,
-    country     TEXT NOT NULL,
-    user_type   TEXT NOT NULL,
-    profile_url TEXT,
-    use_case    TEXT,
-    consent     INTEGER NOT NULL DEFAULT 1,
-    ip_address  TEXT,
-    created_at  TEXT NOT NULL
-  );
-
-  CREATE INDEX IF NOT EXISTS idx_waitlist_email      ON waitlist_entries(email);
-  CREATE INDEX IF NOT EXISTS idx_waitlist_created_at ON waitlist_entries(created_at);
-  CREATE INDEX IF NOT EXISTS idx_waitlist_user_type  ON waitlist_entries(user_type);
-
-  CREATE TABLE IF NOT EXISTS admin_otps (
-    id         TEXT PRIMARY KEY,
-    email      TEXT NOT NULL,
-    otp_hash   TEXT NOT NULL,
-    expires_at TEXT NOT NULL,
-    used       INTEGER NOT NULL DEFAULT 0,
-    created_at TEXT NOT NULL
-  );
-
-  CREATE INDEX IF NOT EXISTS idx_otps_email ON admin_otps(email);
-
-  CREATE TABLE IF NOT EXISTS contact_requests (
-    id                      TEXT PRIMARY KEY,
-    full_name               TEXT NOT NULL,
-    email                   TEXT NOT NULL,
-    company                 TEXT NOT NULL,
-    company_size            TEXT,
-    soc_maturity            TEXT,
-    deployment_preference   TEXT,
-    ip_address              TEXT,
-    created_at              TEXT NOT NULL
-  );
-
-  CREATE INDEX IF NOT EXISTS idx_contact_created_at ON contact_requests(created_at);
-
-  CREATE TABLE IF NOT EXISTS audit_logs (
-    id          TEXT PRIMARY KEY,
-    action      TEXT NOT NULL,
-    details     TEXT,
-    admin_email TEXT,
-    ip          TEXT,
-    created_at  TEXT NOT NULL
-  );
-
-  CREATE INDEX IF NOT EXISTS idx_audit_created_at ON audit_logs(created_at);
-`);
-
-// Columns added for the Talk to us form (consent, role, how the team monitors, message).
-// SQLite has no "ADD COLUMN IF NOT EXISTS", so check the table first.
-{
-  const have = new Set(db.prepare('PRAGMA table_info(contact_requests)').all().map(c => c.name));
-  for (const [col, type] of [['role', 'TEXT'], ['monitoring', 'TEXT'], ['message', 'TEXT'], ['consent', 'INTEGER']]) {
-    if (!have.has(col)) db.exec(`ALTER TABLE contact_requests ADD COLUMN ${col} ${type}`);
-  }
-}
-
-console.log('[DB] SQLite database ready at', path.join(DATA_DIR, 'waitlist.db'));
+console.log('[DB] Using', store.name);
 
 // Retention. The privacy notice says form entries are deleted 12 months after they are sent.
 const RETENTION_MONTHS = 12;
-function purgeOldSubmissions() {
-  const cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - RETENTION_MONTHS);
-  const iso = cutoff.toISOString();
-  const contacts = db.prepare('DELETE FROM contact_requests WHERE created_at < ?').run(iso).changes;
-  const waitlist = db.prepare('DELETE FROM waitlist_entries WHERE created_at < ?').run(iso).changes;
-  db.prepare('DELETE FROM admin_otps WHERE created_at < ?').run(new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-  if (contacts || waitlist) console.log(`[RETENTION] Deleted ${contacts} contact and ${waitlist} early-access entries older than ${RETENTION_MONTHS} months`);
+async function purgeOldSubmissions() {
+  try {
+    const { contacts, waitlist } = await store.purge(RETENTION_MONTHS);
+    if (contacts || waitlist) console.log(`[RETENTION] Deleted ${contacts} contact and ${waitlist} early-access entries older than ${RETENTION_MONTHS} months`);
+  } catch (err) {
+    console.error('[RETENTION] Purge failed:', err.message);
+  }
 }
 purgeOldSubmissions();
 setInterval(purgeOldSubmissions, 24 * 3600 * 1000).unref();
@@ -294,24 +217,15 @@ function verifyToken(req, res) {
 }
 
 function logAudit(action, details, adminEmail = null, ip = null) {
-  try {
-    db.prepare(`
-      INSERT INTO audit_logs (id, action, details, admin_email, ip, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(
-      uuidv4(),
-      action,
-      typeof details === 'object' ? JSON.stringify(details) : String(details),
-      adminEmail,
-      ip,
-      new Date().toISOString()
-    );
-  } catch (err) {
-    console.error('[AUDIT] Failed to write audit log:', err.message);
-  }
+  store.put('audit_logs', {
+    id: uuidv4(),
+    action,
+    details: typeof details === 'object' ? JSON.stringify(details) : String(details),
+    admin_email: adminEmail,
+    ip,
+    created_at: new Date().toISOString(),
+  }).catch(err => console.error('[AUDIT] Failed to write audit log:', err.message));
 }
-
-
 // One CSV cell. Quotes are doubled, and a value that starts with = + - @ is prefixed with an apostrophe so a
 // spreadsheet does not run it as a formula (form submissions are written by strangers).
 function csvCell(value) {
@@ -566,8 +480,9 @@ async function sendMail(options) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Health check ──────────────────────────────────────────────────────────────
-app.get('/api/health', (_req, res) => {
-  const totalEntries = db.prepare('SELECT COUNT(*) AS n FROM waitlist_entries').get().n;
+app.get('/api/health', async (_req, res) => {
+  let totalEntries = null;
+  try { totalEntries = await store.count('waitlist_entries'); } catch (err) { console.error('[HEALTH] Store error:', err.message); }
   res.json({
     success:   true,
     status:    'healthy',
@@ -605,7 +520,7 @@ app.post('/api/waitlist/submit', formsGate, waitlistLimiter, async (req, res) =>
     const email = String(req.body.email).toLowerCase().trim();
 
     // Duplicate check
-    const existing = db.prepare('SELECT id FROM waitlist_entries WHERE email = ?').get(email);
+    const existing = await store.findWaitlistByEmail(email);
     if (existing) {
       return res.status(409).json({ error: 'This email is already on the waitlist.' });
     }
@@ -625,12 +540,7 @@ app.post('/api/waitlist/submit', formsGate, waitlistLimiter, async (req, res) =>
       created_at:  new Date().toISOString(),
     };
 
-    db.prepare(`
-      INSERT INTO waitlist_entries
-        (id, full_name, email, role, company, country, user_type, profile_url, use_case, consent, ip_address, created_at)
-      VALUES
-        (@id, @full_name, @email, @role, @company, @country, @user_type, @profile_url, @use_case, @consent, @ip_address, @created_at)
-    `).run(entry);
+    await store.put('waitlist_entries', entry);
 
     logAudit('waitlist_submit', { entry_id: entry.id, email: entry.email, name: entry.full_name }, null, ip);
 
@@ -682,12 +592,7 @@ app.post('/api/contact/submit', formsGate, contactLimiter, async (req, res) => {
       created_at:            new Date().toISOString(),
     };
 
-    db.prepare(`
-      INSERT INTO contact_requests
-        (id, full_name, email, company, role, monitoring, message, consent, company_size, soc_maturity, deployment_preference, ip_address, created_at)
-      VALUES
-        (@id, @full_name, @email, @company, @role, @monitoring, @message, @consent, @company_size, @soc_maturity, @deployment_preference, @ip_address, @created_at)
-    `).run(entry);
+    await store.put('contact_requests', entry);
 
     logAudit('contact_submit', { entry_id: entry.id, email: entry.email, name: entry.full_name, company: entry.company }, null, ip);
 
@@ -721,15 +626,12 @@ app.post('/api/admin/auth/request-otp', otpRequestLimiter, async (req, res) => {
     }
 
     // Invalidate any existing unused OTPs for this email
-    db.prepare("UPDATE admin_otps SET used = 1 WHERE email = ? AND used = 0").run(email);
+    await store.invalidateOtps(email);
 
     const otp       = generateOtp();
     const expiresAt = new Date(Date.now() + OTP_TTL_MS).toISOString();
 
-    db.prepare(`
-      INSERT INTO admin_otps (id, email, otp_hash, expires_at, used, created_at)
-      VALUES (?, ?, ?, ?, 0, ?)
-    `).run(uuidv4(), email, hashOtp(email, otp), expiresAt, new Date().toISOString());
+    await store.put('admin_otps', { id: uuidv4(), email, otp_hash: hashOtp(email, otp), expires_at: expiresAt, used: 0, created_at: new Date().toISOString() });
 
     await sendMail(buildOtpEmail(email, otp));
 
@@ -747,7 +649,7 @@ app.post('/api/admin/auth/request-otp', otpRequestLimiter, async (req, res) => {
 });
 
 // ── Admin auth: verify OTP ────────────────────────────────────────────────────
-app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, (req, res) => {
+app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, async (req, res) => {
   try {
     const email = String(req.body.email || '').toLowerCase().trim();
     const code  = String(req.body.code  || '').trim();
@@ -761,13 +663,7 @@ app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, (req, res) => {
     }
 
     // Find latest unused, unexpired OTP for this email
-    const otpRow = db.prepare(`
-      SELECT id, otp_hash, expires_at
-      FROM admin_otps
-      WHERE email = ? AND used = 0
-      ORDER BY created_at DESC
-      LIMIT 1
-    `).get(email);
+    const otpRow = await store.latestOtp(email);
 
     if (!otpRow) {
       return res.status(401).json({ error: 'No active code found. Please request a new one.' });
@@ -775,7 +671,7 @@ app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, (req, res) => {
 
     // Check expiry
     if (new Date() > new Date(otpRow.expires_at)) {
-      db.prepare('UPDATE admin_otps SET used = 1 WHERE id = ?').run(otpRow.id);
+      await store.patch('admin_otps', otpRow.id, { used: 1 });
       return res.status(401).json({ error: 'Code has expired. Please request a new one.' });
     }
 
@@ -787,7 +683,7 @@ app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, (req, res) => {
     }
 
     // Mark as used
-    db.prepare('UPDATE admin_otps SET used = 1 WHERE id = ?').run(otpRow.id);
+    await store.patch('admin_otps', otpRow.id, { used: 1 });
 
     const token = generateToken(email);
 
@@ -805,7 +701,7 @@ app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, (req, res) => {
 });
 
 // ── Admin: get waitlist entries ───────────────────────────────────────────────
-app.get('/api/admin/waitlist', (req, res) => {
+app.get('/api/admin/waitlist', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
@@ -816,31 +712,7 @@ app.get('/api/admin/waitlist', (req, res) => {
     const typeFilter = String(req.query.typeFilter || '').trim();
     const offset     = (page - 1) * limit;
 
-    let where  = [];
-    let params = [];
-
-    if (search) {
-      where.push('(full_name LIKE ? OR email LIKE ? OR company LIKE ? OR role LIKE ? OR country LIKE ?)');
-      const s = `%${search}%`;
-      params.push(s, s, s, s, s);
-    }
-    if (typeFilter) {
-      where.push('user_type = ?');
-      params.push(typeFilter);
-    }
-
-    const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
-
-    const total = db.prepare(`SELECT COUNT(*) AS n FROM waitlist_entries ${whereClause}`).get(...params).n;
-
-    const rows = db.prepare(`
-      SELECT id, full_name, email, role, company, country, user_type,
-             profile_url, use_case, consent, created_at, ip_address
-      FROM waitlist_entries
-      ${whereClause}
-      ORDER BY created_at DESC
-      LIMIT ? OFFSET ?
-    `).all(...params, limit, offset);
+    const { rows, total } = await store.search('waitlist_entries', { term: search, fields: ['full_name', 'email', 'company', 'role', 'country'], equals: { user_type: typeFilter }, limit, offset });
 
     // Convert consent integer back to boolean for frontend compatibility
     const formatted = rows.map(r => ({ ...r, consent: !!r.consent }));
@@ -853,19 +725,19 @@ app.get('/api/admin/waitlist', (req, res) => {
 });
 
 // ── Admin: delete entry ───────────────────────────────────────────────────────
-app.delete('/api/admin/waitlist/:id', (req, res) => {
+app.delete('/api/admin/waitlist/:id', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
   try {
     const { id } = req.params;
-    const entry  = db.prepare('SELECT id, email, full_name FROM waitlist_entries WHERE id = ?').get(id);
+    const entry  = await store.get('waitlist_entries', id);
 
     if (!entry) {
       return res.status(404).json({ error: 'Entry not found.' });
     }
 
-    db.prepare('DELETE FROM waitlist_entries WHERE id = ?').run(id);
+    await store.remove('waitlist_entries', id);
 
     logAudit('admin_delete',
       { entry_id: id, email: entry.email, name: entry.full_name },
@@ -883,7 +755,7 @@ app.delete('/api/admin/waitlist/:id', (req, res) => {
 // ── Admin: export CSV ─────────────────────────────────────────────────────────
 // NOTE: This route MUST be defined before the /:id DELETE route has no effect here,
 // but must be before any catch-all. It's a GET so no conflict.
-app.get('/api/admin/waitlist/export', (req, res) => {
+app.get('/api/admin/waitlist/export', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
@@ -891,28 +763,7 @@ app.get('/api/admin/waitlist/export', (req, res) => {
     const search     = String(req.query.search     || '').trim();
     const typeFilter = String(req.query.typeFilter || '').trim();
 
-    let where  = [];
-    let params = [];
-
-    if (search) {
-      where.push('(full_name LIKE ? OR email LIKE ? OR company LIKE ? OR role LIKE ? OR country LIKE ?)');
-      const s = `%${search}%`;
-      params.push(s, s, s, s, s);
-    }
-    if (typeFilter) {
-      where.push('user_type = ?');
-      params.push(typeFilter);
-    }
-
-    const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
-
-    const rows = db.prepare(`
-      SELECT id, full_name, email, role, company, country, user_type,
-             profile_url, use_case, consent, created_at, ip_address
-      FROM waitlist_entries
-      ${whereClause}
-      ORDER BY created_at DESC
-    `).all(...params);
+    const { rows } = await store.search('waitlist_entries', { term: search, fields: ['full_name', 'email', 'company', 'role', 'country'], equals: { user_type: typeFilter } });
 
     const header = 'ID,Full Name,Email,Job Title,Company,Country,Role Type,Profile URL,Use Case,Consent,Submitted At,IP Address\n';
     const csvRows = rows.map(r => [
@@ -943,7 +794,7 @@ app.get('/api/admin/waitlist/export', (req, res) => {
 });
 
 // ── Admin: list contact/demo requests ───────────────────────────────────────────
-app.get('/api/admin/contact', (req, res) => {
+app.get('/api/admin/contact', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
@@ -953,26 +804,7 @@ app.get('/api/admin/contact', (req, res) => {
     const search = String(req.query.search || '').trim();
     const offset = (page - 1) * limit;
 
-    let where  = [];
-    let params = [];
-
-    if (search) {
-      where.push('(full_name LIKE ? OR email LIKE ? OR company LIKE ?)');
-      const s = `%${search}%`;
-      params.push(s, s, s);
-    }
-
-    const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
-
-    const total = db.prepare(`SELECT COUNT(*) AS n FROM contact_requests ${whereClause}`).get(...params).n;
-
-    const rows = db.prepare(`
-      SELECT id, full_name, email, company, role, monitoring, message, consent, company_size, soc_maturity, deployment_preference, created_at, ip_address
-      FROM contact_requests
-      ${whereClause}
-      ORDER BY created_at DESC
-      LIMIT ? OFFSET ?
-    `).all(...params, limit, offset);
+    const { rows, total } = await store.search('contact_requests', { term: search, fields: ['full_name', 'email', 'company'], limit, offset });
 
     return res.json({ success: true, rows, total, page, limit });
   } catch (err) {
@@ -982,19 +814,19 @@ app.get('/api/admin/contact', (req, res) => {
 });
 
 // ── Admin: delete contact/demo request ──────────────────────────────────────────
-app.delete('/api/admin/contact/:id', (req, res) => {
+app.delete('/api/admin/contact/:id', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
   try {
     const { id } = req.params;
-    const entry  = db.prepare('SELECT id, email, full_name FROM contact_requests WHERE id = ?').get(id);
+    const entry  = await store.get('contact_requests', id);
 
     if (!entry) {
       return res.status(404).json({ error: 'Entry not found.' });
     }
 
-    db.prepare('DELETE FROM contact_requests WHERE id = ?').run(id);
+    await store.remove('contact_requests', id);
 
     logAudit('admin_delete_contact',
       { entry_id: id, email: entry.email, name: entry.full_name },
@@ -1010,29 +842,13 @@ app.delete('/api/admin/contact/:id', (req, res) => {
 });
 
 // ── Admin: export contact/demo requests CSV ─────────────────────────────────────
-app.get('/api/admin/contact/export', (req, res) => {
+app.get('/api/admin/contact/export', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
   try {
     const search = String(req.query.search || '').trim();
-    let where  = [];
-    let params = [];
-
-    if (search) {
-      where.push('(full_name LIKE ? OR email LIKE ? OR company LIKE ?)');
-      const s = `%${search}%`;
-      params.push(s, s, s);
-    }
-
-    const whereClause = where.length ? 'WHERE ' + where.join(' AND ') : '';
-
-    const rows = db.prepare(`
-      SELECT id, full_name, email, company, role, monitoring, message, consent, company_size, soc_maturity, deployment_preference, created_at, ip_address
-      FROM contact_requests
-      ${whereClause}
-      ORDER BY created_at DESC
-    `).all(...params);
+    const { rows } = await store.search('contact_requests', { term: search, fields: ['full_name', 'email', 'company'] });
 
     const header = 'ID,Full Name,Email,Organisation,Role,Monitors With,Message,Consent,Old: Company Size,Old: SOC Maturity,Old: Deployment Preference,Submitted At,IP Address\n';
     const csvRows = rows.map(r => [
@@ -1064,21 +880,14 @@ app.get('/api/admin/contact/export', (req, res) => {
 });
 
 // ── Admin: audit logs ─────────────────────────────────────────────────────────
-app.get('/api/admin/logs', (req, res) => {
+app.get('/api/admin/logs', async (req, res) => {
   const claims = verifyToken(req, res);
   if (!claims) return;
 
   try {
     const limit = Math.min(500, Math.max(1, parseInt(req.query.limit || '200', 10)));
 
-    const rows = db.prepare(`
-      SELECT id, action, details, admin_email, ip, created_at
-      FROM audit_logs
-      ORDER BY created_at DESC
-      LIMIT ?
-    `).all(limit);
-
-    const total = db.prepare('SELECT COUNT(*) AS n FROM audit_logs').get().n;
+    const { rows, total } = await store.search('audit_logs', { limit });
 
     return res.json({ success: true, rows, total });
   } catch (err) {
@@ -1136,11 +945,10 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`[SERVER] Health check: http://localhost:${PORT}/api/health`);
 });
 
-// Graceful shutdown — let SQLite finish any in-progress writes
+// Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('[SERVER] SIGTERM received — shutting down gracefully...');
   server.close(() => {
-    db.close();
     console.log('[SERVER] Shutdown complete.');
     process.exit(0);
   });
@@ -1149,7 +957,6 @@ process.on('SIGTERM', () => {
 process.on('SIGINT', () => {
   console.log('[SERVER] SIGINT received — shutting down...');
   server.close(() => {
-    db.close();
     process.exit(0);
   });
 });
