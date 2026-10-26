@@ -1,0 +1,94 @@
+{
+  "measured_date": "2026-10-25",
+  "verified_date": "2026-10-26",
+  "system": "Hydra engine v2",
+  "model_label_in_saved_runs": "qwen3.8-27b",
+  "configuration": {
+    "precision": "FP8",
+    "thinking": false,
+    "gpu": "NVIDIA A100 40 GB",
+    "rules_and_guards": true
+  },
+  "limitations": [
+    "Program history separates attack and benign classes by construction; program-evidence results are an upper bound, not a production estimate.",
+    "One run per configuration; 26 attack cases, one attack family, repetitive lab background.",
+    "No independent evaluation or production burst test. Engine v2 is disabled in production."
+  ],
+  "runs": [
+    {
+      "evidence": "program evidence",
+      "source_run_filename": "rec2-qwen3.8-27b-D.json",
+      "source_run_sha256": "ec657877ed1af9497a75c2c29045b0c1ff60c626e3e36ffeeabe91341d964556",
+      "outcomes": {
+        "cases": 277,
+        "attacks": 26,
+        "benign": 251,
+        "attacks_confirmed": 23,
+        "attacks_to_human": 3,
+        "attacks_dismissed": 0,
+        "benign_cleared": 204,
+        "benign_to_human": 47,
+        "false_alarms": 0,
+        "errors": 0
+      },
+      "split_method": "Recomputed on the full case fixture using benchmark assign_splits, rather than per-shard split fields.",
+      "case_fixture_sha256": "c4c50e69e31d412b227c712f6e311e806a5bd25f8d3fc9e9d2c2b050c761206d",
+      "splits": {
+        "dev": {
+          "attacks": 14,
+          "benign": 126,
+          "attacks_confirmed": 13,
+          "attacks_to_human": 1,
+          "attacks_dismissed": 0,
+          "benign_cleared": 100,
+          "benign_to_human": 26,
+          "false_alarms": 0
+        },
+        "test": {
+          "attacks": 12,
+          "benign": 125,
+          "attacks_confirmed": 10,
+          "attacks_to_human": 2,
+          "attacks_dismissed": 0,
+          "benign_cleared": 104,
+          "benign_to_human": 21,
+          "false_alarms": 0
+        }
+      }
+    },
+    {
+      "evidence": "host evidence",
+      "source_run_filename": "rec2-qwen3.8-27b-C3.json",
+      "source_run_sha256": "1386d9f112800d5d499f66771e970577399bf24ceebacd9b56ae0c9aa974a371",
+      "outcomes": {
+        "cases": 277,
+        "attacks": 26,
+        "benign": 251,
+        "attacks_confirmed": 21,
+        "attacks_to_human": 5,
+        "attacks_dismissed": 0,
+        "benign_cleared": 208,
+        "benign_to_human": 43,
+        "false_alarms": 0,
+        "errors": 0
+      }
+    },
+    {
+      "evidence": "no Wazuh evidence",
+      "source_run_filename": "rec2-qwen3.8-27b-B.json",
+      "source_run_sha256": "6caa01a47d8e1eecdaeeaaafe0abf1a84d22b40950f723a1fd820841899e86de",
+      "outcomes": {
+        "cases": 277,
+        "attacks": 26,
+        "benign": 251,
+        "attacks_confirmed": 11,
+        "attacks_to_human": 15,
+        "attacks_dismissed": 0,
+        "benign_cleared": 224,
+        "benign_to_human": 27,
+        "false_alarms": 0,
+        "errors": 0
+      }
+    }
+  ]
+}

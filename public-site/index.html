@@ -11,7 +11,7 @@
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/site.css?v=20261026-results">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -57,10 +57,9 @@
 </div></section>
 <section class="sec"><div class="wrap narrow">
 <h2>What we have measured, and what we have not</h2>
-<p>We tested Hydra's built-in checks on 42 labelled alerts: 18 real attacks and 24 harmless look-alikes. 20 came from recorded real-world attack data and 22 we wrote ourselves.</p>
-<div class="tablewrap"><table><thead><tr><th>What we measured</th><th>Result</th></tr></thead><tbody><tr><td>Alerts tested</td><td>42 (18 attacks, 24 harmless)</td></tr><tr><td>Attacks flagged</td><td>13 of 18</td></tr><tr><td>Harmless alerts cleared</td><td>19 of 24</td></tr><tr><td>Attacks dismissed</td><td>0</td></tr><tr><td>Harmless alerts called attacks</td><td>0</td></tr></tbody></table></div>
-<p>That is a small test, partly written by us, and nobody outside the company has relabelled it. It shows the checks work on these patterns. It does not show how Hydra will do on your alerts. That is what a shadow evaluation is for.</p>
-<p class="note">Figures from 17 October 2026. We re-run the test whenever the checks change and update this page the same day.</p>
+<p>In a lab test with Qwen3.8-27B and program evidence, Hydra confirmed 23 of 26 attacks and cleared 204 of 251 harmless alerts. No attacks were dismissed and no false alarms were raised in this sample.</p>
+<p>The program-history setup separates attacks from harmless activity by construction, so this is an upper bound, not a production estimate. The full results include two other evidence settings and every case left to a person.</p>
+<p class="note">Measured 25 October 2026 on 277 recorded cases. Engine v2 is not enabled in production.</p>
 <p><a class="more" href="/pages/our-test-results.html">Read the test in full &rarr;</a></p>
 </div></section>
 <section class="sec"><div class="wrap narrow">

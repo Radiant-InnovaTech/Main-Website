@@ -52,7 +52,7 @@ RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
   ("h1", "Resources"),
   ("lead", "We publish what exists. Right now that is three things."),
   ("h2", "Our test results"),
-  ("p", "How we tested Hydra on 42 labelled alerts, the numbers, the five attacks it did not flag, and what the test does not show."),
+  ("p", "Hydra engine v2 with Qwen3.8-27B on 277 recorded lab cases: three evidence settings, the final outcomes, and why the program-evidence result is an upper bound."),
   ("link", "Read our test results", "/pages/our-test-results.html"),
   ("h2", "How Hydra investigates an alert"),
   ("p", "What Hydra does with each alert, what its built-in checks look for, how the verdict is made, and where its limits are."),
@@ -275,7 +275,7 @@ def page_html(p):
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/site.css?v=20261026-results">
 </head>
 <body>
 {legal}{header(path)}
