@@ -283,57 +283,184 @@ HOWITWORKS = {
   ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
-RESULTS = {
- "file": "our-test-results",
- "title": "Qwen lab results: 277 recorded alerts | Hydra",
- "description": "Hydra engine v2 with Qwen3.8-27B on 277 recorded lab alerts. All three evidence settings, human referrals, and the limits of the test.",
- "blocks": [
-  ("h1", "Our Qwen lab results"),
-  ("lead", "With program evidence, Hydra confirmed 23 of 26 attacks and cleared 204 of 251 harmless alerts. It dismissed no attacks and raised no false alarms in this sample. The program-history setup favours this result, so it is an upper bound, not a production estimate."),
-  ("small", "Measured 25 October 2026. Publication prepared 26 October 2026. These are Hydra engine v2 results with Qwen3.8-27B, not a test of the model on its own. Engine v2 is not enabled in production."),
-  ("h2", "The same alerts, three evidence settings"),
-  ("p", "Each setting used the same 277 recorded cases: 26 attacks and 251 harmless alerts. The behaviour rules, dismissal guard and evidence checks were enabled in all three runs. A case sent to a person is neither a confirmed attack nor a cleared alert."),
-  ("table", [["Final outcome", "Program evidence", "Host evidence", "No Wazuh evidence"],
-    ["Attacks confirmed", "23 of 26", "21 of 26", "11 of 26"],
-    ["Attacks sent to a person", "3 of 26", "5 of 26", "15 of 26"],
-    ["Attacks dismissed as harmless", "0 of 26", "0 of 26", "0 of 26"],
-    ["Harmless alerts cleared", "204 of 251", "208 of 251", "224 of 251"],
-    ["Harmless alerts sent to a person", "47 of 251", "43 of 251", "27 of 251"],
-    ["Harmless alerts called attacks", "0 of 251", "0 of 251", "0 of 251"],
-    ["Cases with an execution error", "0 of 277", "0 of 277", "0 of 277"]]),
-  ("p", "**Program evidence** describes the history of the program involved. **Host evidence** describes activity on the machine. **No Wazuh evidence** omits those recorded tool results; Hydra still has the alert and its code-based checks. Clearing more harmless alerts is only one part of the result: without Wazuh evidence, fewer attacks were confirmed and more were left to a person."),
-  ("h2", "Why the program-evidence result is an upper bound"),
-  ("p", "The injected history was built from the recordings' harmless events. Attack programs therefore appeared new, while harmless programs with history appeared familiar. This separates the two classes by construction. Real environments also have new harmless programs and attacks using familiar programs. We have not yet measured that fairer mix."),
-  ("p", "The host-evidence run does not have that particular separation. It confirmed 21 of 26 attacks and cleared 208 of 251 harmless alerts, with none dismissed and no false alarms in the sample. It still uses activity from the period around an attack and repetitive lab background, so it is not a production estimate either."),
-  ("h2", "What we ran"),
-  ("ul", [
-    "**Model configuration:** Qwen3.8-27B, FP8 (8-bit), thinking switched off, served with vLLM on one NVIDIA A100 40 GB.",
-    "**Investigation:** Hydra engine v2, with fixed questions, recorded tool evidence, code-based confidence and guards, and checks on evidence quotes.",
-    "**Cases:** recorded Windows attack-log cases from seven lab campaigns, covering one attack family. The harmless alerts are background activity from the lab, not customer traffic.",
-    "**Runs:** one run per evidence setting, on the same 277 cases. No model was rerun to prepare this publication.",
-    "**Verification:** the published counts were recomputed from the individual saved outcomes. They are final Hydra decisions, not the model's unchecked answers.",
-  ]),
-  ("h2", "The development and test split"),
-  ("p", "The rules and checks were developed on the development half. For the program-evidence run, the benchmark split, recomputed on the full case set, gives the following results. Both halves share the favourable program-history setup, so the test half does not remove that limitation."),
-  ("table", [["Split", "Attacks confirmed", "Harmless cleared", "Attacks dismissed", "False alarms"],
-    ["Development", "13 of 14", "100 of 126", "0", "0"],
-    ["Test", "10 of 12", "104 of 125", "0", "0"]]),
-  ("h2", "What these results do not prove"),
-  ("ul", [
-    "**Zero observed errors is not a guarantee.** There are only 26 attack cases. No attacks dismissed in this sample does not establish a zero dismissal rate in use.",
-    "**This is a narrow lab test.** It does not establish performance across other attack families, operating systems, cloud alerts or customer environments.",
-    "**These are system results.** The model, behaviour rules and guards work together. The counts should not be presented as Qwen's standalone accuracy.",
-    "**It is not an independent evaluation.** The team prepared the cases and labels. External relabelling and adversarial review are still needed.",
-    "**Each configuration was run once.** We have not measured Qwen's variation across repeated runs here.",
-    "**It is not a bank burst test.** These counts do not establish production capacity, response-time guarantees or cost per customer.",
-    "**It is not the production configuration.** Engine v2 remains disabled in production, and the Qwen GPU stays off unless a separate run is requested.",
-  ]),
-  ("h2", "What comes next"),
-  ("p", "We plan a fairer history baseline, independent review of labels and rules, and a separate burst test. Customer work with real data will not start until the Cyber Security Authority answers our licence position in writing."),
-  ("p", "This replaces the earlier 42-alert test as the main results page. That earlier test used a different case set and setup; its figures cannot be compared directly with these results."),
-  ("link", "Download the aggregate results and run-file hashes (JSON)", "/assets/results/qwen-2026-10-25.json"),
-  ("link", "Talk to us about the test", "/pages/contact.html"),
- ]}
+RESULTS = {'file': 'our-test-results',
+ 'title': 'Model comparison and test results | Hydra',
+ 'description': 'Compare Hydra with Qwen3.8-27B, Foundation-Sec 8B and Granite 4.1 3B. Matched lab runs, earlier results, and '
+                'the limits of each test.',
+ 'blocks': [('h1', 'Our model comparisons'),
+            ('lead',
+             'We tested Hydra with Qwen3.8-27B, Foundation-Sec 8B and Granite 4.1 3B. Below are the comparisons on matching '
+             'cases, followed by the earlier 42-alert test. Different case sets and engine versions cannot be ranked as one '
+             'accuracy score.'),
+            ('small',
+             'Latest Qwen runs measured 25 October 2026; earlier comparison reported 17 October 2026. These are '
+             'Hydra system results unless marked model-only. Engine v2 is not enabled in production.'),
+            ('h2', 'Qwen and Foundation-Sec on the same 277 cases'),
+            ('p',
+             'These engine v2 runs used the same 26 attacks and 251 harmless alerts, with behaviour rules and guards enabled. '
+             'Program evidence has a favourable history baseline that separates the classes by construction, so those results '
+             'are upper bounds. Host evidence avoids that particular flaw but still uses narrow lab recordings.'),
+            ('table',
+             [['Model and evidence', 'Attacks confirmed', 'Harmless cleared', 'Attacks dismissed', 'False alarms'],
+              ['Qwen3.8-27B, program evidence', '23 of 26', '204 of 251', '0', '0'],
+              ['Foundation-Sec 8B, program evidence', '23 of 26', '64 of 251', '0', '0'],
+              ['Qwen3.8-27B, host evidence', '21 of 26', '208 of 251', '0', '0'],
+              ['Foundation-Sec 8B, host evidence', '23 of 26', '60 of 251', '0', '0']]),
+            ('p',
+             'All remaining cases went to a person. With program evidence, Qwen left 3 attacks and 47 harmless alerts to a '
+             'person; Foundation-Sec left 3 attacks and 187 harmless alerts. With host evidence, Qwen left 5 attacks and 43 '
+             'harmless alerts; Foundation-Sec left 3 attacks and 191 harmless alerts. No case had an execution error in these '
+             'four runs.'),
+            ('p',
+             'Qwen cleared more harmless alerts in these runs. With host evidence, Foundation-Sec confirmed two more attacks. '
+             'These are Hydra system outcomes after code checks, not standalone model accuracy. Granite was not measured on this '
+             '277-case set.'),
+            ('link',
+             'Download the matched model comparison and run-file hashes (JSON)',
+             '/assets/results/model-comparison-2026-10.json'),
+            ('h2', 'Qwen on the same alerts, three evidence settings'),
+            ('p',
+             'Each setting used the same 277 recorded cases: 26 attacks and 251 harmless alerts. The behaviour rules, dismissal '
+             'guard and evidence checks were enabled in all three runs. A case sent to a person is neither a confirmed attack '
+             'nor a cleared alert.'),
+            ('table',
+             [['Final outcome', 'Program evidence', 'Host evidence', 'No Wazuh evidence'],
+              ['Attacks confirmed', '23 of 26', '21 of 26', '11 of 26'],
+              ['Attacks sent to a person', '3 of 26', '5 of 26', '15 of 26'],
+              ['Attacks dismissed as harmless', '0 of 26', '0 of 26', '0 of 26'],
+              ['Harmless alerts cleared', '204 of 251', '208 of 251', '224 of 251'],
+              ['Harmless alerts sent to a person', '47 of 251', '43 of 251', '27 of 251'],
+              ['Harmless alerts called attacks', '0 of 251', '0 of 251', '0 of 251'],
+              ['Cases with an execution error', '0 of 277', '0 of 277', '0 of 277']]),
+            ('p',
+             '**Program evidence** describes the history of the program involved. **Host evidence** describes activity on the '
+             'machine. **No Wazuh evidence** omits those recorded tool results; Hydra still has the alert and its code-based '
+             'checks. Clearing more harmless alerts is only one part of the result: without Wazuh evidence, fewer attacks were '
+             'confirmed and more were left to a person.'),
+            ('h2', 'Why the program-evidence result is an upper bound'),
+            ('p',
+             "The injected history was built from the recordings' harmless events. Attack programs therefore appeared new, while "
+             'harmless programs with history appeared familiar. This separates the two classes by construction. Real '
+             'environments also have new harmless programs and attacks using familiar programs. We have not yet measured that '
+             'fairer mix.'),
+            ('p',
+             'The host-evidence run does not have that particular separation. It confirmed 21 of 26 attacks and cleared 208 of '
+             '251 harmless alerts, with none dismissed and no false alarms in the sample. It still uses activity from the period '
+             'around an attack and repetitive lab background, so it is not a production estimate either.'),
+            ('h2', 'What we ran'),
+            ('ul',
+             ['**Model configuration:** Qwen3.8-27B, FP8 (8-bit), thinking switched off, served with vLLM on one NVIDIA A100 40 '
+              'GB.',
+              '**Investigation:** Hydra engine v2, with fixed questions, recorded tool evidence, code-based confidence and '
+              'guards, and checks on evidence quotes.',
+              '**Cases:** recorded Windows attack-log cases from seven lab campaigns, covering one attack family. The harmless '
+              'alerts are background activity from the lab, not customer traffic.',
+              '**Runs:** one run per evidence setting, on the same 277 cases. No model was rerun to prepare this publication.',
+              '**Verification:** the published counts were recomputed from the individual saved outcomes. They are final Hydra '
+              "decisions, not the model's unchecked answers."]),
+            ('h2', 'The development and test split'),
+            ('p',
+             'The rules and checks were developed on the development half. For the program-evidence run, the benchmark split, '
+             'recomputed on the full case set, gives the following results. Both halves share the favourable program-history '
+             'setup, so the test half does not remove that limitation.'),
+            ('table',
+             [['Split', 'Attacks confirmed', 'Harmless cleared', 'Attacks dismissed', 'False alarms'],
+              ['Development', '13 of 14', '100 of 126', '0', '0'],
+              ['Test', '10 of 12', '104 of 125', '0', '0']]),
+            ('h2', 'What these results do not prove'),
+            ('ul',
+             ['**Zero observed errors is not a guarantee.** There are only 26 attack cases. No attacks dismissed in this sample '
+              'does not establish a zero dismissal rate in use.',
+              '**This is a narrow lab test.** It does not establish performance across other attack families, operating systems, '
+              'cloud alerts or customer environments.',
+              '**These are system results.** The model, behaviour rules and guards work together. The counts should not be '
+              "presented as Qwen's standalone accuracy.",
+              '**It is not an independent evaluation.** The team prepared the cases and labels. External relabelling and '
+              'adversarial review are still needed.',
+              "**Each configuration was run once.** We have not measured Qwen's variation across repeated runs here.",
+              '**It is not a bank burst test.** These counts do not establish production capacity, response-time guarantees or '
+              'cost per customer.',
+              '**It is not the production configuration.** Engine v2 remains disabled in production, and the Qwen GPU stays off '
+              'unless a separate run is requested.']),
+            ('h2', 'What comes next'),
+            ('p',
+             'We plan a fairer history baseline, independent review of labels and rules, and a separate burst test. Customer '
+             'work with real data will not start until the Cyber Security Authority answers our licence position in writing.'),
+            ('link', 'Download the aggregate results and run-file hashes (JSON)', '/assets/results/qwen-2026-10-25.json'),
+            ('link', 'Talk to us about the test', '/pages/contact.html'),
+            ('h2', 'Earlier comparison: 42 alerts, October 2026'),
+            ('p',
+             'These previously published results are retained for comparison. They use 18 attacks and 24 harmless alerts, with a '
+             'different setup from the newer test. Qwen was not measured on this set. Granite was run before the later fixes, so '
+             'this is not a controlled ranking of all three models.'),
+            ('h2', 'The test'),
+            ('ul',
+             ['**42 alerts:** 18 real attacks and 24 harmless look-alikes.',
+              '**20 from recorded real-world data.** These come from public attack recordings (OTRF Security-Datasets, MIT '
+              "licence). The attack tool's own events are labelled as attacks. The other events from the same recordings are "
+              'labelled harmless.',
+              '**22 we wrote ourselves** from well-known attack and normal patterns: a Word document starting PowerShell, '
+              'Kerberoasting, password spraying, backup software, patching, VPN logons and so on.',
+              '**Titles and severity do not give away the answer.** Alerts are titled and rated by the rule that fired, never by '
+              'the label, and a test checks that severity does not separate attacks from harmless alerts within a rule.',
+              "**A new customer's situation.** We removed anything a brand-new customer would not have yet: stored reputation "
+              'lookups, related alerts and analyst history.']),
+            ('h3', 'How we score it'),
+            ('table',
+             [['Measure', 'What it means'],
+              ['Attacks flagged', 'Real attacks Hydra called an attack'],
+              ['Attacks dismissed', 'Real attacks Hydra called harmless. This is the dangerous mistake. The target is zero.'],
+              ['Harmless alerts cleared', 'Harmless alerts Hydra called harmless: the noise it removes'],
+              ['Harmless alerts called attacks', 'False alarms'],
+              ['Left to a person', 'Alerts Hydra said needs a person, whichever the truth']]),
+            ('h2', 'The results'),
+            ('table',
+             [['Set-up', 'Attacks flagged', 'Harmless cleared', 'Attacks dismissed', 'Harmless called attacks', 'Time per alert'],
+              ["Hydra's built-in checks only, no AI", '13 of 18', '19 of 24', '0', '0', 'Under a second'],
+              ['Checks plus Foundation-Sec 8B (open model, one NVIDIA L4 GPU)', '13 of 18', '19 of 24', '0', '0', '28 seconds'],
+              ['Checks plus Granite 4.1 3B (small open model, a laptop), run before our latest fixes',
+               '12 of 18',
+               '19 of 24',
+               '0',
+               '0',
+               '25 seconds']]),
+            ('p', 'Every attack Hydra did not flag was passed to a person as "needs a person". None was called harmless.'),
+            ('h3', 'What the AI alone does without the checks'),
+            ('table',
+             [['AI model on its own', 'Attacks flagged', 'Attacks dismissed', 'Harmless called attacks'],
+              ["Granite 4.1 3B, given Hydra's behaviour analysis", '16 of 18', '2 of 18', '1 of 24'],
+              ['Granite 4.1 3B, without the behaviour analysis', '16 of 18', '1 of 18', '15 of 24'],
+              ['Foundation-Sec 8B, given the behaviour analysis', '18 of 18', '0 of 18', '0 of 24']]),
+            ('p',
+             'In this earlier test, the small model on its own dismissed real attacks. The model-only table and guarded system '
+             'table measure different things. No Gemini result is included in this comparison.'),
+            ('h2', 'The five attacks it did not flag'),
+            ('p', 'We list them because you should know where the checks are weak.'),
+            ('ul',
+             ["A memory-dumping tool running from a user's Desktop folder, seen on its own as a program starting. Hydra only "
+              'noted that it ran from a folder anyone can write to.',
+              'A reconnaissance command (queries about the user, the system or accounts). Hydra noted it as weak evidence.',
+              'A program listening for connections on port 8000.',
+              'Two reads of the Windows Credential Manager vault.']),
+            ('p',
+             'Each of these scored too low for Hydra to call an attack in that earlier run, so each went to a person. These '
+             'failure cases belong to the 42-alert test, not the newer 277-case test.'),
+            ('p',
+             'Five harmless alerts were also left to a person rather than cleared: two ordinary logons, two process starts and '
+             'one registry change.'),
+            ('h2', 'What this test does not show'),
+            ('ul',
+             ['**We wrote 22 of the 42 cases,** knowing which checks existed. That flatters the result.',
+              '**Nobody outside the company has relabelled it.** The labels are ours.',
+              '**We tuned the checks while looking at half of the alerts.** We scored the other half once, with the checks '
+              'frozen: 3 of 6 attacks flagged and 5 of 9 harmless cleared. We then fixed two bugs, so the current figures on '
+              'that half (4 of 6 and 6 of 9) are no longer a clean test.',
+              '**It covers Windows events only.** It says nothing about Okta, AWS, Google Cloud or Linux alerts.',
+              '**The recordings are small and from 2020.** Each has between 68 and 122 events.',
+              '**One computer, two small models.** Results with other models or hardware will differ.',
+              '**It does not test the reputation lookups or analyst history,** because a new customer has neither.',
+              '**It shows the checks work on these patterns.** It does not show how Hydra will do on your alerts.',
+              '**It is small.** Zero dismissed among 18 attacks does not prove a zero dismissal rate in use.'])]}
 
 ABOUT = {
  "file": "about",

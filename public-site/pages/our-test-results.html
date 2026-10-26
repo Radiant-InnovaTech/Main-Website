@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Qwen lab results: 277 recorded alerts | Hydra</title>
-<meta name="description" content="Hydra engine v2 with Qwen3.8-27B on 277 recorded lab alerts. All three evidence settings, human referrals, and the limits of the test.">
+<title>Model comparison and test results | Hydra</title>
+<meta name="description" content="Compare Hydra with Qwen3.8-27B, Foundation-Sec 8B and Granite 4.1 3B. Matched lab runs, earlier results, and the limits of each test.">
 <link rel="canonical" href="https://radiantinnovatech.com/pages/our-test-results.html">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Hydra"><meta property="og:title" content="Qwen lab results: 277 recorded alerts | Hydra"><meta property="og:description" content="Hydra engine v2 with Qwen3.8-27B on 277 recorded lab alerts. All three evidence settings, human referrals, and the limits of the test."><meta property="og:url" content="https://radiantinnovatech.com/pages/our-test-results.html"><meta property="og:image" content="https://radiantinnovatech.com/assets/brand/og-image-light.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Hydra"><meta property="og:title" content="Model comparison and test results | Hydra"><meta property="og:description" content="Compare Hydra with Qwen3.8-27B, Foundation-Sec 8B and Granite 4.1 3B. Matched lab runs, earlier results, and the limits of each test."><meta property="og:url" content="https://radiantinnovatech.com/pages/our-test-results.html"><meta property="og:image" content="https://radiantinnovatech.com/assets/brand/og-image-light.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,12 +22,20 @@
 </div></header>
 <main id="main">
 <section class="hero"><div class="wrap narrow">
-<h1>Our Qwen lab results</h1>
-<p class="lead">With program evidence, Hydra confirmed 23 of 26 attacks and cleared 204 of 251 harmless alerts. It dismissed no attacks and raised no false alarms in this sample. The program-history setup favours this result, so it is an upper bound, not a production estimate.</p>
-<p class="note">Measured 25 October 2026. Publication prepared 26 October 2026. These are Hydra engine v2 results with Qwen3.8-27B, not a test of the model on its own. Engine v2 is not enabled in production.</p>
+<h1>Our model comparisons</h1>
+<p class="lead">We tested Hydra with Qwen3.8-27B, Foundation-Sec 8B and Granite 4.1 3B. Below are the comparisons on matching cases, followed by the earlier 42-alert test. Different case sets and engine versions cannot be ranked as one accuracy score.</p>
+<p class="note">Latest Qwen runs measured 25 October 2026; earlier comparison reported 17 October 2026. These are Hydra system results unless marked model-only. Engine v2 is not enabled in production.</p>
 </div></section>
 <section class="sec"><div class="wrap narrow">
-<h2>The same alerts, three evidence settings</h2>
+<h2>Qwen and Foundation-Sec on the same 277 cases</h2>
+<p>These engine v2 runs used the same 26 attacks and 251 harmless alerts, with behaviour rules and guards enabled. Program evidence has a favourable history baseline that separates the classes by construction, so those results are upper bounds. Host evidence avoids that particular flaw but still uses narrow lab recordings.</p>
+<div class="tablewrap"><table><thead><tr><th>Model and evidence</th><th>Attacks confirmed</th><th>Harmless cleared</th><th>Attacks dismissed</th><th>False alarms</th></tr></thead><tbody><tr><td>Qwen3.8-27B, program evidence</td><td>23 of 26</td><td>204 of 251</td><td>0</td><td>0</td></tr><tr><td>Foundation-Sec 8B, program evidence</td><td>23 of 26</td><td>64 of 251</td><td>0</td><td>0</td></tr><tr><td>Qwen3.8-27B, host evidence</td><td>21 of 26</td><td>208 of 251</td><td>0</td><td>0</td></tr><tr><td>Foundation-Sec 8B, host evidence</td><td>23 of 26</td><td>60 of 251</td><td>0</td><td>0</td></tr></tbody></table></div>
+<p>All remaining cases went to a person. With program evidence, Qwen left 3 attacks and 47 harmless alerts to a person; Foundation-Sec left 3 attacks and 187 harmless alerts. With host evidence, Qwen left 5 attacks and 43 harmless alerts; Foundation-Sec left 3 attacks and 191 harmless alerts. No case had an execution error in these four runs.</p>
+<p>Qwen cleared more harmless alerts in these runs. With host evidence, Foundation-Sec confirmed two more attacks. These are Hydra system outcomes after code checks, not standalone model accuracy. Granite was not measured on this 277-case set.</p>
+<p><a class="more" href="/assets/results/model-comparison-2026-10.json">Download the matched model comparison and run-file hashes (JSON) &rarr;</a></p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>Qwen on the same alerts, three evidence settings</h2>
 <p>Each setting used the same 277 recorded cases: 26 attacks and 251 harmless alerts. The behaviour rules, dismissal guard and evidence checks were enabled in all three runs. A case sent to a person is neither a confirmed attack nor a cleared alert.</p>
 <div class="tablewrap"><table><thead><tr><th>Final outcome</th><th>Program evidence</th><th>Host evidence</th><th>No Wazuh evidence</th></tr></thead><tbody><tr><td>Attacks confirmed</td><td>23 of 26</td><td>21 of 26</td><td>11 of 26</td></tr><tr><td>Attacks sent to a person</td><td>3 of 26</td><td>5 of 26</td><td>15 of 26</td></tr><tr><td>Attacks dismissed as harmless</td><td>0 of 26</td><td>0 of 26</td><td>0 of 26</td></tr><tr><td>Harmless alerts cleared</td><td>204 of 251</td><td>208 of 251</td><td>224 of 251</td></tr><tr><td>Harmless alerts sent to a person</td><td>47 of 251</td><td>43 of 251</td><td>27 of 251</td></tr><tr><td>Harmless alerts called attacks</td><td>0 of 251</td><td>0 of 251</td><td>0 of 251</td></tr><tr><td>Cases with an execution error</td><td>0 of 277</td><td>0 of 277</td><td>0 of 277</td></tr></tbody></table></div>
 <p><strong>Program evidence</strong> describes the history of the program involved. <strong>Host evidence</strong> describes activity on the machine. <strong>No Wazuh evidence</strong> omits those recorded tool results; Hydra still has the alert and its code-based checks. Clearing more harmless alerts is only one part of the result: without Wazuh evidence, fewer attacks were confirmed and more were left to a person.</p>
@@ -53,9 +61,37 @@
 <section class="sec"><div class="wrap narrow">
 <h2>What comes next</h2>
 <p>We plan a fairer history baseline, independent review of labels and rules, and a separate burst test. Customer work with real data will not start until the Cyber Security Authority answers our licence position in writing.</p>
-<p>This replaces the earlier 42-alert test as the main results page. That earlier test used a different case set and setup; its figures cannot be compared directly with these results.</p>
 <p><a class="more" href="/assets/results/qwen-2026-10-25.json">Download the aggregate results and run-file hashes (JSON) &rarr;</a></p>
 <p><a class="more" href="/pages/contact.html">Talk to us about the test &rarr;</a></p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>Earlier comparison: 42 alerts, October 2026</h2>
+<p>These previously published results are retained for comparison. They use 18 attacks and 24 harmless alerts, with a different setup from the newer test. Qwen was not measured on this set. Granite was run before the later fixes, so this is not a controlled ranking of all three models.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>The test</h2>
+<ul><li><strong>42 alerts:</strong> 18 real attacks and 24 harmless look-alikes.</li><li><strong>20 from recorded real-world data.</strong> These come from public attack recordings (OTRF Security-Datasets, MIT licence). The attack tool's own events are labelled as attacks. The other events from the same recordings are labelled harmless.</li><li><strong>22 we wrote ourselves</strong> from well-known attack and normal patterns: a Word document starting PowerShell, Kerberoasting, password spraying, backup software, patching, VPN logons and so on.</li><li><strong>Titles and severity do not give away the answer.</strong> Alerts are titled and rated by the rule that fired, never by the label, and a test checks that severity does not separate attacks from harmless alerts within a rule.</li><li><strong>A new customer's situation.</strong> We removed anything a brand-new customer would not have yet: stored reputation lookups, related alerts and analyst history.</li></ul>
+<h3>How we score it</h3>
+<div class="tablewrap"><table><thead><tr><th>Measure</th><th>What it means</th></tr></thead><tbody><tr><td>Attacks flagged</td><td>Real attacks Hydra called an attack</td></tr><tr><td>Attacks dismissed</td><td>Real attacks Hydra called harmless. This is the dangerous mistake. The target is zero.</td></tr><tr><td>Harmless alerts cleared</td><td>Harmless alerts Hydra called harmless: the noise it removes</td></tr><tr><td>Harmless alerts called attacks</td><td>False alarms</td></tr><tr><td>Left to a person</td><td>Alerts Hydra said needs a person, whichever the truth</td></tr></tbody></table></div>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>The results</h2>
+<div class="tablewrap"><table><thead><tr><th>Set-up</th><th>Attacks flagged</th><th>Harmless cleared</th><th>Attacks dismissed</th><th>Harmless called attacks</th><th>Time per alert</th></tr></thead><tbody><tr><td>Hydra's built-in checks only, no AI</td><td>13 of 18</td><td>19 of 24</td><td>0</td><td>0</td><td>Under a second</td></tr><tr><td>Checks plus Foundation-Sec 8B (open model, one NVIDIA L4 GPU)</td><td>13 of 18</td><td>19 of 24</td><td>0</td><td>0</td><td>28 seconds</td></tr><tr><td>Checks plus Granite 4.1 3B (small open model, a laptop), run before our latest fixes</td><td>12 of 18</td><td>19 of 24</td><td>0</td><td>0</td><td>25 seconds</td></tr></tbody></table></div>
+<p>Every attack Hydra did not flag was passed to a person as "needs a person". None was called harmless.</p>
+<h3>What the AI alone does without the checks</h3>
+<div class="tablewrap"><table><thead><tr><th>AI model on its own</th><th>Attacks flagged</th><th>Attacks dismissed</th><th>Harmless called attacks</th></tr></thead><tbody><tr><td>Granite 4.1 3B, given Hydra's behaviour analysis</td><td>16 of 18</td><td>2 of 18</td><td>1 of 24</td></tr><tr><td>Granite 4.1 3B, without the behaviour analysis</td><td>16 of 18</td><td>1 of 18</td><td>15 of 24</td></tr><tr><td>Foundation-Sec 8B, given the behaviour analysis</td><td>18 of 18</td><td>0 of 18</td><td>0 of 24</td></tr></tbody></table></div>
+<p>In this earlier test, the small model on its own dismissed real attacks. The model-only table and guarded system table measure different things. No Gemini result is included in this comparison.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>The five attacks it did not flag</h2>
+<p>We list them because you should know where the checks are weak.</p>
+<ul><li>A memory-dumping tool running from a user's Desktop folder, seen on its own as a program starting. Hydra only noted that it ran from a folder anyone can write to.</li><li>A reconnaissance command (queries about the user, the system or accounts). Hydra noted it as weak evidence.</li><li>A program listening for connections on port 8000.</li><li>Two reads of the Windows Credential Manager vault.</li></ul>
+<p>Each of these scored too low for Hydra to call an attack in that earlier run, so each went to a person. These failure cases belong to the 42-alert test, not the newer 277-case test.</p>
+<p>Five harmless alerts were also left to a person rather than cleared: two ordinary logons, two process starts and one registry change.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>What this test does not show</h2>
+<ul><li><strong>We wrote 22 of the 42 cases,</strong> knowing which checks existed. That flatters the result.</li><li><strong>Nobody outside the company has relabelled it.</strong> The labels are ours.</li><li><strong>We tuned the checks while looking at half of the alerts.</strong> We scored the other half once, with the checks frozen: 3 of 6 attacks flagged and 5 of 9 harmless cleared. We then fixed two bugs, so the current figures on that half (4 of 6 and 6 of 9) are no longer a clean test.</li><li><strong>It covers Windows events only.</strong> It says nothing about Okta, AWS, Google Cloud or Linux alerts.</li><li><strong>The recordings are small and from 2020.</strong> Each has between 68 and 122 events.</li><li><strong>One computer, two small models.</strong> Results with other models or hardware will differ.</li><li><strong>It does not test the reputation lookups or analyst history,</strong> because a new customer has neither.</li><li><strong>It shows the checks work on these patterns.</strong> It does not show how Hydra will do on your alerts.</li><li><strong>It is small.</strong> Zero dismissed among 18 attacks does not prove a zero dismissal rate in use.</li></ul>
 </div></section>
 </main>
 <footer class="site-footer"><div class="wrap">
