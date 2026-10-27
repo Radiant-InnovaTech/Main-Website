@@ -90,7 +90,7 @@ WORKING = {
 
   ("h2", "Questions"),
   ("faq", [
-    ("Where does my data go?", "To Hydra, which we host on Google Cloud in Iowa, in the United States. You choose whether alerts are read by Google's Gemini model or by an open model we run ourselves. We do not train models on your data. Our [Security page](/pages/security.html) lists every provider that handles it."),
+    ("Where does my data go?", "To Hydra, which we host on Google Cloud in Iowa, in the United States. When model processing is enabled, alert text is read by an open model that we operate in our Google Cloud environment. We do not use Vertex AI and we do not train models on your data. Our [Security page](/pages/security.html) lists every provider that handles it."),
     ("What access do you need?", "Read-only access to the tools you connect. We send you the list of permissions before you set anything up. Hydra reads alert details. It does not read file contents, email contents, passwords or payment card data, and we ask you not to send those."),
     ("Does Hydra change anything in our systems?", "No. Hydra is advice-only today. A person carries out any action it recommends, in your own tools."),
     ("Can we run it on our own servers?", "Not yet. We host it today."),
@@ -173,12 +173,11 @@ SECURITY = {
 
   ("h2", "Where your data goes"),
   ("table", [["Provider", "What it does", "Where"],
-             ["Google Cloud", "Hosts Hydra, its database, storage and backups", "United States (Iowa)"],
-             ["Google Vertex AI", "Hosted AI model, only if you choose it", "United States"],
+             ["Google Cloud", "Hosts Hydra, its database, storage, backups and Radiant-operated AI models", "United States (Iowa)"],
              ["Clerk", "Sign-in and accounts", "United States"],
              ["Brevo", "Email notifications, only if enabled", "European Union"],
              ["mNotify", "Text-message notifications, only if enabled", "Ghana"]]),
-  ("p", "We will tell you 14 days before we add a provider that handles your data. You can also choose an open AI model that we run ourselves, so that alerts are not sent to Google's model."),
+  ("p", "We do not use Google Vertex AI. When model processing is enabled, the model runs inside Radiant's Google Cloud environment. We will tell you 14 days before we add another provider that handles your data."),
 
   ("h2", "Licensing, stated plainly"),
   ("p", "We plan to run Hydra for customers ourselves, under a licence from Ghana's Cyber Security Authority for managed cybersecurity services. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to must be run by a company accredited by the Authority and owned mostly by Ghanaians. That is why we will be the operator and not only the software maker. This is our reading, and a Ghanaian lawyer has not checked it yet."),
@@ -257,7 +256,7 @@ HOWITWORKS = {
   ]),
 
   ("h2", "7. Where your data goes"),
-  ("p", "Hydra is hosted by us on Google Cloud in Iowa, in the United States. The AI model can be Google's Gemini on Vertex AI, or an open model that we run ourselves. Alert text is sent to whichever model you choose. We do not train models on your data. Hydra reads alert details, not file contents, email contents, passwords or payment card data. The full list of providers is on our [Security page](/pages/security.html)."),
+  ("p", "Hydra is hosted by us on Google Cloud in Iowa, in the United States. When model processing is enabled, we run an open model ourselves in that environment. We do not use Vertex AI or send alerts to another hosted model provider, and we do not train models on your data. Hydra reads alert details, not file contents, email contents, passwords or payment card data. The full list of providers is on our [Security page](/pages/security.html)."),
 
   ("h2", "8. What Hydra does not do yet"),
   ("ul", [
