@@ -11,11 +11,11 @@ REPO = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.
 OUT = os.path.join(REPO, "public-site")
 SITE = "https://radiantinnovatech.com"
 
-# Switches. The contact form remains paused. Early access is enabled at Samuel's request while
-# registration is pending; the backend needs EARLY_ACCESS_ENABLED=true as well. Fill MATOMO_* when our own
+# Switches. Both forms are enabled at Samuel's request while registration is pending; the backend
+# also needs FORMS_ENABLED=true. Fill MATOMO_* when our own
 # Matomo server is running; the privacy notice then says so and the content security policy needs
 # MATOMO_URL set on the service too.
-FORMS_PAUSED = True
+FORMS_PAUSED = False
 EARLY_ACCESS_ENABLED = True
 MATOMO_URL = ""      # for example https://stats.radiantinnovatech.com
 MATOMO_SITE_ID = ""  # for example 1
