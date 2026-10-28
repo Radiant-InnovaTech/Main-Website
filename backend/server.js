@@ -506,16 +506,20 @@ app.get('/api/health', async (_req, res) => {
   });
 });
 
-// Forms are switched off until the company is registered with the Data Protection Commission.
-// Set FORMS_ENABLED=true on the service to turn them on (and flip FORMS_PAUSED in site-src/build_site.py).
+// Forms are off by default. Early access can be enabled independently of the contact form.
 const FORMS_ENABLED = process.env.FORMS_ENABLED === 'true';
+const EARLY_ACCESS_ENABLED = process.env.EARLY_ACCESS_ENABLED === 'true';
 function formsGate(_req, res, next) {
   if (FORMS_ENABLED) return next();
   res.status(503).json({ success: false, error: 'Our forms are switched off for now. Please write to samuelmaclar@radiantinnovatech.com or call 050 455 5100.' });
 }
+function waitlistGate(req, res, next) {
+  if (EARLY_ACCESS_ENABLED) return next();
+  return formsGate(req, res, next);
+}
 
 // ── Waitlist submission ────────────────────────────────────────────────────────
-app.post('/api/waitlist/submit', formsGate, waitlistLimiter, async (req, res) => {
+app.post('/api/waitlist/submit', waitlistGate, waitlistLimiter, async (req, res) => {
   try {
     const ip = getClientIp(req);
 
