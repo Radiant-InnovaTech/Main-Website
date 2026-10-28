@@ -12,3 +12,9 @@ jobs:
         with: { node-version: 20 }
       - name: Check pages (placeholders, claims, links, structure)
         run: node scripts/check-site.js
+      - name: Install website backend dependencies
+        working-directory: backend
+        run: npm ci
+      - name: Test forms, storage and admin portal
+        working-directory: backend
+        run: npm test

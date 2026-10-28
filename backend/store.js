@@ -5,6 +5,7 @@
 //                          revision. Needs FIRESTORE_DATABASE (default "(default)") and the service's
 //                          identity must have the Cloud Datastore User role.
 //   DATA_STORE=sqlite      default, for local work and tests: a file under backend/data.
+//   DATA_STORE=memory      tests only: process memory, discarded when the process exits.
 //
 // Both backends expose the same few operations. Searching, sorting and paging happen here, in plain
 // JavaScript, so the two behave the same. That is fine at this volume (a few hundred rows at most,
@@ -13,6 +14,26 @@ const path = require('path');
 const fs   = require('fs');
 
 const TABLES = ['waitlist_entries', 'contact_requests', 'admin_otps', 'audit_logs'];
+
+function memoryBackend() {
+  if (process.env.NODE_ENV !== 'test') throw new Error('DATA_STORE=memory is allowed only in tests');
+  const tables = Object.fromEntries(TABLES.map(t => [t, new Map()]));
+  const ok = (t) => { if (!TABLES.includes(t)) throw new Error('Unknown table ' + t); return tables[t]; };
+  return {
+    name: 'memory (test only)',
+    async all(t) { return [...ok(t).values()].map(row => ({ ...row })); },
+    async get(t, id) { const row = ok(t).get(id); return row ? { ...row } : null; },
+    async put(t, row) { ok(t).set(row.id, { ...row }); },
+    async patch(t, id, fields) { const row = ok(t).get(id); if (row) ok(t).set(id, { ...row, ...fields }); },
+    async remove(t, id) { ok(t).delete(id); },
+    async count(t) { return ok(t).size; },
+    async removeOlderThan(t, iso) {
+      let deleted = 0;
+      for (const [id, row] of ok(t)) if (row.created_at < iso) { ok(t).delete(id); deleted++; }
+      return deleted;
+    },
+  };
+}
 
 // ── SQLite backend ───────────────────────────────────────────────────────────
 function sqliteBackend() {
@@ -100,7 +121,7 @@ function firestoreBackend() {
 }
 
 const kind = (process.env.DATA_STORE || 'sqlite').toLowerCase();
-const backend = kind === 'firestore' ? firestoreBackend() : sqliteBackend();
+const backend = kind === 'firestore' ? firestoreBackend() : kind === 'memory' ? memoryBackend() : sqliteBackend();
 
 // ── Shared helpers, same for both backends ───────────────────────────────────
 const newestFirst = (a, b) => (a.created_at < b.created_at ? 1 : a.created_at > b.created_at ? -1 : 0);
@@ -113,8 +134,10 @@ async function search(table, { term = '', fields = [], equals = {}, limit = null
   for (const [k, v] of Object.entries(equals)) if (v) rows = rows.filter(r => r[k] === v);
   rows.sort(newestFirst);
   const total = rows.length;
+  const weekCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const week = rows.filter(r => new Date(r.created_at).getTime() > weekCutoff).length;
   if (limit != null) rows = rows.slice(offset, offset + limit);
-  return { rows, total };
+  return { rows, total, week };
 }
 
 async function findWaitlistByEmail(email) {
@@ -138,12 +161,30 @@ async function purge(months) {
   const iso = cutoff.toISOString();
   const contacts = await backend.removeOlderThan('contact_requests', iso);
   const waitlist = await backend.removeOlderThan('waitlist_entries', iso);
+  const audits = await backend.removeOlderThan('audit_logs', iso);
   await backend.removeOlderThan('admin_otps', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-  return { contacts, waitlist };
+  return { contacts, waitlist, audits };
+}
+
+// Public submissions used to copy names, emails and IP addresses into the audit log. Keep the event and entry id,
+// but remove that duplicate personal data so deleting or expiring a form record actually removes the contact details.
+async function scrubAuditPii() {
+  const actions = new Set(['waitlist_submit', 'contact_submit', 'admin_delete', 'admin_delete_contact']);
+  let changed = 0;
+  for (const row of await backend.all('audit_logs')) {
+    if (!actions.has(row.action)) continue;
+    let parsed = {};
+    try { parsed = JSON.parse(row.details || '{}'); } catch { /* replace malformed legacy details below */ }
+    const details = JSON.stringify({ entry_id: parsed.entry_id || null });
+    if (row.details === details && !row.ip) continue;
+    await backend.patch('audit_logs', row.id, { details, ip: null });
+    changed++;
+  }
+  return changed;
 }
 
 module.exports = {
   name: backend.name,
   get: backend.get, put: backend.put, patch: backend.patch, remove: backend.remove, count: backend.count,
-  search, findWaitlistByEmail, invalidateOtps, latestOtp, purge,
+  search, findWaitlistByEmail, invalidateOtps, latestOtp, purge, scrubAuditPii,
 };

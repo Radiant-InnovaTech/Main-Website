@@ -41,6 +41,17 @@ const INTERNAL_NOTIFY = [
   'christiandwamena@radiantinnovatech.com',
 ];
 
+// Named administrators only. A company-domain mailbox is not automatically an administrator.
+const ADMIN_EMAILS = new Set((process.env.ADMIN_EMAILS || '')
+  .split(',').map(email => email.trim().toLowerCase()).filter(Boolean));
+if (NODE_ENV === 'production' && ADMIN_EMAILS.size === 0) {
+  console.error('[FATAL] ADMIN_EMAILS is empty. Refusing to expose an admin login with no allowlist.');
+  process.exit(1);
+}
+function isAdminEmail(email) {
+  return ADMIN_EMAILS.has(String(email || '').trim().toLowerCase());
+}
+
 // CORS origins
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
@@ -63,8 +74,9 @@ console.log('[DB] Using', store.name);
 const RETENTION_MONTHS = 12;
 async function purgeOldSubmissions() {
   try {
-    const { contacts, waitlist } = await store.purge(RETENTION_MONTHS);
-    if (contacts || waitlist) console.log(`[RETENTION] Deleted ${contacts} contact and ${waitlist} early-access entries older than ${RETENTION_MONTHS} months`);
+    const { contacts, waitlist, audits } = await store.purge(RETENTION_MONTHS);
+    const scrubbed = await store.scrubAuditPii();
+    if (contacts || waitlist || audits || scrubbed) console.log(`[RETENTION] Deleted ${contacts} contact, ${waitlist} early-access and ${audits} audit records; scrubbed ${scrubbed} audit records`);
   } catch (err) {
     console.error('[RETENTION] Purge failed:', err.message);
   }
@@ -451,6 +463,7 @@ function parseAddressList(addr) {
 }
 
 async function sendMail(options) {
+  if (NODE_ENV === 'test') return;
   if (!BREVO_API_KEY) {
     console.warn('[EMAIL] BREVO_API_KEY not configured — skipping:', options.subject);
     return;
@@ -542,7 +555,7 @@ app.post('/api/waitlist/submit', formsGate, waitlistLimiter, async (req, res) =>
 
     await store.put('waitlist_entries', entry);
 
-    logAudit('waitlist_submit', { entry_id: entry.id, email: entry.email, name: entry.full_name }, null, ip);
+    logAudit('waitlist_submit', { entry_id: entry.id });
 
     // Fire-and-forget emails (do not await to avoid slowing down the HTTP response)
     sendMail(buildApplicantEmail(entry));
@@ -594,7 +607,7 @@ app.post('/api/contact/submit', formsGate, contactLimiter, async (req, res) => {
 
     await store.put('contact_requests', entry);
 
-    logAudit('contact_submit', { entry_id: entry.id, email: entry.email, name: entry.full_name, company: entry.company }, null, ip);
+    logAudit('contact_submit', { entry_id: entry.id });
 
     // Fire-and-forget notification to the team.
     sendMail({
@@ -621,8 +634,8 @@ app.post('/api/admin/auth/request-otp', otpRequestLimiter, async (req, res) => {
   try {
     const email = String(req.body.email || '').toLowerCase().trim();
 
-    if (!email.endsWith('@radiantinnovatech.com')) {
-      return res.status(400).json({ error: 'Only @radiantinnovatech.com email addresses are allowed.' });
+    if (!isAdminEmail(email)) {
+      return res.status(403).json({ error: 'This email is not authorised for website administration.' });
     }
 
     // Invalidate any existing unused OTPs for this email
@@ -641,7 +654,11 @@ app.post('/api/admin/auth/request-otp', otpRequestLimiter, async (req, res) => {
       console.log(`[OTP][DEV] Code for ${email}: ${otp}`);
     }
 
-    return res.json({ success: true, message: `A 6-digit code has been sent to ${email}.` });
+    return res.json({
+      success: true,
+      message: `A 6-digit code has been sent to ${email}.`,
+      ...(NODE_ENV === 'test' ? { test_code: otp } : {}),
+    });
   } catch (err) {
     console.error('[OTP] Request error:', err);
     return res.status(500).json({ error: 'Internal server error.' });
@@ -658,8 +675,8 @@ app.post('/api/admin/auth/verify-otp', otpVerifyLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Enter the 6-digit code sent to your email.' });
     }
 
-    if (!email.endsWith('@radiantinnovatech.com')) {
-      return res.status(400).json({ error: 'Invalid email address.' });
+    if (!isAdminEmail(email)) {
+      return res.status(403).json({ error: 'This email is not authorised for website administration.' });
     }
 
     // Find latest unused, unexpired OTP for this email
@@ -712,12 +729,12 @@ app.get('/api/admin/waitlist', async (req, res) => {
     const typeFilter = String(req.query.typeFilter || '').trim();
     const offset     = (page - 1) * limit;
 
-    const { rows, total } = await store.search('waitlist_entries', { term: search, fields: ['full_name', 'email', 'company', 'role', 'country'], equals: { user_type: typeFilter }, limit, offset });
+    const { rows, total, week } = await store.search('waitlist_entries', { term: search, fields: ['full_name', 'email', 'company', 'role', 'country'], equals: { user_type: typeFilter }, limit, offset });
 
     // Convert consent integer back to boolean for frontend compatibility
     const formatted = rows.map(r => ({ ...r, consent: !!r.consent }));
 
-    return res.json({ success: true, rows: formatted, total, page, limit });
+    return res.json({ success: true, rows: formatted, total, week, page, limit });
   } catch (err) {
     console.error('[ADMIN] Get waitlist error:', err);
     return res.status(500).json({ error: 'Internal server error.' });
@@ -740,7 +757,7 @@ app.delete('/api/admin/waitlist/:id', async (req, res) => {
     await store.remove('waitlist_entries', id);
 
     logAudit('admin_delete',
-      { entry_id: id, email: entry.email, name: entry.full_name },
+      { entry_id: id },
       claims.email,
       getClientIp(req)
     );
@@ -804,9 +821,9 @@ app.get('/api/admin/contact', async (req, res) => {
     const search = String(req.query.search || '').trim();
     const offset = (page - 1) * limit;
 
-    const { rows, total } = await store.search('contact_requests', { term: search, fields: ['full_name', 'email', 'company'], limit, offset });
+    const { rows, total, week } = await store.search('contact_requests', { term: search, fields: ['full_name', 'email', 'company'], limit, offset });
 
-    return res.json({ success: true, rows, total, page, limit });
+    return res.json({ success: true, rows, total, week, page, limit });
   } catch (err) {
     console.error('[ADMIN] Get contact requests error:', err);
     return res.status(500).json({ error: 'Internal server error.' });
@@ -829,7 +846,7 @@ app.delete('/api/admin/contact/:id', async (req, res) => {
     await store.remove('contact_requests', id);
 
     logAudit('admin_delete_contact',
-      { entry_id: id, email: entry.email, name: entry.full_name },
+      { entry_id: id },
       claims.email,
       getClientIp(req)
     );
