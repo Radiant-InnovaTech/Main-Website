@@ -11,11 +11,12 @@ REPO = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.
 OUT = os.path.join(REPO, "public-site")
 SITE = "https://radiantinnovatech.com"
 
-# Switches. Flip FORMS_PAUSED to False only after the company is registered with the Data Protection
-# Commission, and set FORMS_ENABLED=true on the Cloud Run service. Fill MATOMO_* only when our own
+# Switches. Both forms are enabled at Samuel's request while registration is pending; the backend
+# also needs FORMS_ENABLED=true. Fill MATOMO_* when our own
 # Matomo server is running; the privacy notice then says so and the content security policy needs
 # MATOMO_URL set on the service too.
-FORMS_PAUSED = True
+FORMS_PAUSED = False
+EARLY_ACCESS_ENABLED = True
 MATOMO_URL = ""      # for example https://stats.radiantinnovatech.com
 MATOMO_SITE_ID = ""  # for example 1
 ANALYTICS_ON = bool(MATOMO_URL and MATOMO_SITE_ID)
@@ -178,6 +179,7 @@ def render_blocks(p):
 
 def render_block(b, p):
     k = b[0]
+    paused = FORMS_PAUSED and not (EARLY_ACCESS_ENABLED and p["path"] == "/waitlist/")
     if k == "h1": return f"<h1>{inline(b[1])}</h1>"
     if k == "h2": return f"<h2>{inline(b[1])}</h2>"
     if k == "h3": return f"<h3>{inline(b[1])}</h3>"
@@ -206,11 +208,10 @@ def render_block(b, p):
         return '<div class="founders">' + "".join(
             f'<article class="founder"><img src="{img}" alt="Portrait of {html.escape(name)}" width="220" height="220" loading="lazy"><div><h3>{html.escape(title)}</h3><p>{inline(bio)}</p></div></article>'
             for name, title, bio, img in b[1]) + "</div>"
-    if k == "form" and FORMS_PAUSED:
-        return ('<div class="notice" role="note"><p><strong>Our forms are switched off for now.</strong> We are not yet registered with Ghana\'s Data Protection Commission, '
-                'and we will not collect your details through this website until we are.</p>'
+    if k == "form" and paused:
+        return ('<div class="notice" role="note"><p><strong>Our contact form is switched off for now.</strong> We are not yet registered with Ghana\'s Data Protection Commission.</p>'
                 '<p>To reach us, write to <a href="mailto:samuelmaclar@radiantinnovatech.com">samuelmaclar@radiantinnovatech.com</a> or call 050 455 5100. One of the founders replies within two working days.</p></div>')
-    if k == "state" and FORMS_PAUSED: return ""
+    if k == "state" and paused: return ""
     if k == "form":
         fid, fields, label, hp = b[1], b[2], b[3], b[4]
         m = FORM_FIELDS[fid]
@@ -259,7 +260,7 @@ MATOMO_SNIPPET = ('<script>var _paq=window._paq=window._paq||[];_paq.push(["setD
 def page_html(p):
     path = p["path"]
     blocks = about_blocks(p["blocks"]) if p["file"].endswith("pages/about.html") else p["blocks"]
-    if FORMS_PAUSED and any(x[0] == "form" for x in blocks):
+    if FORMS_PAUSED and not (EARLY_ACCESS_ENABLED and path == "/waitlist/") and any(x[0] == "form" for x in blocks):
         blocks = [("lead", PAUSED_LEAD) if x[0] == "lead" else x for x in blocks]
     q = dict(p, blocks=blocks)
     body = render_blocks(q)

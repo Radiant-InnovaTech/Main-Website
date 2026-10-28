@@ -8,7 +8,9 @@ PROJECT="nexus-501421"; REGION="us-central1"; SERVICE="radiant-nexus-site"; DB="
 gcloud config set project "$PROJECT" >/dev/null
 gcloud services enable firestore.googleapis.com
 if ! gcloud firestore databases describe --database="$DB" >/dev/null 2>&1; then
-  gcloud firestore databases create --database="$DB" --location="$REGION" --type=firestore-native
+  gcloud firestore databases create --database="$DB" --location="$REGION" --type=firestore-native --delete-protection --enable-pitr
+else
+  gcloud firestore databases update --database="$DB" --delete-protection --enable-pitr
 fi
 SA="$(gcloud run services describe "$SERVICE" --region "$REGION" --format='value(spec.template.spec.serviceAccountName)')"
 if [ -z "$SA" ]; then SA="$(gcloud projects describe "$PROJECT" --format='value(projectNumber)')-compute@developer.gserviceaccount.com"; fi
