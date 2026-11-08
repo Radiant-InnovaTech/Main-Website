@@ -96,17 +96,16 @@ def inline(t):
     t = re.sub(r"\[([^\[\]]+?)\]\((/[^)\s]*)\)", r'<a href="\2">\1</a>', t)
     return t
 
-DIAGRAM = """<svg class="diagram" viewBox="0 0 880 150" role="img" aria-labelledby="dg-t dg-d" xmlns="http://www.w3.org/2000/svg">
-<title id="dg-t">The path of an alert through Hydra</title>
-<desc id="dg-d">Your tools send the alert to Hydra. Hydra investigates and writes a verdict. Your analysts decide. Your tools carry out an action only when a person approves.</desc>
-<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#071B2E"/></marker></defs>
-<g font-family="Plus Jakarta Sans, system-ui, sans-serif" font-size="15" fill="#071B2E">
-<rect x="4" y="30" width="180" height="90" rx="8" fill="#fff" stroke="#071B2E" stroke-width="1.5"/><text x="94" y="68" text-anchor="middle" font-weight="700">Your tools</text><text x="94" y="92" text-anchor="middle" font-size="13">send the alert</text>
-<rect x="232" y="30" width="180" height="90" rx="8" fill="#071B2E"/><text x="322" y="68" text-anchor="middle" font-weight="700" fill="#fff">Hydra</text><text x="322" y="92" text-anchor="middle" font-size="13" fill="#fff">investigates, writes a verdict</text>
-<rect x="460" y="30" width="180" height="90" rx="8" fill="#fff" stroke="#071B2E" stroke-width="1.5"/><text x="550" y="68" text-anchor="middle" font-weight="700">Your analysts</text><text x="550" y="92" text-anchor="middle" font-size="13">decide</text>
-<rect x="688" y="30" width="188" height="90" rx="8" fill="#fff" stroke="#071B2E" stroke-width="1.5" stroke-dasharray="6 4"/><text x="782" y="62" text-anchor="middle" font-weight="700">Your tools act</text><text x="782" y="84" text-anchor="middle" font-size="13">only when a person</text><text x="782" y="102" text-anchor="middle" font-size="13">approves</text>
-<path d="M186 75H228" stroke="#071B2E" stroke-width="2" marker-end="url(#ar)"/><path d="M414 75H456" stroke="#071B2E" stroke-width="2" marker-end="url(#ar)"/><path d="M642 75H684" stroke="#071B2E" stroke-width="2" marker-end="url(#ar)"/>
-</g></svg>"""
+DIAGRAM = """<div class="investigation-flow" aria-label="From alert to analyst decision">
+<div class="flow-heading"><span class="flow-eyebrow">FROM ALERT TO DECISION</span><span class="flow-status">Advice-only today</span></div>
+<ol class="flow-steps">
+<li><span class="flow-number" aria-hidden="true">01</span><div><h3>The alert arrives</h3><p>Your monitoring tools send an alert. Hydra keeps the original event.</p><span class="flow-detail">Original event preserved</span></div></li>
+<li><span class="flow-number" aria-hidden="true">02</span><div><h3>Hydra gathers evidence</h3><p>It checks the event and brings together relevant context.</p><span class="flow-detail">Event + related context</span></div></li>
+<li class="flow-check"><span class="flow-number" aria-hidden="true">03</span><div><h3>The verdict is checked</h3><p>The model proposes a verdict. Code checks the evidence and enforces the guards.</p><span class="flow-detail">Uncertain cases go to a person</span></div></li>
+<li><span class="flow-number" aria-hidden="true">04</span><div><h3>Your analyst decides</h3><p>Your team reviews the findings and carries out any action in its own tools.</p><span class="flow-detail">Human review before action</span></div></li>
+</ol>
+<div class="flow-footer"><span aria-hidden="true">↳</span><p><strong>Evidence stays with the verdict.</strong> Your analyst can see what supports the finding.</p></div>
+</div>"""
 
 NAV = [("How it works", "/pages/how-it-works.html"), ("Who it is for", "/pages/solutions.html"), ("Security", "/pages/security.html"),
        ("Our test results", "/pages/our-test-results.html"), ("Working with us", "/pages/working-with-us.html"), ("About", "/pages/about.html")]
@@ -117,8 +116,13 @@ def header(path):
     return f'''<a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap bar">
 <a class="brand" href="/"><img src="/assets/brand/hydra-logo.svg" alt="Hydra" width="132" height="34"></a>
-<nav aria-label="Main">{links}</nav>
-<div class="actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+<nav class="desktop-nav" aria-label="Main">{links}</nav>
+<div class="actions header-actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+<details class="mobile-menu">
+<summary><span>Menu</span><svg class="menu-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="menu-bars" d="M3 5h14M3 10h14M3 15h14"/><path class="menu-close" d="m4 4 12 12M16 4 4 16"/></svg></summary>
+<div class="mobile-panel"><nav aria-label="Main on mobile">{links}</nav>
+<div class="actions"><a class="btn" href="/pages/contact.html">Talk to us</a><a class="btn btn-quiet" href="/waitlist/">Early access</a></div></div>
+</details>
 </div></header>'''
 
 FOOTER = '''<footer class="site-footer"><div class="wrap">
@@ -275,7 +279,8 @@ def page_html(p):
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/site.css?v=20261027-combined">
+<script src="/js/navigation.js" defer></script>
 </head>
 <body>
 {legal}{header(path)}

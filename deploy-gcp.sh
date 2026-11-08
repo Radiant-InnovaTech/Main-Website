@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Deploy Radiant Nexus site+backend to Cloud Run and map it to radiantinnovatech.com
-# Run once: gcloud auth login
+# Deploy the Hydra website and its small form backend to the existing Cloud Run service.
+# Run once on a new machine: gcloud auth login
 set -euo pipefail
 
 PROJECT="nexus-501421"
@@ -14,11 +14,8 @@ gcloud run deploy "$SERVICE" \
   --source . \
   --region "$REGION" \
   --allow-unauthenticated \
-  --set-env-vars "^;^NODE_ENV=production;ALLOWED_ORIGINS=https://radiantinnovatech.com,https://www.radiantinnovatech.com" \
-  --set-secrets "JWT_SECRET=jwt-secret:latest,SMTP_USER=smtp-user:latest,SMTP_PASS=smtp-pass:latest"
+  --max-instances 3 \
+  --set-env-vars "^;^NODE_ENV=production;ALLOWED_ORIGINS=https://radiantinnovatech.com,https://www.radiantinnovatech.com;DATA_STORE=firestore;FIRESTORE_DATABASE=radiant-site" \
+  --set-secrets "JWT_SECRET=jwt-secret:latest,BREVO_API_KEY=brevo-api-key:latest"
 
-# One-time: map the custom domain (prints DNS records you add at your registrar)
-gcloud beta run domain-mappings create \
-  --service "$SERVICE" \
-  --domain radiantinnovatech.com \
-  --region "$REGION"
+# The custom domain is already mapped. Do not recreate the mapping during a release.

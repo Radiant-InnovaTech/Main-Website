@@ -1,0 +1,86 @@
+{
+  "scope": "Matched 277-case engine v2 runs. Program-evidence baseline separates classes by construction; results are an upper bound, not a production estimate.",
+  "outcome_meanings": {
+    "true_positive": "called attack",
+    "false_positive": "called harmless",
+    "needs_context": "sent to a person"
+  },
+  "runs": [
+    {
+      "model": "qwen3.8-27b",
+      "run_file": "rec2-qwen3.8-27b-D.json",
+      "sha256": "ec657877ed1af9497a75c2c29045b0c1ff60c626e3e36ffeeabe91341d964556",
+      "cases": 277,
+      "outcomes": {
+        "attack": {
+          "true_positive": 23,
+          "false_positive": 0,
+          "needs_context": 3
+        },
+        "benign": {
+          "true_positive": 0,
+          "false_positive": 204,
+          "needs_context": 47
+        }
+      },
+      "errors": 0
+    },
+    {
+      "model": "fdtn-ai/foundation-sec-1.1-8b-instruct",
+      "run_file": "rec2-D-program-recipes.json",
+      "sha256": "df6e6ae12a1f853c02c8bac8622d3da499c0bc13ff8b21cf0a5edd1aafb34124",
+      "cases": 277,
+      "outcomes": {
+        "attack": {
+          "true_positive": 23,
+          "false_positive": 0,
+          "needs_context": 3
+        },
+        "benign": {
+          "true_positive": 0,
+          "false_positive": 64,
+          "needs_context": 187
+        }
+      },
+      "errors": 0
+    },
+    {
+      "model": "qwen3.8-27b",
+      "run_file": "rec2-qwen3.8-27b-C3.json",
+      "sha256": "1386d9f112800d5d499f66771e970577399bf24ceebacd9b56ae0c9aa974a371",
+      "cases": 277,
+      "outcomes": {
+        "attack": {
+          "true_positive": 21,
+          "false_positive": 0,
+          "needs_context": 5
+        },
+        "benign": {
+          "true_positive": 0,
+          "false_positive": 208,
+          "needs_context": 43
+        }
+      },
+      "errors": 0
+    },
+    {
+      "model": "fdtn-ai/foundation-sec-1.1-8b-instruct",
+      "run_file": "rec2-C3-host-level-recipes.json",
+      "sha256": "e5cc625132bc02c122531f2dcf05ab3c47e81c45fad4cf9e2fae5035e7ef3097",
+      "cases": 277,
+      "outcomes": {
+        "attack": {
+          "true_positive": 23,
+          "false_positive": 0,
+          "needs_context": 3
+        },
+        "benign": {
+          "true_positive": 0,
+          "false_positive": 60,
+          "needs_context": 191
+        }
+      },
+      "errors": 0
+    }
+  ]
+}

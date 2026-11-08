@@ -41,12 +41,12 @@ def privacy(analytics_on):
   ("p", "If you think your data is in an alert, ask your employer or the organisation that runs the security tool, because it controls that data. If you contact us, we will pass your request to them."),
 
   ("h2", "5. How Hydra uses artificial intelligence"),
-  ("p", "Hydra uses AI models to read alert text, explain what may have happened and suggest what a person should do. Depending on the customer's choice, the model is either a hosted service from a third party (at present Google's Vertex AI) or a model we run ourselves. Hydra is advice-only: it recommends and a person decides. It does not make decisions about individuals by automatic means alone and it does not act on a customer's systems. AI results can be wrong, which is why a person reviews them."),
+  ("p", "Hydra uses AI models to read alert text, explain what may have happened and suggest what a person should do. When model processing is enabled, Radiant operates an open model inside its Google Cloud environment. We do not use Google Vertex AI or another hosted model provider for alert processing. Hydra is advice-only: it recommends and a person decides. It does not make decisions about individuals by automatic means alone and it does not act on a customer's systems. AI results can be wrong, which is why a person reviews them."),
 
   ("h2", "6. Who we share data with"),
   ("p", "We do not sell personal data. We share it only with these recipients, and only as far as they need it."),
   ("table", [["Recipient", "What for", "Where"],
-             ["Google Cloud (and Google Vertex AI, if a customer chose the hosted model)", "Hosting this website, Hydra, our databases and backups, and running the hosted AI model.", "United States, unless a customer's agreement says otherwise"],
+             ["Google Cloud", "Hosting this website, Hydra, our databases and backups, and the open AI models that Radiant operates.", "United States, unless a customer's agreement says otherwise"],
              ["Google Fonts", "Delivering this website's fonts to your browser, so Google receives your IP address when a page loads.", "United States"],
              ["Brevo", "Sending the email that tells us someone has used a form, and our replies.", "European Union"],
              ["Clerk", "Sign-in and account security for Hydra users.", "United States"],

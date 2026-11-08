@@ -11,14 +11,20 @@
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/site.css?v=20261027-combined">
+<script src="/js/navigation.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap bar">
 <a class="brand" href="/"><img src="/assets/brand/hydra-logo.svg" alt="Hydra" width="132" height="34"></a>
-<nav aria-label="Main"><a href="/pages/how-it-works.html">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html">Our test results</a><a href="/pages/working-with-us.html" aria-current="page">Working with us</a><a href="/pages/about.html">About</a></nav>
-<div class="actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+<nav class="desktop-nav" aria-label="Main"><a href="/pages/how-it-works.html">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html">Our test results</a><a href="/pages/working-with-us.html" aria-current="page">Working with us</a><a href="/pages/about.html">About</a></nav>
+<div class="actions header-actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+<details class="mobile-menu">
+<summary><span>Menu</span><svg class="menu-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="menu-bars" d="M3 5h14M3 10h14M3 15h14"/><path class="menu-close" d="m4 4 12 12M16 4 4 16"/></svg></summary>
+<div class="mobile-panel"><nav aria-label="Main on mobile"><a href="/pages/how-it-works.html">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html">Our test results</a><a href="/pages/working-with-us.html" aria-current="page">Working with us</a><a href="/pages/about.html">About</a></nav>
+<div class="actions"><a class="btn" href="/pages/contact.html">Talk to us</a><a class="btn btn-quiet" href="/waitlist/">Early access</a></div></div>
+</details>
 </div></header>
 <main id="main">
 <section class="hero"><div class="wrap narrow">
@@ -52,7 +58,7 @@
 </div></section>
 <section class="sec"><div class="wrap narrow">
 <h2>Questions</h2>
-<h3>Where does my data go?</h3><p>To Hydra, which we host on Google Cloud in Iowa, in the United States. You choose whether alerts are read by Google's Gemini model or by an open model we run ourselves. We do not train models on your data. Our <a href="/pages/security.html">Security page</a> lists every provider that handles it.</p><h3>What access do you need?</h3><p>Read-only access to the tools you connect. We send you the list of permissions before you set anything up. Hydra reads alert details. It does not read file contents, email contents, passwords or payment card data, and we ask you not to send those.</p><h3>Does Hydra change anything in our systems?</h3><p>No. Hydra is advice-only today. A person carries out any action it recommends, in your own tools.</p><h3>Can we run it on our own servers?</h3><p>Not yet. We host it today.</p><h3>Do you run our security monitoring?</h3><p>Not today. In an evaluation your analysts stay in charge and Hydra is a tool for them. The plan is for us to run it for you under our own licence, with Hydra doing the first look and our analysts handling the alerts that need a person. That starts only once we hold the licence.</p><h3>How long does an evaluation take to set up?</h3><p>We will tell you once we have scoped your tools. We would rather give you a real number than guess before we have a customer.</p><h3>Who can I call?</h3><p>Samuel Maclar, 050 455 5100, samuelmaclar@radiantinnovatech.com.</p>
+<h3>Where does my data go?</h3><p>To Hydra, which we host on Google Cloud in Iowa, in the United States. When model processing is enabled, alert text is read by an open model that we operate in our Google Cloud environment. We do not use Vertex AI and we do not train models on your data. Our <a href="/pages/security.html">Security page</a> lists every provider that handles it.</p><h3>What access do you need?</h3><p>Read-only access to the tools you connect. We send you the list of permissions before you set anything up. Hydra reads alert details. It does not read file contents, email contents, passwords or payment card data, and we ask you not to send those.</p><h3>Does Hydra change anything in our systems?</h3><p>No. Hydra is advice-only today. A person carries out any action it recommends, in your own tools.</p><h3>Can we run it on our own servers?</h3><p>Not yet. We host it today.</p><h3>Do you run our security monitoring?</h3><p>Not today. In an evaluation your analysts stay in charge and Hydra is a tool for them. The plan is for us to run it for you under our own licence, with Hydra doing the first look and our analysts handling the alerts that need a person. That starts only once we hold the licence.</p><h3>How long does an evaluation take to set up?</h3><p>We will tell you once we have scoped your tools. We would rather give you a real number than guess before we have a customer.</p><h3>Who can I call?</h3><p>Samuel Maclar, 050 455 5100, samuelmaclar@radiantinnovatech.com.</p>
 <p><a class="btn btn-lg" href="/pages/contact.html">Talk to us</a></p>
 <p class="note">Last reviewed: 21 October 2026 by Samuel Maclar.</p>
 </div></section>
