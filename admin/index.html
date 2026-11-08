@@ -376,7 +376,7 @@
     <!-- Tabs -->
     <div class="dash-tabs">
       <button class="dash-tab active" id="tab-waitlist" onclick="switchTab('waitlist')">Waitlist</button>
-      <button class="dash-tab"        id="tab-contact"  onclick="switchTab('contact')">Demo Requests</button>
+      <button class="dash-tab"        id="tab-contact"  onclick="switchTab('contact')">Enquiries</button>
       <button class="dash-tab"        id="tab-logs"     onclick="switchTab('logs')">Audit Logs</button>
     </div>
 
@@ -409,12 +409,11 @@
       </div>
       <select class="filter-select" id="type-filter">
         <option value="">All Types</option>
-        <option>SOC Analyst</option>
-        <option>Security Engineer</option>
-        <option>Threat Hunter</option>
-        <option>CISO/Security Leader</option>
-        <option>MSSP</option>
-        <option>Investor/Advisor</option>
+        <option>Security analyst</option>
+        <option>Security engineer</option>
+        <option>Threat hunter</option>
+        <option>Head of security or CISO</option>
+        <option>Managed security provider</option>
         <option>Other</option>
       </select>
       <button class="export-btn" onclick="exportCSV()">
@@ -450,11 +449,11 @@
     </div>
     </div><!-- /pane-waitlist -->
 
-    <!-- Contact / demo requests pane -->
+    <!-- Contact enquiries pane -->
     <div id="pane-contact" style="display:none">
       <div class="stats-row" id="contact-stats-row">
         <div class="stat-card">
-          <div class="stat-label">Total Requests</div>
+          <div class="stat-label">Total Enquiries</div>
           <div class="stat-value" id="c-stat-total">—</div>
           <div class="stat-sub">All time</div>
         </div>
@@ -660,6 +659,7 @@
 
     var params = new URLSearchParams({ page, limit: PAGE_SIZE });
     if (search) params.set('search', search);
+    if (typeFilter) params.set('typeFilter', typeFilter);
 
     try {
       var r = await fetch('/api/admin/waitlist?' + params, {
@@ -668,36 +668,29 @@
       if (r.status === 401) { logout(); return; }
       var data = await r.json();
 
-      // Client-side type filter (server search doesn't filter user_type)
-      var rows = typeFilter ? data.rows.filter(function(row) { return row.user_type === typeFilter; }) : data.rows;
-
       allRows = data.rows;
       totalRows = data.total;
-      renderTable(rows, data.total, page);
-      renderStats(data.total);
+      renderTable(data.rows, data.total, page);
+      renderStats(data.total, data.week, data.rows.length);
     } catch(e) {
       document.getElementById('wl-tbody').innerHTML =
         '<tr><td colspan="8" class="table-empty">Failed to load data. Please refresh.</td></tr>';
     }
   }
 
-  function renderStats(total) {
+  function renderStats(total, week, showing) {
     document.getElementById('stat-total').textContent = total.toLocaleString();
-    var week = allRows.filter(function(r) {
-      return new Date(r.created_at) > new Date(Date.now() - 7*24*60*60*1000);
-    }).length;
     document.getElementById('stat-week').textContent = week.toLocaleString();
-    document.getElementById('stat-showing').textContent = allRows.length.toLocaleString();
+    document.getElementById('stat-showing').textContent = showing.toLocaleString();
   }
 
   var TYPE_BADGE = {
-    'SOC Analyst':         'badge-blue',
-    'Security Engineer':   'badge-blue',
-    'Threat Hunter':       'badge-blue',
-    'CISO/Security Leader':'badge-orange',
-    'MSSP':                'badge-green',
-    'Investor/Advisor':    'badge-orange',
-    'Other':               'badge-gray',
+    'Security analyst':          'badge-blue',
+    'Security engineer':         'badge-blue',
+    'Threat hunter':             'badge-blue',
+    'Head of security or CISO':  'badge-orange',
+    'Managed security provider': 'badge-green',
+    'Other':                     'badge-gray',
   };
 
   function fmtDate(d) {
@@ -718,7 +711,7 @@
     var html = '';
     rows.forEach(function(r, i) {
       var badgeClass = TYPE_BADGE[r.user_type] || 'badge-gray';
-      html += '<tr class="data-row" id="row-' + r.id + '" onclick="toggleDetail(' + r.id + ')">' +
+      html += '<tr class="data-row" id="row-' + r.id + '" onclick="toggleDetail(\'' + r.id + '\')">' +
         '<td class="mono muted">' + (offset + i + 1) + '</td>' +
         '<td><strong style="font-size:0.88rem">' + escHtml(r.full_name) + '</strong></td>' +
         '<td class="mono" style="font-size:0.78rem">' + escHtml(r.email) + '</td>' +
@@ -746,7 +739,7 @@
           (r.use_case ? '<div class="detail-field full-width"><div class="df-label">Use Case / Notes</div><div class="df-value" style="color:var(--text-secondary)">' + escHtml(r.use_case) + '</div></div>' : '') +
           '<div class="detail-actions">' +
             '<div id="del-ui-' + r.id + '">' +
-              '<button class="delete-btn" onclick="confirmDelete(event,' + r.id + ')">' +
+              '<button class="delete-btn" onclick="confirmDelete(event,\'' + r.id + '\')">' +
                 '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
                 'Delete Entry' +
               '</button>' +
@@ -779,15 +772,15 @@
     e.stopPropagation();
     var wrap = document.getElementById('del-ui-' + id);
     wrap.innerHTML = '<div class="confirm-wrap">Remove this entry? ' +
-      '<button class="confirm-yes" onclick="doDelete(event,' + id + ')">Delete</button>' +
-      '<button class="confirm-no" onclick="cancelDelete(event,' + id + ')">Cancel</button>' +
+      '<button class="confirm-yes" onclick="doDelete(event,\'' + id + '\')">Delete</button>' +
+      '<button class="confirm-no" onclick="cancelDelete(event,\'' + id + '\')">Cancel</button>' +
       '</div>';
   };
 
   window.cancelDelete = function(e, id) {
     e.stopPropagation();
     var wrap = document.getElementById('del-ui-' + id);
-    wrap.innerHTML = '<button class="delete-btn" onclick="confirmDelete(event,' + id + ')">' +
+    wrap.innerHTML = '<button class="delete-btn" onclick="confirmDelete(event,\'' + id + '\')">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>' +
       'Delete Entry</button>';
   };
@@ -844,7 +837,12 @@
 
   window.exportCSV = async function() {
     var token = getToken();
-    var r = await fetch('/api/admin/waitlist/export', { headers: { 'Authorization': 'Bearer ' + token } });
+    var params = new URLSearchParams();
+    var search = document.getElementById('search-input').value.trim();
+    var typeFilter = document.getElementById('type-filter').value;
+    if (search) params.set('search', search);
+    if (typeFilter) params.set('typeFilter', typeFilter);
+    var r = await fetch('/api/admin/waitlist/export?' + params, { headers: { 'Authorization': 'Bearer ' + token } });
     if (r.status === 401) { logout(); return; }
     var blob = await r.blob();
     var url = URL.createObjectURL(blob);
@@ -880,20 +878,17 @@
       cAllRows = data.rows;
       cTotalRows = data.total;
       renderContactTable(data.rows, data.total, page);
-      renderContactStats(data.total);
+      renderContactStats(data.total, data.week, data.rows.length);
     } catch(e) {
       document.getElementById('c-tbody').innerHTML =
         '<tr><td colspan="7" class="table-empty">Failed to load data. Please refresh.</td></tr>';
     }
   }
 
-  function renderContactStats(total) {
+  function renderContactStats(total, week, showing) {
     document.getElementById('c-stat-total').textContent = total.toLocaleString();
-    var week = cAllRows.filter(function(r) {
-      return new Date(r.created_at) > new Date(Date.now() - 7*24*60*60*1000);
-    }).length;
     document.getElementById('c-stat-week').textContent = week.toLocaleString();
-    document.getElementById('c-stat-showing').textContent = cAllRows.length.toLocaleString();
+    document.getElementById('c-stat-showing').textContent = showing.toLocaleString();
   }
 
   function renderContactTable(rows, total, page) {
@@ -1025,7 +1020,10 @@
 
   window.exportContactCSV = async function() {
     var token = getToken();
-    var r = await fetch('/api/admin/contact/export', { headers: { 'Authorization': 'Bearer ' + token } });
+    var params = new URLSearchParams();
+    var search = document.getElementById('c-search-input').value.trim();
+    if (search) params.set('search', search);
+    var r = await fetch('/api/admin/contact/export?' + params, { headers: { 'Authorization': 'Bearer ' + token } });
     if (r.status === 401) { logout(); return; }
     var blob = await r.blob();
     var url = URL.createObjectURL(blob);
@@ -1060,10 +1058,11 @@
   };
 
   var ACTION_CLASS = {
-    login:        'action-login',
-    login_failed: 'action-login_failed',
-    delete:       'action-delete',
-    export:       'action-export',
+    admin_login:          'action-login',
+    admin_delete:         'action-delete',
+    admin_delete_contact: 'action-delete',
+    admin_export:         'action-export',
+    admin_export_contact: 'action-export',
   };
 
   function fmtFull(d) {
@@ -1094,7 +1093,7 @@
           '<td class="mono muted" style="font-size:0.76rem;white-space:nowrap">' + fmtFull(row.created_at) + '</td>' +
           '<td style="font-family:JetBrains Mono,monospace;font-size:0.78rem;color:var(--accent)">' + escHtml(row.admin_email) + '</td>' +
           '<td><span class="action-pill ' + cls + '">' + escHtml(row.action.replace('_',' ')) + '</span></td>' +
-          '<td style="color:var(--text-secondary);font-size:0.82rem">' + escHtml(row.detail || '—') + '</td>' +
+          '<td style="color:var(--text-secondary);font-size:0.82rem">' + escHtml(row.details || '—') + '</td>' +
         '</tr>';
       });
       document.getElementById('log-tbody').innerHTML = html;

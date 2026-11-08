@@ -12,3 +12,15 @@ jobs:
         with: { node-version: 20 }
       - name: Check pages (placeholders, claims, links, structure)
         run: node scripts/check-site.js
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Install website backend dependencies
+        working-directory: backend
+        run: npm ci
+      - name: Test forms, storage and admin portal
+        working-directory: backend
+        run: npm test
