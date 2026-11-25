@@ -15,7 +15,7 @@ def privacy(analytics_on):
  "blocks": [
   ("h1", "Privacy notice"),
   ("lead", "This notice explains what personal data Radiant InnovaTech collects, why, who sees it, how long we keep it, and what rights you have under Ghana's Data Protection Act, 2012 (Act 843). It covers this website and, once your organisation gives you an account, Hydra itself."),
-  ("small", "Effective 21 October 2026. Version 1.0."),
+  ("small", "Effective 25 November 2026. Version 1.1. Version 1.1 adds the reputation, domain-age and threat-feed providers to sections 4, 6 and 7."),
 
   ("h2", "1. Who we are"),
   ("p", "Radiant InnovaTech makes Hydra, software that investigates security alerts. We are based in Accra, Ghana. Company registration is in progress, and we will add the registered name, number and address here once we have them. You can reach us about privacy at privacy@radiantinnovatech.com."),
@@ -39,6 +39,7 @@ def privacy(analytics_on):
 
   ("h2", "4. Security alerts sent to Hydra by organisations"),
   ("p", "When an organisation connects its security tools to Hydra, Hydra receives alerts that may contain personal data, such as user names, device names, email addresses and IP addresses of that organisation's staff and other people. We use this data only to provide Hydra to that organisation, on its instructions, under a data processing agreement. We do not use it for our own purposes, we do not train AI models on it, and we do not sell it."),
+  ("p", "If the organisation sets up reputation providers, Hydra sends them parts of an alert: public IP addresses, domain names and file hashes, and for Tenable the name or address of a host. Hydra also sends domain names from alerts to rdap.org to read the registration date, unless the organisation switches that off. These recipients are listed in section 6. Nothing else from the alert goes with these requests."),
   ("p", "If you think your data is in an alert, ask your employer or the organisation that runs the security tool, because it controls that data. If you contact us, we will pass your request to them."),
 
   ("h2", "5. How Hydra uses artificial intelligence"),
@@ -52,13 +53,15 @@ def privacy(analytics_on):
              ["Brevo", "Sending the email that tells us someone has used a form, and our replies.", "European Union"],
              ["Clerk", "Sign-in and account security for Hydra users.", "United States"],
              ["mNotify", "Text-message notifications, if a customer turns them on.", "Ghana"],
+             ["AbuseIPDB, VirusTotal and Tenable", "Reputation lookups on indicators from a customer's alerts (public IP addresses, domain names, file hashes, and for Tenable a host's name or address), only for the providers that customer sets up.", "United States"],
+             ["rdap.org and domain registries", "Reading when a domain name on an alert was registered. On by default; a customer can switch it off.", "Worldwide, each registry in its own country"],
              ["Google Workspace", "Our own email and documents.", "United States and elsewhere"],
              ["Our professional advisers, auditors and insurers", "Legal, accounting and insurance advice.", "Ghana and elsewhere"],
              ["Courts, regulators and law enforcement", "When the law requires or allows us to disclose data.", "Ghana"]]),
   ("p", "If we sell or merge the business, we may share data with the other side under a confidentiality agreement, and we will tell you if your data is handled differently afterwards."),
 
   ("h2", "7. Data sent outside Ghana"),
-  ("p", "Some of our providers are outside Ghana, as the table shows. When we send personal data abroad we use written contracts that require the recipient to protect it as this notice and the Act require, and we choose providers with recognised security practices. A customer that needs its data kept in a particular place can ask us, and its agreement with us will say where the data is held."),
+  ("p", "Some of our providers are outside Ghana, as the table shows. Reputation and domain-age lookups send only the indicator itself (see section 4), and a domain-age request can reach a registry in any country, so we cannot name every country in advance. When we send personal data abroad we use written contracts that require the recipient to protect it as this notice and the Act require, and we choose providers with recognised security practices. A customer that needs its data kept in a particular place can ask us, and its agreement with us will say where the data is held."),
 
   ("h2", "8. How we protect data"),
   ("p", "We use measures that fit the risk. Each customer's data is kept in a separate workspace, access is limited to staff who need it, the services we use encrypt data in transit and at rest, Hydra records what it and its users do in an audit trail, and we keep backups. Our [Security page](/pages/security.html) says in detail what is in place and what is not. No system is perfectly secure. If a breach affects your personal data, we will tell the people affected and the Data Protection Commission as the law requires."),
@@ -85,7 +88,7 @@ def privacy(analytics_on):
 
   ("h2", "13. Contact"),
   ("p", "Radiant InnovaTech, Accra, Ghana. Email: privacy@radiantinnovatech.com."),
-  ("small", "Last updated: 21 October 2026. Owner: Priscilla Anane. This notice has not yet been reviewed by a Ghanaian lawyer."),
+  ("small", "Last updated: 25 November 2026. Owner: Priscilla Anane. This notice has not yet been reviewed by a Ghanaian lawyer."),
  ]}
 
 

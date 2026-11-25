@@ -90,7 +90,7 @@ WORKING = {
 
   ("h2", "Questions"),
   ("faq", [
-    ("Where does my data go?", "To Hydra, which we host on Google Cloud in Iowa, in the United States. When model processing is enabled, alert text is read by an open model that we operate in our Google Cloud environment. We do not use Vertex AI and we do not train models on your data. Our [Security page](/pages/security.html) lists every provider that handles it."),
+    ("Where does my data go?", "To Hydra, which we host on Google Cloud in Iowa, in the United States. When model processing is enabled, alert text is read by an open model that we operate in our Google Cloud environment. We do not use Vertex AI and we do not train models on your data. If you set up reputation providers, they are sent public indicators from an alert, and domain names are sent to a public registration service unless you switch that off. Our [Security page](/pages/security.html) lists every provider that handles it."),
     ("What access do you need?", "Read-only access to the tools you connect. We send you the list of permissions before you set anything up. Hydra reads alert details. It does not read file contents, email contents, passwords or payment card data, and we ask you not to send those."),
     ("Does Hydra change anything in our systems?", "No. Hydra is advice-only today. A person carries out any action it recommends, in your own tools."),
     ("Can we run it on our own servers?", "Not yet. We host it today."),
@@ -143,7 +143,7 @@ SECURITY = {
   ("ul", [
     "Services run in containers as non-root users, and a default-deny network policy blocks traffic between services unless it is explicitly allowed.",
     "Calls from Hydra to an address you configure are checked so they cannot be pointed at private networks or the cloud metadata service.",
-    "Every change is made by pull request and tested before release. The code has more than 300 automated tests, including tests of customer separation and of the safeguards that stop Hydra acting on its own.",
+    "Every change is made by pull request and tested before release. The code has more than 600 automated tests, including tests of customer separation and of the safeguards that stop Hydra acting on its own.",
     "Releases use fixed images and roll back automatically if the new version does not start. A database backup is taken before each release, and daily backups are kept for 14 days.",
   ]),
   ("h3", "An audit trail"),
@@ -176,8 +176,10 @@ SECURITY = {
              ["Google Cloud", "Hosts Hydra, its database, storage, backups and Radiant-operated AI models", "United States (Iowa)"],
              ["Clerk", "Sign-in and accounts", "United States"],
              ["Brevo", "Email notifications, only if enabled", "European Union"],
-             ["mNotify", "Text-message notifications, only if enabled", "Ghana"]]),
-  ("p", "We do not use Google Vertex AI. When model processing is enabled, the model runs inside Radiant's Google Cloud environment. We will tell you 14 days before we add another provider that handles your data."),
+             ["mNotify", "Text-message notifications, only if enabled", "Ghana"],
+             ["AbuseIPDB, VirusTotal, Tenable", "Reputation lookups, only for the providers you set up. AbuseIPDB and VirusTotal are sent public IP addresses (VirusTotal also domain names and file hashes), never a private address. Tenable is sent the name or address of a host on the alert", "United States"],
+             ["rdap.org and domain registries", "Domain registration date. Domain names found on alerts are sent. On by default; a workspace can switch it off in Settings", "Worldwide (each registry is run in its own country)"]]),
+  ("p", "If you give Hydra the address of a threat feed, it fetches that list about once an hour. Only that request is sent to the feed's host, and nothing from your workspace goes with it. We do not use Google Vertex AI. When model processing is enabled, the model runs inside Radiant's Google Cloud environment. We will tell you 14 days before we add another provider that handles your data."),
 
   ("h2", "Licensing, stated plainly"),
   ("p", "We plan to run Hydra for customers ourselves, under a licence from Ghana's Cyber Security Authority for managed cybersecurity services. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to must be run by a company accredited by the Authority and owned mostly by Ghanaians. That is why we will be the operator and not only the software maker. This is our reading, and a Ghanaian lawyer has not checked it yet."),
@@ -202,7 +204,7 @@ HOWITWORKS = {
   ("ol", [
     "**The alert arrives.** Your monitoring tools send it to Hydra, or Hydra collects it from them. Hydra stores it under your organisation's own workspace and keeps the full original event, not only a summary.",
     "**Hydra checks the event.** It looks at what the event itself shows, using the built-in patterns described in section 2. This step needs no AI and no network.",
-    "**Hydra gathers context.** It links the alert to the machine, user and addresses involved, finds other alerts that share them, and reads what your analysts decided about similar alerts before. If a reputation lookup has been run for the addresses and files involved, Hydra uses its result.",
+    "**Hydra gathers context.** It links the alert to the machine, user and addresses involved, finds other alerts that share them, and reads what your analysts decided about similar alerts before. If a reputation provider is set up for your workspace, Hydra looks up the public addresses, domain names and file hashes on the alert before the AI reads it, and uses what comes back (section 7 says what is sent).",
     "**An AI model writes the verdict.** The model reads everything Hydra gathered and returns one of three verdicts: attack, harmless, or needs a person. It must cite the numbered steps its verdict relies on.",
     "**Hydra's rules check the model.** The rules can overrule the model. Section 3 explains how.",
     "**Hydra saves the result.** The verdict, the evidence score, every step and an audit entry are stored. If the verdict is a likely attack, Hydra can notify the contact you chose and prepare recommended actions for a person to approve.",
@@ -257,12 +259,13 @@ HOWITWORKS = {
 
   ("h2", "7. Where your data goes"),
   ("p", "Hydra is hosted by us on Google Cloud in Iowa, in the United States. When model processing is enabled, we run an open model ourselves in that environment. We do not use Vertex AI or send alerts to another hosted model provider, and we do not train models on your data. Hydra reads alert details, not file contents, email contents, passwords or payment card data. The full list of providers is on our [Security page](/pages/security.html)."),
+  ("p", "Two kinds of lookup leave our environment. If you set up a reputation provider, Hydra sends it public IP addresses, domain names and file hashes from an alert, and never a private address (the exception is Tenable, which is sent the name or address of a host so it can return that host's known vulnerabilities). Hydra also checks when a domain name on an alert was registered, by asking the public registration service at rdap.org; that is on unless you switch it off in Settings. Each of these is described, with what it sends, in the Compliance Pack report of your workspace."),
 
   ("h2", "8. What Hydra does not do yet"),
   ("ul", [
     "The built-in checks cover Windows events only.",
-    "While it investigates, Hydra does not run new queries against your own tools. It works from the alert and from what it has stored.",
-    "Hydra does not run reputation lookups on its own yet. An analyst can run one, and Hydra then uses the result.",
+    "Hydra can run read-only searches of a tool you have connected, during an investigation and in a threat hunt, but only if you switch them on. They are off by default, each one has its own limits and hourly budget, every search is recorded with a SHA-256 of what came back, and the kill switch stops all of them. Today this covers Wazuh. The AI model picks from fixed searches and never writes a query. We have built and tested this, and no customer's systems have been searched with it, because we have no customers.",
+    "The lookups described in section 7 are on only for the providers you set up. We have not used them on any customer's alerts.",
     "Our latest lab test used Qwen3.8-27B with engine v2 on 277 recorded cases. Engine v2 is not enabled in production; the program-evidence result is an upper bound, not a production estimate. [Read it in full](/pages/our-test-results.html).",
     "We have no customers yet.",
     "We do not offer on-premises or air-gapped deployment. We host Hydra.",
@@ -272,10 +275,9 @@ HOWITWORKS = {
   ("h2", "9. What we are working on next"),
   ("p", "These are plans, not features, and we are not giving dates."),
   ("ul", [
-    "Read-only questions to your own tools during an investigation, inside limits you set.",
-    "Keeping the full evidence behind each step, not only a summary of it.",
+    "Read-only searches of Microsoft Defender and CrowdStrike Falcon, in the same way as Wazuh today.",
     "Built-in checks for identity and cloud alerts.",
-    "Scheduled threat hunts.",
+    "Threat hunts that run on a schedule you choose. Today the only automatic hunt is the hourly check of a threat feed you provide.",
     "An operated service: once we hold our licence, we plan to run Hydra for you, with our analysts handling the alerts that need a person.",
   ]),
   ("cta", "Talk to us about an evaluation", "/pages/contact.html"),
