@@ -56,8 +56,8 @@ function application(overrides = {}) {
 
 let BASE, CLOSED;
 test.before(async () => {
-  BASE = start(39125, { PILOT_FORM_ENABLED: 'true' });
-  CLOSED = start(39126, {});
+  BASE = start(39131, { PILOT_FORM_ENABLED: 'true' });
+  CLOSED = start(39132, {});
   await Promise.all([ready(BASE), ready(CLOSED)]);
 });
 test.after(() => { for (const s of servers) if (!s.killed) s.kill('SIGTERM'); });
