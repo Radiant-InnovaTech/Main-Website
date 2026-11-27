@@ -8,7 +8,7 @@ REGION="us-central1"
 SERVICE="radiant-nexus-site"
 # Cloudflare Turnstile bot check on the forms. The site key is public; the secret key lives in
 # Secret Manager as turnstile-secret-key. Until both exist the forms run without the check.
-TURNSTILE_SITE_KEY=""
+TURNSTILE_SITE_KEY="0x4AAAAAAGVeWdPUJ_RHow2B"
 
 gcloud config set project "$PROJECT"
 
