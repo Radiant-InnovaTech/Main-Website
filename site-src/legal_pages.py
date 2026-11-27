@@ -50,6 +50,7 @@ def privacy(analytics_on):
   ("table", [["Recipient", "What for", "Where"],
              ["Google Cloud", "Hosting this website, Hydra, our databases and backups, and the open AI models that Radiant operates.", "United States, unless a customer's agreement says otherwise"],
              ["Google Fonts", "Delivering this website's fonts to your browser, so Google receives your IP address when a page loads.", "United States"],
+             ["Cloudflare", "Checking that our early access and contact forms are sent by a person and not an automated program. On pages with a form, the check runs in your browser and Cloudflare receives your IP address and details of your browser and device. It sets no cookies.", "United States"],
              ["Brevo", "Sending the email that tells us someone has used a form, and our replies.", "European Union"],
              ["Clerk", "Sign-in and account security for Hydra users.", "United States"],
              ["mNotify", "Text-message notifications, if a customer turns them on.", "Ghana"],

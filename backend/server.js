@@ -112,6 +112,14 @@ if (process.env.PREVIEW_PASSWORD) {
 }
 
 // Our own Matomo server, only when MATOMO_URL is set on the service (see site-src/build_site.py).
+// Cloudflare Turnstile bot check on the public forms. On only when both keys are set on the
+// service: the pages fetch the site key from /api/forms/config, so they and the server never disagree.
+const TURNSTILE_SITE_KEY   = process.env.TURNSTILE_SITE_KEY || '';
+const TURNSTILE_SECRET_KEY = process.env.TURNSTILE_SECRET_KEY || '';
+const TURNSTILE_ON     = Boolean(TURNSTILE_SITE_KEY && TURNSTILE_SECRET_KEY);
+const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
+const TURNSTILE_VERIFY_URL = process.env.TURNSTILE_VERIFY_URL || `${TURNSTILE_ORIGIN}/turnstile/v0/siteverify`;
+
 const MATOMO_ORIGIN = (() => { try { return process.env.MATOMO_URL ? new URL(process.env.MATOMO_URL).origin : null; } catch { return null; } })();
 
 app.use(helmet({
@@ -125,8 +133,9 @@ app.use(helmet({
       // still blocked even with scriptSrc allowing inline <script> blocks.
       // Both had to be relaxed for the drawer button to actually work.
       styleSrc:     ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      scriptSrc:    ["'self'", "'unsafe-inline'", ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
-      connectSrc:   ["'self'", ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
+      scriptSrc:    ["'self'", "'unsafe-inline'", ...(TURNSTILE_ON ? [TURNSTILE_ORIGIN] : []), ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
+      connectSrc:   ["'self'", ...(TURNSTILE_ON ? [TURNSTILE_ORIGIN] : []), ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
+      frameSrc:     TURNSTILE_ON ? [TURNSTILE_ORIGIN] : ["'none'"],
       scriptSrcAttr: ["'unsafe-inline'"],
       fontSrc:    ["'self'", 'https://fonts.gstatic.com', 'data:'],
       imgSrc:     ["'self'", 'data:', 'https://placehold.co', 'https://icons.duckduckgo.com', 'https://www.vectorlogo.zone', 'https://cdn.simpleicons.org', ...(MATOMO_ORIGIN ? [MATOMO_ORIGIN] : [])],
@@ -518,8 +527,40 @@ function waitlistGate(req, res, next) {
   return formsGate(req, res, next);
 }
 
+// What the form script needs to know. The site key is public by design.
+app.get('/api/forms/config', (_req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json({ turnstile_site_key: TURNSTILE_ON ? TURNSTILE_SITE_KEY : null });
+});
+
+// Refuses a submission without a valid, unused Turnstile token. Bots that post straight to
+// the API never get one. If Cloudflare cannot be reached we refuse too, and say how else to reach us.
+const BOT_CHECK_FAILED = 'We could not confirm you are not a robot. Please reload the page and try again, or write to samuelmaclar@radiantinnovatech.com.';
+async function turnstileGate(req, res, next) {
+  if (!TURNSTILE_ON) return next();
+  const token = req.body && req.body['cf-turnstile-response'];
+  if (typeof token !== 'string' || !token || token.length > 2048) {
+    console.warn(`[TURNSTILE] ${req.path} refused: no token`);
+    return res.status(400).json({ success: false, error: BOT_CHECK_FAILED });
+  }
+  try {
+    const r = await fetch(TURNSTILE_VERIFY_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ secret: TURNSTILE_SECRET_KEY, response: token, remoteip: getClientIp(req) }),
+      signal:  AbortSignal.timeout(8000),
+    });
+    const out = await r.json();
+    if (out.success === true) return next();
+    console.warn(`[TURNSTILE] ${req.path} refused: ${(out['error-codes'] || []).join(',') || 'rejected'}`);
+  } catch (err) {
+    console.error('[TURNSTILE] Verification request failed:', err.message);
+  }
+  return res.status(400).json({ success: false, error: BOT_CHECK_FAILED });
+}
+
 // ── Waitlist submission ────────────────────────────────────────────────────────
-app.post('/api/waitlist/submit', waitlistGate, waitlistLimiter, async (req, res) => {
+app.post('/api/waitlist/submit', waitlistGate, waitlistLimiter, turnstileGate, async (req, res) => {
   try {
     const ip = getClientIp(req);
 
@@ -577,7 +618,7 @@ app.post('/api/waitlist/submit', waitlistGate, waitlistLimiter, async (req, res)
 });
 
 // ── Contact (Talk to us) submission ────────────────────────────────────────────
-app.post('/api/contact/submit', formsGate, contactLimiter, async (req, res) => {
+app.post('/api/contact/submit', formsGate, contactLimiter, turnstileGate, async (req, res) => {
   try {
     const ip = getClientIp(req);
 
