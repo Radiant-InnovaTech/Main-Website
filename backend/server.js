@@ -65,6 +65,12 @@ const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
 // OTP TTL in milliseconds (10 minutes)
 const OTP_TTL_MS = 10 * 60 * 1000;
 
+// The Axis Sprint pilot form. The same file draws the page (site-src/build_site.py), so the questions and
+// options accepted here are exactly the ones shown.
+const PILOT_SPEC   = require('./pilot-form.json');
+const PILOT_FIELDS = PILOT_SPEC.sections.flatMap(s => s.fields.map(f => ({ ...f, section: s.title })));
+const pilotLabel   = f => f.shortLabel || f.label;
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  DATABASE: see store.js (DATA_STORE=firestore in production, a SQLite file for local work)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -74,9 +80,9 @@ console.log('[DB] Using', store.name);
 const RETENTION_MONTHS = 12;
 async function purgeOldSubmissions() {
   try {
-    const { contacts, waitlist, audits } = await store.purge(RETENTION_MONTHS);
+    const { contacts, waitlist, pilots, audits } = await store.purge(RETENTION_MONTHS);
     const scrubbed = await store.scrubAuditPii();
-    if (contacts || waitlist || audits || scrubbed) console.log(`[RETENTION] Deleted ${contacts} contact, ${waitlist} early-access and ${audits} audit records; scrubbed ${scrubbed} audit records`);
+    if (contacts || waitlist || pilots || audits || scrubbed) console.log(`[RETENTION] Deleted ${contacts} contact, ${waitlist} early-access, ${pilots} pilot and ${audits} audit records; scrubbed ${scrubbed} audit records`);
   } catch (err) {
     console.error('[RETENTION] Purge failed:', err.message);
   }
@@ -171,6 +177,16 @@ const waitlistLimiter = rateLimit({
 const contactLimiter = rateLimit({
   windowMs:         15 * 60 * 1000, // 15 minutes
   max:              5,
+  standardHeaders:  true,
+  legacyHeaders:    false,
+  message:          { error: 'Too many submissions from this IP. Please try again in 15 minutes.' },
+});
+
+const pilotLimiter = rateLimit({
+  windowMs:         15 * 60 * 1000, // 15 minutes
+  max:              5,
+  // A long form: someone correcting a few mistakes should not be locked out, so only accepted sends count.
+  skipFailedRequests: true,
   standardHeaders:  true,
   legacyHeaders:    false,
   message:          { error: 'Too many submissions from this IP. Please try again in 15 minutes.' },
@@ -312,6 +328,44 @@ function validateContactData(data) {
   return errors;
 }
 
+// Checks a pilot application against backend/pilot-form.json. Returns every problem, and the answers cleaned:
+// only known questions are kept, choices must be one of the options shown, and text is trimmed and capped.
+function validatePilotData(body) {
+  const errors = [];
+  const answers = {};
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  for (const f of PILOT_FIELDS) {
+    const label = pilotLabel(f);
+    const raw = body[f.name];
+    if (f.type === 'checkboxes') {
+      const list = raw == null || raw === '' ? [] : Array.isArray(raw) ? raw : [raw];
+      if (list.some(x => typeof x !== 'string' || !f.options.includes(x))) { errors.push(`${label}: please choose from the options given.`); continue; }
+      answers[f.name] = [...new Set(list)];
+      if (f.required && !answers[f.name].length) errors.push(`Please answer: ${label}`);
+      continue;
+    }
+    if (raw != null && typeof raw !== 'string') { errors.push(`${label}: that answer is not valid.`); continue; }
+    const v = (raw || '').trim();
+    const max = f.type === 'textarea' ? 2000 : 200;
+    const unless = f.requiredUnless;
+    const needed = f.required || (unless && String(body[unless.field] || '').trim() !== unless.equals);
+    if (!v) { if (needed) errors.push(`Please answer: ${label}`); answers[f.name] = ''; continue; }
+    if (v.length > max) { errors.push(`${label}: please keep it under ${max.toLocaleString('en-GB')} characters.`); continue; }
+    if ((f.type === 'select' || f.type === 'radio') && !f.options.includes(v)) { errors.push(`${label}: please choose from the options given.`); continue; }
+    if (f.type === 'email' && !emailRe.test(v)) { errors.push(`${label}: please enter a valid email address.`); continue; }
+    if (f.type === 'tel' && !/^[0-9+()\-.\s]{6,30}$/.test(v)) { errors.push(`${label}: please enter a valid phone number.`); continue; }
+    answers[f.name] = f.type === 'email' ? v.toLowerCase() : v;
+  }
+  if (!body.consent) errors.push('Please tick the box to agree that we may contact you and the people you named.');
+  return { errors, answers };
+}
+
+// One answer as text, for emails and CSV.
+function pilotAnswerText(f, answers) {
+  const v = answers[f.name];
+  return Array.isArray(v) ? v.join('; ') : (v || '');
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  EMAIL TEMPLATES
 // ─────────────────────────────────────────────────────────────────────────────
@@ -406,6 +460,42 @@ function buildTeamNotificationEmail(entry) {
 </body>
 </html>`,
     text: `New Waitlist Signup\n\nName: ${entry.full_name}\nEmail: ${entry.email}\nJob Title: ${entry.role}\nCompany: ${entry.company}\nCountry: ${entry.country}\nRole Type: ${entry.user_type}\n${entry.profile_url ? `Profile: ${entry.profile_url}\n` : ''}${entry.use_case ? `\nUse Case:\n${entry.use_case}\n` : ''}\nSubmitted: ${submittedAt}\n\nView admin dashboard: https://radiantinnovatech.com/admin/`,
+  };
+}
+
+function buildPilotTeamEmail(entry, answers) {
+  const sections = PILOT_SPEC.sections.map(s => ({
+    title: s.title,
+    rows: s.fields.map(f => [pilotLabel(f), pilotAnswerText(f, answers)]),
+  }));
+  return {
+    from:    `"Hydra website" <${SMTP_FROM}>`,
+    to:      INTERNAL_NOTIFY.join(', '),
+    subject: `New Axis Sprint pilot application: ${entry.startup_name}`,
+    text: `New Axis Sprint pilot application\n\n` +
+      sections.map(s => `${s.title}\n` + s.rows.map(([k, v]) => `  ${k}: ${v || 'not given'}`).join('\n')).join('\n\n') +
+      `\n\nSubmitted: ${entry.created_at}\n\nView in the admin panel: https://radiantinnovatech.com/admin/`,
+    html: `<p>New Axis Sprint pilot application</p>` +
+      sections.map(s => `<h3 style="margin:18px 0 6px">${escHtml(s.title)}</h3><ul>` +
+        s.rows.map(([k, v]) => `<li><b>${escHtml(k)}</b> ${escHtml(v || 'not given')}</li>`).join('') + '</ul>').join('') +
+      `<p>Submitted: ${escHtml(entry.created_at)}</p><p><a href="https://radiantinnovatech.com/admin/">View in the admin panel</a></p>`,
+  };
+}
+
+function buildPilotApplicantEmail(entry) {
+  const text = `Hello ${entry.full_name},
+
+Thank you for applying for the Hydra pilot for the Axis Sprint cohort on behalf of ${entry.startup_name}.
+
+A founder reads every application and will contact you at this address about next steps. If you have a question before then, reply to this email.
+
+Radiant InnovaTech, Accra, Ghana`;
+  return {
+    from:    `"Radiant InnovaTech" <${SMTP_FROM}>`,
+    to:      entry.email,
+    subject: 'We have your Hydra pilot application',
+    text,
+    html: `<p>Hello ${escHtml(entry.full_name)},</p><p>Thank you for applying for the Hydra pilot for the Axis Sprint cohort on behalf of ${escHtml(entry.startup_name)}.</p><p>A founder reads every application and will contact you at this address about next steps. If you have a question before then, reply to this email.</p><p style="font-size:12px;color:#4A5B6B">Radiant InnovaTech, Accra, Ghana</p>`,
   };
 }
 
@@ -525,6 +615,12 @@ function formsGate(_req, res, next) {
 function waitlistGate(req, res, next) {
   if (EARLY_ACCESS_ENABLED) return next();
   return formsGate(req, res, next);
+}
+// The pilot form has its own switch, so it can open and close on its own.
+const PILOT_FORM_ENABLED = process.env.PILOT_FORM_ENABLED === 'true';
+function pilotGate(_req, res, next) {
+  if (PILOT_FORM_ENABLED) return next();
+  res.status(503).json({ success: false, error: 'Pilot applications are closed for now. Please write to samuelmaclar@radiantinnovatech.com.' });
 }
 
 // What the form script needs to know. The site key is public by design.
@@ -670,6 +766,45 @@ app.post('/api/contact/submit', formsGate, contactLimiter, turnstileGate, async 
     });
   } catch (err) {
     console.error('[CONTACT] Submit error:', err);
+    return res.status(500).json({ error: 'Internal server error. Please try again.' });
+  }
+});
+
+// ── Axis Sprint pilot application ─────────────────────────────────────────────
+app.post('/api/pilot/submit', pilotGate, pilotLimiter, turnstileGate, async (req, res) => {
+  try {
+    // Honeypot: bots fill the hidden field. Accept quietly and store nothing.
+    if (req.body._hp) {
+      return res.status(200).json({ success: true, message: 'Application received.' });
+    }
+
+    const { errors, answers } = validatePilotData(req.body);
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors[0], details: errors });
+    }
+
+    const entry = {
+      id:           uuidv4(),
+      startup_name: answers.startup_name,
+      full_name:    answers.full_name,
+      email:        answers.email,
+      answers:      JSON.stringify(answers),
+      consent:      1,
+      ip_address:   getClientIp(req),
+      created_at:   new Date().toISOString(),
+    };
+
+    await store.put('pilot_applications', entry);
+
+    logAudit('pilot_submit', { entry_id: entry.id });
+
+    // Fire-and-forget emails (do not await to avoid slowing down the HTTP response)
+    sendMail(buildPilotTeamEmail(entry, answers));
+    sendMail(buildPilotApplicantEmail(entry));
+
+    return res.status(200).json({ success: true, message: 'Application received.', entry_id: entry.id });
+  } catch (err) {
+    console.error('[PILOT] Submit error:', err);
     return res.status(500).json({ error: 'Internal server error. Please try again.' });
   }
 });
@@ -941,6 +1076,82 @@ app.get('/api/admin/contact/export', async (req, res) => {
   }
 });
 
+// ── Admin: pilot applications ─────────────────────────────────────────────────
+function parsePilotRow(r) {
+  let answers = {};
+  try { answers = JSON.parse(r.answers || '{}'); } catch { /* show the row without its answers */ }
+  return { ...r, answers };
+}
+
+app.get('/api/admin/pilot', async (req, res) => {
+  const claims = verifyToken(req, res);
+  if (!claims) return;
+
+  try {
+    const page   = Math.max(1, parseInt(req.query.page  || '1', 10));
+    const limit  = Math.min(200, Math.max(1, parseInt(req.query.limit || '50', 10)));
+    const search = String(req.query.search || '').trim();
+    const offset = (page - 1) * limit;
+
+    const { rows, total, week } = await store.search('pilot_applications', { term: search, fields: ['startup_name', 'full_name', 'email'], limit, offset });
+    // The questions travel with the rows, so the admin panel shows every answer under its own label.
+    const sections = PILOT_SPEC.sections.map(s => ({ title: s.title, fields: s.fields.map(f => ({ name: f.name, label: pilotLabel(f) })) }));
+
+    return res.json({ success: true, rows: rows.map(parsePilotRow), sections, total, week, page, limit });
+  } catch (err) {
+    console.error('[ADMIN] Get pilot applications error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+app.get('/api/admin/pilot/export', async (req, res) => {
+  const claims = verifyToken(req, res);
+  if (!claims) return;
+
+  try {
+    const search = String(req.query.search || '').trim();
+    const { rows } = await store.search('pilot_applications', { term: search, fields: ['startup_name', 'full_name', 'email'] });
+
+    const header = ['ID', 'Submitted At', ...PILOT_FIELDS.map(pilotLabel), 'Consent', 'IP Address'].map(csvCell).join(',') + '\n';
+    const csvRows = rows.map(parsePilotRow).map(r => [
+      r.id,
+      r.created_at,
+      ...PILOT_FIELDS.map(f => csvCell(pilotAnswerText(f, r.answers))),
+      r.consent ? 'yes' : 'no',
+      r.ip_address || '',
+    ].join(',')).join('\n');
+
+    const filename = `pilot_applications_${new Date().toISOString().slice(0, 10)}.csv`;
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send('﻿' + header + csvRows); // BOM for Excel UTF-8 compatibility
+
+    logAudit('admin_export_pilot', { count: rows.length, search }, claims.email, getClientIp(req));
+  } catch (err) {
+    console.error('[ADMIN] Export pilot applications error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+app.delete('/api/admin/pilot/:id', async (req, res) => {
+  const claims = verifyToken(req, res);
+  if (!claims) return;
+
+  try {
+    const { id } = req.params;
+    const entry  = await store.get('pilot_applications', id);
+    if (!entry) return res.status(404).json({ error: 'Entry not found.' });
+
+    await store.remove('pilot_applications', id);
+    logAudit('admin_delete_pilot', { entry_id: id }, claims.email, getClientIp(req));
+
+    return res.json({ success: true, message: 'Entry deleted.', deleted_id: id });
+  } catch (err) {
+    console.error('[ADMIN] Delete pilot application error:', err);
+    return res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
 // ── Admin: audit logs ─────────────────────────────────────────────────────────
 app.get('/api/admin/logs', async (req, res) => {
   const claims = verifyToken(req, res);
@@ -978,6 +1189,9 @@ app.get(Object.keys(MOVED), (req, res) => res.redirect(301, MOVED[req.path]));
 app.get('/.well-known/security.txt', (_req, res) => {
   res.type('text/plain; charset=utf-8').sendFile(path.join(__dirname, '..', 'public-site', '.well-known', 'security.txt'));
 });
+
+// The pilot form is reached only by link: tell search engines not to list it (the page says so too).
+app.use('/pilot', (_req, res, next) => { res.set('X-Robots-Tag', 'noindex, nofollow'); next(); });
 
 app.use(express.static(path.join(__dirname, '..', 'public-site')));
 app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));
