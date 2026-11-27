@@ -374,7 +374,7 @@ function buildApplicantEmail(entry) {
 
 Thank you for joining the early access list for Hydra.
 
-We are talking to two to four security teams about a free six-week shadow evaluation: Hydra reads your alerts, records what it would conclude, and changes nothing. We cannot give you a start date yet. We do not start with a team until the Cyber Security Authority has confirmed our licence position in writing.
+We are talking to two to four security teams about a free six-week shadow evaluation: Hydra reads your alerts, records what it would conclude, and changes nothing. We cannot give you a start date yet. Free shadow evaluations can start before we are licensed: in our view they are not a licensed service, because they are not provided for reward, and we are confirming this with our lawyer.
 
 A founder will write to you at this address. If you have a question before then, reply to this email.
 
@@ -391,7 +391,7 @@ Radiant InnovaTech, Accra, Ghana`;
 <p style="font-weight:700;color:#071B2E;margin:0 0 16px;">Hydra</p>
 <p>Hello ${escHtml(entry.full_name)},</p>
 <p>Thank you for joining the early access list for Hydra.</p>
-<p>We are talking to two to four security teams about a free six-week shadow evaluation: Hydra reads your alerts, records what it would conclude, and changes nothing. We cannot give you a start date yet. We do not start with a team until the Cyber Security Authority has confirmed our licence position in writing.</p>
+<p>We are talking to two to four security teams about a free six-week shadow evaluation: Hydra reads your alerts, records what it would conclude, and changes nothing. We cannot give you a start date yet. Free shadow evaluations can start before we are licensed: in our view they are not a licensed service, because they are not provided for reward, and we are confirming this with our lawyer.</p>
 <p>A founder will write to you at this address. If you have a question before then, reply to this email.</p>
 <p><a href="https://radiantinnovatech.com/pages/working-with-us.html" style="color:#02727A;">How we work with a new team</a></p>
 <p style="font-size:12px;color:#4A5B6B;margin-top:24px;">Radiant InnovaTech, Accra, Ghana</p>

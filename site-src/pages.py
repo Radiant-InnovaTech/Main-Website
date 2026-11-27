@@ -60,7 +60,7 @@ HOME = {
   ("h2", "Start with a shadow evaluation"),
   ("p", "Hydra reads your alerts for six weeks and writes down what it would conclude. It changes nothing. Your analysts keep doing their work, and at the end you compare the two."),
   ("p", "An evaluation comes first. Running Hydra as a service for you starts only once we hold our licence."),
-  ("p", "We will not start with a customer until the Cyber Security Authority has confirmed our licence position in writing. We are glad to talk before then."),
+  ("p", "Free, advice-only shadow evaluations can start before we are licensed: in our view they are not a licensed service under section 49 of the Cybersecurity Act, 2020, because they are not provided for reward. We are confirming this with our lawyer. Running Hydra as a paid service waits for our licence."),
   ("cta", "Talk to us", "/pages/contact.html"),
   ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
@@ -77,7 +77,7 @@ WORKING = {
   ("p", "A call of about 30 minutes. We ask how you monitor today and what your team spends its time on. You ask us anything, including the uncomfortable questions."),
   ("h2", "2. Agree the terms"),
   ("p", "Before any data moves, we agree a short evaluation agreement and a data processing agreement. We give you the exact list of read-only permissions we need."),
-  ("p", "We do not start with a customer until the Cyber Security Authority has confirmed our licence position in writing."),
+  ("p", "A free, advice-only shadow evaluation can start before we are licensed: in our view it is not a licensed service under section 49 of the Cybersecurity Act, 2020, because it is not provided for reward. We are confirming this with our lawyer."),
   ("h2", "3. A six-week shadow evaluation"),
   ("p", "Hydra reads your alerts and writes down what it would conclude. It changes nothing. Your analysts work as normal."),
   ("h2", "4. Compare"),
@@ -160,7 +160,7 @@ SECURITY = {
     "**Recovery drills.** We will test a restore from backup into a clean database at least twice a year. The first drill is scheduled.",
     "**Mandatory second review** of every code change, and automated checks on every pull request.",
     "**Dependency updates.** We audit dependencies on each release and are completing an update of our main framework and database packages.",
-    "**Our licence.** We are preparing our application to Ghana's Cyber Security Authority for the licence to provide managed cybersecurity services, because we plan to run Hydra for customers ourselves. Company registration is in progress, and the application follows it.",
+    "**Our licence.** We are preparing our application to Ghana's Cyber Security Authority for the licence to provide managed cybersecurity services, because we plan to run Hydra for customers ourselves. Company registration is almost complete, and the application follows it.",
   ]),
 
   ("h2", "Planned, not yet started"),
@@ -183,7 +183,7 @@ SECURITY = {
 
   ("h2", "Licensing, stated plainly"),
   ("p", "We plan to run Hydra for customers ourselves, under a licence from Ghana's Cyber Security Authority for managed cybersecurity services. As we read the Bank of Ghana's 2026 directive, the security monitoring system an institution subscribes to must be run by a company accredited by the Authority and owned mostly by Ghanaians. That is why we will be the operator and not only the software maker. This is our reading, and a Ghanaian lawyer has not checked it yet."),
-  ("p", "Where we are: company registration is in progress, and the licence application follows it. We do not hold the licence. We will not provide Hydra to a customer until we are licensed or the Authority has confirmed in writing that the activity does not need a licence. Today we do not run anyone's security operations centre."),
+  ("p", "Where we are: company registration is almost complete, and the licence application follows it. We do not hold the licence. Free, advice-only shadow evaluations can start now: in our view they are not a licensed service under section 49 of the Cybersecurity Act, 2020, because they are not provided for reward. We are confirming this with our lawyer. We will not run Hydra as a paid service for a customer until we are licensed. Today we do not run anyone's security operations centre."),
 
   ("h2", "Report a problem"),
   ("p", "To report a vulnerability or ask a security question, write to security@radiantinnovatech.com. We reply within two business days and will not take action against anyone who reports in good faith."),
@@ -385,8 +385,8 @@ RESULTS = {'file': 'our-test-results',
               'unless a separate run is requested.']),
             ('h2', 'What comes next'),
             ('p',
-             'We plan a fairer history baseline, independent review of labels and rules, and a separate burst test. Customer '
-             'work with real data will not start until the Cyber Security Authority answers our licence position in writing.'),
+             'We plan a fairer history baseline, independent review of labels and rules, and a separate burst test. Free, '
+             'advice-only shadow evaluations can start before we are licensed: in our view they are not a licensed service under section 49 of the Cybersecurity Act, 2020, because they are not provided for reward. We are confirming this with our lawyer.'),
             ('link', 'Download the aggregate results and run-file hashes (JSON)', '/assets/results/qwen-2026-10-25.json'),
             ('link', 'Talk to us about the test', '/pages/contact.html'),
             ('h2', 'Earlier comparison: 42 alerts, October 2026'),
@@ -497,14 +497,14 @@ ABOUT = {
   ("h2", "What we have not done yet"),
   ("ul", [
     "We have no customers.",
-    "We do not yet have our Cyber Security Authority licence, and company registration is in progress. We plan to run Hydra for customers ourselves, so we are preparing to apply for the licence once the company is registered. We will not provide Hydra to a customer until we are licensed or the Authority confirms in writing that we do not need one.",
+    "We do not yet have our Cyber Security Authority licence, and company registration is almost complete. We plan to run Hydra for customers ourselves, so we will apply for the licence once the company is registered. Free, advice-only shadow evaluations can start before then: in our view they are not a licensed service under section 49 of the Cybersecurity Act, 2020, because they are not provided for reward. We are confirming this with our lawyer. We will not run Hydra as a paid service until we are licensed.",
     "We do not hold ISO 27001 or SOC 2. Both are planned and not started.",
     "Nobody outside the company has tested our accuracy. [Our test results](/pages/our-test-results.html) say exactly what we have measured and what we have not.",
   ]),
   ("p", "We are working on each of these. We will update this list as they change."),
 
   ("h2", "The company"),
-  ("p", "Radiant InnovaTech, Accra, Ghana. Company registration is in progress. We will add the registered name, number and address here once we have them."),
+  ("p", "Radiant InnovaTech, Accra, Ghana. Company registration is almost complete. We will add the registered name, number and address here once we have them."),
   ("cta", "Talk to us", "/pages/contact.html"),
   ("small", "Last reviewed: 21 October 2026 by Samuel Maclar. Each founder has read their own entry."),
  ]}
@@ -534,7 +534,7 @@ CONTACT = {
     "We reply within two working days.",
     "If it fits, we suggest a call of about 30 minutes. You can ask us anything, including the uncomfortable questions.",
   ]),
-  ("p", "We will not start with a customer until the Cyber Security Authority has confirmed our licence position in writing. We are glad to talk before then."),
+  ("p", "Free, advice-only shadow evaluations can start before we are licensed: in our view they are not a licensed service under section 49 of the Cybersecurity Act, 2020, because they are not provided for reward. We are confirming this with our lawyer. Running Hydra as a paid service waits for our licence."),
 
   ("h2", "Other ways to reach us"),
   ("ul", [
@@ -561,7 +561,7 @@ EARLY = {
     "At the end you get a written report and decide what to do next.",
     "It is free for our first evaluation partners. If it is useful, we quote in writing afterwards.",
   ]),
-  ("p", "We will not start with a team until the Cyber Security Authority has confirmed our licence position in writing, so we cannot give you a start date today. Joining now means we talk to you first."),
+  ("p", "Free, advice-only shadow evaluations can start before we are licensed: in our view they are not a licensed service under section 49 of the Cybersecurity Act, 2020, because they are not provided for reward. We are confirming this with our lawyer. We cannot give you a start date today. Joining now means we talk to you first."),
   ("link", "How we work with a new team", "/pages/working-with-us.html"),
 
   ("form", "early-access-form", [
