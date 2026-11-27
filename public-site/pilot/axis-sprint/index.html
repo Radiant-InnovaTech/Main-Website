@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hydra pilot for the Axis Sprint cohort | Hydra</title>
+<meta name="description" content="Startups in the Axis Sprint cohort can apply here to try Hydra, our AI security analyst, in a pilot.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://radiantinnovatech.com/pilot/axis-sprint/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Hydra"><meta property="og:title" content="Hydra pilot for the Axis Sprint cohort | Hydra"><meta property="og:description" content="Startups in the Axis Sprint cohort can apply here to try Hydra, our AI security analyst, in a pilot."><meta property="og:url" content="https://radiantinnovatech.com/pilot/axis-sprint/"><meta property="og:image" content="https://radiantinnovatech.com/assets/brand/og-image-light.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css?v=20261127-pilot">
+<script src="/js/navigation.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="wrap bar">
+<a class="brand" href="/"><img src="/assets/brand/hydra-logo.svg" alt="Hydra" width="132" height="34"></a>
+<nav class="desktop-nav" aria-label="Main"><a href="/pages/how-it-works.html">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html">Our test results</a><a href="/pages/working-with-us.html">Working with us</a><a href="/pages/about.html">About</a></nav>
+<div class="actions header-actions"><a class="btn btn-quiet" href="/waitlist/">Early access</a><a class="btn" href="/pages/contact.html">Talk to us</a></div>
+<details class="mobile-menu">
+<summary><span>Menu</span><svg class="menu-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path class="menu-bars" d="M3 5h14M3 10h14M3 15h14"/><path class="menu-close" d="m4 4 12 12M16 4 4 16"/></svg></summary>
+<div class="mobile-panel"><nav aria-label="Main on mobile"><a href="/pages/how-it-works.html">How it works</a><a href="/pages/solutions.html">Who it is for</a><a href="/pages/security.html">Security</a><a href="/pages/our-test-results.html">Our test results</a><a href="/pages/working-with-us.html">Working with us</a><a href="/pages/about.html">About</a></nav>
+<div class="actions"><a class="btn" href="/pages/contact.html">Talk to us</a><a class="btn btn-quiet" href="/waitlist/">Early access</a></div></div>
+</details>
+</div></header>
+<main id="main">
+<section class="hero"><div class="wrap narrow">
+<h1>Apply for the Hydra pilot</h1>
+<p class="lead">This form is for startups in the Axis Sprint cohort who want to try Hydra, our AI security analyst. It takes about ten minutes. A founder reads every application and will contact you about next steps.</p>
+</div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>Your application</h2>
+<p>Questions marked optional can be left blank. Rough answers are fine; we will go through the details with you.</p>
+<form id="pilot-form" method="post" action="/api/pilot/submit" data-endpoint="/api/pilot/submit">
+<p class="visually-hidden" aria-hidden="true"><label>Leave this empty <input type="text" name="_hp" tabindex="-1" autocomplete="off"></label></p>
+<fieldset class="form-section"><legend>About you and your startup</legend>
+<p><label for="pilot-form-startup_name">Startup name</label><input id="pilot-form-startup_name" name="startup_name" type="text" maxlength="200" autocomplete="organization" required></p>
+<p><label for="pilot-form-full_name">Your full name</label><input id="pilot-form-full_name" name="full_name" type="text" maxlength="200" autocomplete="name" required></p>
+<p><label for="pilot-form-email">Your email</label><input id="pilot-form-email" name="email" type="email" maxlength="200" autocomplete="email" required></p>
+<fieldset class="choice"><legend>Are you a founder of the startup?</legend><div class="choices"><label><input type="radio" name="is_founder" value="Yes" required> <span>Yes</span></label><label><input type="radio" name="is_founder" value="No" required> <span>No</span></label></div></fieldset>
+</fieldset>
+<fieldset class="form-section"><legend>Pilot contact</legend>
+<p class="hint">The person we work with day to day during the pilot. This can be you.</p>
+<p><label for="pilot-form-pilot_contact_name">Name</label><input id="pilot-form-pilot_contact_name" name="pilot_contact_name" type="text" maxlength="200" required></p>
+<p><label for="pilot-form-pilot_contact_email">Email</label><input id="pilot-form-pilot_contact_email" name="pilot_contact_email" type="email" maxlength="200" required></p>
+<p><label for="pilot-form-pilot_contact_phone">Phone (optional)</label><input id="pilot-form-pilot_contact_phone" name="pilot_contact_phone" type="tel" maxlength="200" autocomplete="tel"></p>
+</fieldset>
+<fieldset class="form-section"><legend>Security lead</legend>
+<fieldset class="choice"><legend>Does someone look after security at your startup?</legend><div class="choices"><label><input type="radio" name="security_lead_status" value="Yes, a dedicated person or team" required> <span>Yes, a dedicated person or team</span></label><label><input type="radio" name="security_lead_status" value="Yes, a founder or engineer alongside other work" required> <span>Yes, a founder or engineer alongside other work</span></label><label><input type="radio" name="security_lead_status" value="Not yet" required> <span>Not yet</span></label></div></fieldset>
+<p><label for="pilot-form-security_lead_name">Security lead's name</label><span class="hint" id="pilot-form-security_lead_name-hint">Leave blank only if you answered Not yet.</span><input id="pilot-form-security_lead_name" name="security_lead_name" type="text" maxlength="200" aria-describedby="pilot-form-security_lead_name-hint"></p>
+<p><label for="pilot-form-security_lead_email">Security lead's email</label><span class="hint" id="pilot-form-security_lead_email-hint">Leave blank only if you answered Not yet.</span><input id="pilot-form-security_lead_email" name="security_lead_email" type="email" maxlength="200" aria-describedby="pilot-form-security_lead_email-hint"></p>
+</fieldset>
+<fieldset class="form-section"><legend>Your security setup</legend>
+<p class="hint">Rough answers are fine. They help us plan what Hydra would read during the pilot.</p>
+<fieldset class="choice" data-multi="hosting" data-required><legend>Where does your product run? Tick all that apply.</legend><div class="choices"><label><input type="checkbox" name="hosting" value="Amazon Web Services"> <span>Amazon Web Services</span></label><label><input type="checkbox" name="hosting" value="Google Cloud"> <span>Google Cloud</span></label><label><input type="checkbox" name="hosting" value="Microsoft Azure"> <span>Microsoft Azure</span></label><label><input type="checkbox" name="hosting" value="Another cloud provider"> <span>Another cloud provider</span></label><label><input type="checkbox" name="hosting" value="Our own servers"> <span>Our own servers</span></label><label><input type="checkbox" name="hosting" value="Not sure"> <span>Not sure</span></label></div></fieldset>
+<fieldset class="choice" data-multi="sign_in" data-required><legend>How does your team sign in to work tools? Tick all that apply.</legend><div class="choices"><label><input type="checkbox" name="sign_in" value="Google Workspace"> <span>Google Workspace</span></label><label><input type="checkbox" name="sign_in" value="Microsoft 365 or Entra ID"> <span>Microsoft 365 or Entra ID</span></label><label><input type="checkbox" name="sign_in" value="Okta"> <span>Okta</span></label><label><input type="checkbox" name="sign_in" value="Something else"> <span>Something else</span></label><label><input type="checkbox" name="sign_in" value="No shared sign-in"> <span>No shared sign-in</span></label></div></fieldset>
+<fieldset class="choice" data-multi="tools" data-required><legend>Which security tools do you use today? Tick all that apply.</legend><div class="choices"><label><input type="checkbox" name="tools" value="Wazuh"> <span>Wazuh</span></label><label><input type="checkbox" name="tools" value="Microsoft Defender"> <span>Microsoft Defender</span></label><label><input type="checkbox" name="tools" value="CrowdStrike Falcon"> <span>CrowdStrike Falcon</span></label><label><input type="checkbox" name="tools" value="Microsoft Sentinel"> <span>Microsoft Sentinel</span></label><label><input type="checkbox" name="tools" value="Splunk"> <span>Splunk</span></label><label><input type="checkbox" name="tools" value="Elastic"> <span>Elastic</span></label><label><input type="checkbox" name="tools" value="AWS GuardDuty"> <span>AWS GuardDuty</span></label><label><input type="checkbox" name="tools" value="Google Security Command Center"> <span>Google Security Command Center</span></label><label><input type="checkbox" name="tools" value="Palo Alto Networks firewall"> <span>Palo Alto Networks firewall</span></label><label><input type="checkbox" name="tools" value="Cloudflare"> <span>Cloudflare</span></label><label><input type="checkbox" name="tools" value="Others"> <span>Others</span></label><label><input type="checkbox" name="tools" value="None yet"> <span>None yet</span></label></div></fieldset>
+<p><label for="pilot-form-tools_other">Other security tools (optional)</label><input id="pilot-form-tools_other" name="tools_other" type="text" maxlength="200"></p>
+<p><label for="pilot-form-alerts_central">Do you collect security alerts and logs in one place?</label><select id="pilot-form-alerts_central" name="alerts_central" required><option value="">Select</option><option value="Yes, in a SIEM">Yes, in a SIEM</option><option value="Partly">Partly</option><option value="No">No</option><option value="Not sure">Not sure</option></select></p>
+<p><label for="pilot-form-alert_volume">About how many security alerts do you get a day?</label><select id="pilot-form-alert_volume" name="alert_volume" required><option value="">Select</option><option value="None, or we do not know">None, or we do not know</option><option value="Fewer than 10">Fewer than 10</option><option value="10 to 100">10 to 100</option><option value="100 to 1,000">100 to 1,000</option><option value="More than 1,000">More than 1,000</option></select></p>
+<p><label for="pilot-form-alert_handling">Who reads those alerts today?</label><select id="pilot-form-alert_handling" name="alert_handling" required><option value="">Select</option><option value="A security person or team">A security person or team</option><option value="Developers or IT, when they have time">Developers or IT, when they have time</option><option value="An outside provider">An outside provider</option><option value="Nobody yet">Nobody yet</option></select></p>
+<p><label for="pilot-form-coverage">About how many servers, laptops and cloud accounts would the pilot cover?</label><select id="pilot-form-coverage" name="coverage" required><option value="">Select</option><option value="Fewer than 25">Fewer than 25</option><option value="25 to 100">25 to 100</option><option value="100 to 500">100 to 500</option><option value="More than 500">More than 500</option><option value="Not sure">Not sure</option></select></p>
+<p><label for="pilot-form-incidents">Have you had a security incident in the last 12 months?</label><select id="pilot-form-incidents" name="incidents" required><option value="">Select</option><option value="None that we know of">None that we know of</option><option value="Yes, a minor one">Yes, a minor one</option><option value="Yes, a serious one">Yes, a serious one</option><option value="Prefer not to say">Prefer not to say</option></select></p>
+</fieldset>
+<fieldset class="form-section"><legend>Goals and commitment</legend>
+<fieldset class="choice" data-multi="goals" data-required><legend>What do you most want Hydra to help with? Tick all that apply.</legend><div class="choices"><label><input type="checkbox" name="goals" value="Read alerts we do not have time for"> <span>Read alerts we do not have time for</span></label><label><input type="checkbox" name="goals" value="Catch attacks we might be missing"> <span>Catch attacks we might be missing</span></label><label><input type="checkbox" name="goals" value="Start security monitoring from nothing"> <span>Start security monitoring from nothing</span></label><label><input type="checkbox" name="goals" value="Show customers, investors or auditors that we monitor security"> <span>Show customers, investors or auditors that we monitor security</span></label><label><input type="checkbox" name="goals" value="Cut down noisy alerts"> <span>Cut down noisy alerts</span></label><label><input type="checkbox" name="goals" value="Something else"> <span>Something else</span></label></div></fieldset>
+<p><label for="pilot-form-success">What would make the pilot worth it for you?</label><textarea id="pilot-form-success" name="success" rows="5" maxlength="2000" required></textarea></p>
+<p><label for="pilot-form-start_when">When could you start?</label><select id="pilot-form-start_when" name="start_when" required><option value="">Select</option><option value="Within two weeks">Within two weeks</option><option value="Within a month">Within a month</option><option value="Within three months">Within three months</option><option value="Not sure yet">Not sure yet</option></select></p>
+<p><label for="pilot-form-weekly_time">How much time can your team give the pilot each week?</label><select id="pilot-form-weekly_time" name="weekly_time" required><option value="">Select</option><option value="Less than an hour">Less than an hour</option><option value="One to two hours">One to two hours</option><option value="Two to five hours">Two to five hours</option><option value="More than five hours">More than five hours</option></select></p>
+<fieldset class="choice"><legend>Can someone join a short feedback call every two weeks?</legend><div class="choices"><label><input type="radio" name="feedback_calls" value="Yes" required> <span>Yes</span></label><label><input type="radio" name="feedback_calls" value="Maybe" required> <span>Maybe</span></label><label><input type="radio" name="feedback_calls" value="No" required> <span>No</span></label></div></fieldset>
+<fieldset class="choice"><legend>Once the pilot ends, may we say your startup took part?</legend><div class="choices"><label><input type="radio" name="naming" value="Yes" required> <span>Yes</span></label><label><input type="radio" name="naming" value="Ask us first" required> <span>Ask us first</span></label><label><input type="radio" name="naming" value="No" required> <span>No</span></label></div></fieldset>
+<p><label for="pilot-form-notes">Anything else we should know? (optional)</label><textarea id="pilot-form-notes" name="notes" rows="5" maxlength="2000"></textarea></p>
+</fieldset>
+<p class="check"><label><input type="checkbox" name="consent" required> <span>I agree that Radiant InnovaTech may contact me and the people named above about this pilot, and I have their permission to share their details. <a href="/pages/privacy.html">Privacy notice</a></span></label></p>
+<p><button class="btn btn-lg" type="submit">Send application</button></p></form>
+<p class="form-success" role="status" tabindex="-1" hidden>Thank you. We have your application. A founder will contact you at the email you gave.</p>
+<p class="form-error" role="status" tabindex="-1" hidden>That did not send. Please try again, or write to samuelmaclar@radiantinnovatech.com.</p>
+</div></section>
+</main>
+<footer class="site-footer"><div class="wrap">
+<div class="foot-grid">
+<div><img src="/assets/brand/hydra-logo-on-dark.svg" alt="Hydra" width="120" height="31"><p class="foot-line">An AI analyst for your security team. Built in Accra.</p></div>
+<div><h2>Hydra</h2><ul><li><a href="/pages/how-it-works.html">How it works</a></li><li><a href="/pages/solutions.html">Who it is for</a></li><li><a href="/pages/our-test-results.html">Our test results</a></li><li><a href="/pages/resources.html">Resources</a></li></ul></div>
+<div><h2>Company</h2><ul><li><a href="/pages/about.html">About</a></li><li><a href="/pages/security.html">Security</a></li><li><a href="/pages/working-with-us.html">Working with us</a></li><li><a href="/pages/contact.html">Talk to us</a></li></ul></div>
+<div><h2>Legal</h2><ul><li><a href="/pages/privacy.html">Privacy notice</a></li><li><a href="/pages/terms.html">Terms of use</a></li><li><a href="/.well-known/security.txt">Report a vulnerability</a></li></ul></div>
+</div>
+<p class="copy">&copy; 2026 Radiant InnovaTech</p>
+</div></footer>
+<script>
+(function () {
+  var forms = [].slice.call(document.querySelectorAll("form[data-endpoint]"));
+  // Bot check (Cloudflare Turnstile), shown only when the server has keys: see /api/forms/config.
+  var widgets = {};
+  fetch("/api/forms/config").then(function (r) { return r.ok ? r.json() : {}; }).then(function (cfg) {
+    var key = cfg && cfg.turnstile_site_key; if (!key) return;
+    window.riTurnstileReady = function () {
+      forms.forEach(function (form) {
+        var box = document.createElement("p"); box.className = "bot-check";
+        var btn = form.querySelector("button[type=submit]");
+        form.insertBefore(box, btn ? btn.parentNode : null);
+        widgets[form.id] = window.turnstile.render(box, { sitekey: key });
+      });
+    };
+    var s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=riTurnstileReady";
+    s.async = true; document.head.appendChild(s);
+  }).catch(function () {});
+  forms.forEach(function (form) {
+    var ok = form.parentNode.querySelector(".form-success"), bad = form.parentNode.querySelector(".form-error");
+    var badDefault = bad ? bad.textContent : "";
+    function fail(msg) { if (bad) { bad.textContent = msg || badDefault; bad.hidden = false; } }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (ok) ok.hidden = true; if (bad) bad.hidden = true;
+      // Groups of tick boxes (the pilot form): the browser cannot require "at least one", so check here.
+      var groups = [].slice.call(form.querySelectorAll("fieldset[data-multi]"));
+      for (var i = 0; i < groups.length; i++) {
+        if (groups[i].hasAttribute("data-required") && !groups[i].querySelector("input:checked")) {
+          fail("Please answer: " + groups[i].querySelector("legend").textContent);
+          groups[i].querySelector("input").focus(); return;
+        }
+      }
+      var wid = widgets[form.id];
+      if (wid !== undefined && !window.turnstile.getResponse(wid)) { fail("Please wait a moment for the check above the button to finish, then send again."); return; }
+      var data = {}; new FormData(form).forEach(function (v, k) { data[k] = (k in data) ? [].concat(data[k], v) : v; });
+      groups.forEach(function (g) { var n = g.getAttribute("data-multi"); data[n] = n in data ? [].concat(data[n]) : []; });
+      data.consent = form.querySelector('[name="consent"]').checked;
+      var btn = form.querySelector("button[type=submit]"); btn.disabled = true;
+      function retry(msg) { fail(msg); btn.disabled = false; if (wid !== undefined) window.turnstile.reset(wid); }
+      fetch(form.getAttribute("data-endpoint"), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+        .then(function (res) {
+          if (res.ok) { form.hidden = true; if (ok) { ok.hidden = false; ok.focus(); } }
+          else retry(res.body && res.body.error);
+        })
+        .catch(function () { retry(); });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

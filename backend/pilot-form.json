@@ -1,0 +1,300 @@
+{
+  "_comment": "The Axis Sprint pilot form. One list, read by site-src/build_site.py to draw the page and by server.js to check what is sent, so the two cannot drift apart. Changing an option here changes both: rebuild the site and redeploy together.",
+  "sections": [
+    {
+      "title": "About you and your startup",
+      "fields": [
+        {
+          "name": "startup_name",
+          "label": "Startup name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "full_name",
+          "label": "Your full name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "label": "Your email",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "is_founder",
+          "label": "Are you a founder of the startup?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            "Yes",
+            "No"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pilot contact",
+      "intro": "The person we work with day to day during the pilot. This can be you.",
+      "fields": [
+        {
+          "name": "pilot_contact_name",
+          "label": "Name",
+          "type": "text",
+          "required": true,
+          "shortLabel": "Pilot contact's name"
+        },
+        {
+          "name": "pilot_contact_email",
+          "label": "Email",
+          "type": "email",
+          "required": true,
+          "shortLabel": "Pilot contact's email"
+        },
+        {
+          "name": "pilot_contact_phone",
+          "label": "Phone (optional)",
+          "type": "tel",
+          "required": false,
+          "shortLabel": "Pilot contact's phone"
+        }
+      ]
+    },
+    {
+      "title": "Security lead",
+      "fields": [
+        {
+          "name": "security_lead_status",
+          "label": "Does someone look after security at your startup?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            "Yes, a dedicated person or team",
+            "Yes, a founder or engineer alongside other work",
+            "Not yet"
+          ]
+        },
+        {
+          "name": "security_lead_name",
+          "label": "Security lead's name",
+          "type": "text",
+          "hint": "Leave blank only if you answered Not yet.",
+          "requiredUnless": {
+            "field": "security_lead_status",
+            "equals": "Not yet"
+          }
+        },
+        {
+          "name": "security_lead_email",
+          "label": "Security lead's email",
+          "type": "email",
+          "hint": "Leave blank only if you answered Not yet.",
+          "requiredUnless": {
+            "field": "security_lead_status",
+            "equals": "Not yet"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Your security setup",
+      "intro": "Rough answers are fine. They help us plan what Hydra would read during the pilot.",
+      "fields": [
+        {
+          "name": "hosting",
+          "label": "Where does your product run? Tick all that apply.",
+          "type": "checkboxes",
+          "required": true,
+          "options": [
+            "Amazon Web Services",
+            "Google Cloud",
+            "Microsoft Azure",
+            "Another cloud provider",
+            "Our own servers",
+            "Not sure"
+          ]
+        },
+        {
+          "name": "sign_in",
+          "label": "How does your team sign in to work tools? Tick all that apply.",
+          "type": "checkboxes",
+          "required": true,
+          "options": [
+            "Google Workspace",
+            "Microsoft 365 or Entra ID",
+            "Okta",
+            "Something else",
+            "No shared sign-in"
+          ]
+        },
+        {
+          "name": "tools",
+          "label": "Which security tools do you use today? Tick all that apply.",
+          "type": "checkboxes",
+          "required": true,
+          "options": [
+            "Wazuh",
+            "Microsoft Defender",
+            "CrowdStrike Falcon",
+            "Microsoft Sentinel",
+            "Splunk",
+            "Elastic",
+            "AWS GuardDuty",
+            "Google Security Command Center",
+            "Palo Alto Networks firewall",
+            "Cloudflare",
+            "Others",
+            "None yet"
+          ]
+        },
+        {
+          "name": "tools_other",
+          "label": "Other security tools (optional)",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "alerts_central",
+          "label": "Do you collect security alerts and logs in one place?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Yes, in a SIEM",
+            "Partly",
+            "No",
+            "Not sure"
+          ]
+        },
+        {
+          "name": "alert_volume",
+          "label": "About how many security alerts do you get a day?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "None, or we do not know",
+            "Fewer than 10",
+            "10 to 100",
+            "100 to 1,000",
+            "More than 1,000"
+          ]
+        },
+        {
+          "name": "alert_handling",
+          "label": "Who reads those alerts today?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "A security person or team",
+            "Developers or IT, when they have time",
+            "An outside provider",
+            "Nobody yet"
+          ]
+        },
+        {
+          "name": "coverage",
+          "label": "About how many servers, laptops and cloud accounts would the pilot cover?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Fewer than 25",
+            "25 to 100",
+            "100 to 500",
+            "More than 500",
+            "Not sure"
+          ]
+        },
+        {
+          "name": "incidents",
+          "label": "Have you had a security incident in the last 12 months?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "None that we know of",
+            "Yes, a minor one",
+            "Yes, a serious one",
+            "Prefer not to say"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Goals and commitment",
+      "fields": [
+        {
+          "name": "goals",
+          "label": "What do you most want Hydra to help with? Tick all that apply.",
+          "type": "checkboxes",
+          "required": true,
+          "options": [
+            "Read alerts we do not have time for",
+            "Catch attacks we might be missing",
+            "Start security monitoring from nothing",
+            "Show customers, investors or auditors that we monitor security",
+            "Cut down noisy alerts",
+            "Something else"
+          ]
+        },
+        {
+          "name": "success",
+          "label": "What would make the pilot worth it for you?",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "start_when",
+          "label": "When could you start?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Within two weeks",
+            "Within a month",
+            "Within three months",
+            "Not sure yet"
+          ]
+        },
+        {
+          "name": "weekly_time",
+          "label": "How much time can your team give the pilot each week?",
+          "type": "select",
+          "required": true,
+          "options": [
+            "Less than an hour",
+            "One to two hours",
+            "Two to five hours",
+            "More than five hours"
+          ]
+        },
+        {
+          "name": "feedback_calls",
+          "label": "Can someone join a short feedback call every two weeks?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            "Yes",
+            "Maybe",
+            "No"
+          ]
+        },
+        {
+          "name": "naming",
+          "label": "Once the pilot ends, may we say your startup took part?",
+          "type": "radio",
+          "required": true,
+          "options": [
+            "Yes",
+            "Ask us first",
+            "No"
+          ]
+        },
+        {
+          "name": "notes",
+          "label": "Anything else we should know? (optional)",
+          "type": "textarea",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "consent": "I agree that Radiant InnovaTech may contact me and the people named above about this pilot, and I have their permission to share their details. [Privacy notice](/pages/privacy.html)"
+}

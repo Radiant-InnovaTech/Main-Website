@@ -3,13 +3,21 @@
 Usage: python3 build_site.py /path/to/Main-Website
 Writes into <repo>/public-site/. Placeholders written as [[like this]] are rendered as visible
 yellow marks and the site check (scripts/check-site.js) fails until every one is replaced."""
-import html, re, os, sys
+import html, json, re, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pages import HOME, WORKING, SECURITY, HOWITWORKS, RESULTS, ABOUT, CONTACT, EARLY
 
 REPO = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(REPO, "public-site")
 SITE = "https://radiantinnovatech.com"
+
+# The Axis Sprint pilot form. Its questions live in backend/pilot-form.json, which the server also reads to
+# check submissions. The page is reached only by link: it is not in the menu, the sitemap or llms.txt, and it
+# tells search engines not to index it. The backend also needs PILOT_FORM_ENABLED=true.
+PILOT_FORM_ENABLED = True
+PILOT_PATH = "/pilot/axis-sprint/"
+with open(os.path.join(REPO, "backend", "pilot-form.json")) as fh:
+    PILOT_SPEC = json.load(fh)
 
 # Switches. Both forms are enabled at Samuel's request while registration is pending; the backend
 # also needs FORMS_ENABLED=true. Fill MATOMO_* when our own
@@ -65,6 +73,19 @@ RESOURCES = {"file": "pages/resources.html", "path": "/pages/resources.html",
   ("small", "Last reviewed: 21 October 2026 by Samuel Maclar."),
  ]}
 
+PILOT = {"file": "pilot/axis-sprint/index.html", "path": PILOT_PATH, "noindex": True,
+ "title": "Hydra pilot for the Axis Sprint cohort | Hydra",
+ "description": "Startups in the Axis Sprint cohort can apply here to try Hydra, our AI security analyst, in a pilot.",
+ "blocks": [
+  ("h1", "Apply for the Hydra pilot"),
+  ("lead", "This form is for startups in the Axis Sprint cohort who want to try Hydra, our AI security analyst. It takes about ten minutes. A founder reads every application and will contact you about next steps."),
+  ("h2", "Your application"),
+  ("p", "Questions marked optional can be left blank. Rough answers are fine; we will go through the details with you."),
+  ("pilotform",),
+  ("state", "success", "Thank you. We have your application. A founder will contact you at the email you gave."),
+  ("state", "error", "That did not send. Please try again, or write to samuelmaclar@radiantinnovatech.com."),
+ ]}
+
 from legal_pages import privacy as _privacy, TERMS
 PRIVACY = _privacy(ANALYTICS_ON)
 
@@ -81,6 +102,7 @@ PAGES = [
   dict(RESOURCES),
   dict(PRIVACY),
   dict(TERMS),
+  dict(PILOT),
 ]
 
 FORM_FIELDS = {  # page form id -> {our name: backend field}
@@ -162,9 +184,18 @@ FORM_JS = '''<script>
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (ok) ok.hidden = true; if (bad) bad.hidden = true;
+      // Groups of tick boxes (the pilot form): the browser cannot require "at least one", so check here.
+      var groups = [].slice.call(form.querySelectorAll("fieldset[data-multi]"));
+      for (var i = 0; i < groups.length; i++) {
+        if (groups[i].hasAttribute("data-required") && !groups[i].querySelector("input:checked")) {
+          fail("Please answer: " + groups[i].querySelector("legend").textContent);
+          groups[i].querySelector("input").focus(); return;
+        }
+      }
       var wid = widgets[form.id];
       if (wid !== undefined && !window.turnstile.getResponse(wid)) { fail("Please wait a moment for the check above the button to finish, then send again."); return; }
-      var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
+      var data = {}; new FormData(form).forEach(function (v, k) { data[k] = (k in data) ? [].concat(data[k], v) : v; });
+      groups.forEach(function (g) { var n = g.getAttribute("data-multi"); data[n] = n in data ? [].concat(data[n]) : []; });
       data.consent = form.querySelector('[name="consent"]').checked;
       var btn = form.querySelector("button[type=submit]"); btn.disabled = true;
       function retry(msg) { fail(msg); btn.disabled = false; if (wid !== undefined) window.turnstile.reset(wid); }
@@ -253,7 +284,48 @@ def render_block(b, p):
         return "\n".join(f)
     if k == "state":
         return f'<p class="form-{b[1]}" role="status" tabindex="-1" hidden>{inline(b[2])}</p>'
+    if k == "pilotform":
+        if not PILOT_FORM_ENABLED:
+            return '<div class="notice" role="note"><p><strong>Applications are closed for now.</strong> Please write to <a href="mailto:samuelmaclar@radiantinnovatech.com">samuelmaclar@radiantinnovatech.com</a>.</p></div>'
+        return pilot_form_html(PILOT_SPEC)
     raise ValueError(k)
+
+PILOT_AUTOCOMPLETE = {"full_name": "name", "email": "email", "startup_name": "organization", "pilot_contact_phone": "tel"}
+
+def pilot_field_html(fd):
+    """One question of the pilot form. Every input carries its label; hints are tied to it with aria-describedby."""
+    n, lab, typ = fd["name"], fd["label"], fd["type"]
+    fid = "pilot-form-" + n
+    req = " required" if fd.get("required") else ""
+    hint_id = fid + "-hint"
+    hint = f'<span class="hint" id="{hint_id}">{inline(fd["hint"])}</span>' if fd.get("hint") else ""
+    described = f' aria-describedby="{hint_id}"' if fd.get("hint") else ""
+    if typ in ("radio", "checkboxes"):
+        kind = "radio" if typ == "radio" else "checkbox"
+        multi = f' data-multi="{n}"' + (" data-required" if fd.get("required") else "") if typ == "checkboxes" else ""
+        boxes = "".join(
+            f'<label><input type="{kind}" name="{n}" value="{html.escape(o, quote=True)}"{req if kind == "radio" else ""}> <span>{html.escape(o)}</span></label>'
+            for o in fd["options"])
+        return f'<fieldset class="choice"{multi}><legend>{inline(lab)}</legend>{hint}<div class="choices">{boxes}</div></fieldset>'
+    if typ == "select":
+        opts = "".join(f'<option value="{html.escape(o, quote=True)}">{html.escape(o)}</option>' for o in fd["options"])
+        return f'<p><label for="{fid}">{inline(lab)}</label>{hint}<select id="{fid}" name="{n}"{req}{described}><option value="">Select</option>{opts}</select></p>'
+    if typ == "textarea":
+        return f'<p><label for="{fid}">{inline(lab)}</label>{hint}<textarea id="{fid}" name="{n}" rows="5" maxlength="2000"{req}{described}></textarea></p>'
+    auto = f' autocomplete="{PILOT_AUTOCOMPLETE[n]}"' if n in PILOT_AUTOCOMPLETE else ""
+    return f'<p><label for="{fid}">{inline(lab)}</label>{hint}<input id="{fid}" name="{n}" type="{typ}" maxlength="200"{auto}{req}{described}></p>'
+
+def pilot_form_html(spec):
+    f = ['<form id="pilot-form" method="post" action="/api/pilot/submit" data-endpoint="/api/pilot/submit">',
+         '<p class="visually-hidden" aria-hidden="true"><label>Leave this empty <input type="text" name="_hp" tabindex="-1" autocomplete="off"></label></p>']
+    for sec in spec["sections"]:
+        f.append(f'<fieldset class="form-section"><legend>{inline(sec["title"])}</legend>')
+        if sec.get("intro"): f.append(f'<p class="hint">{inline(sec["intro"])}</p>')
+        f.extend(pilot_field_html(fd) for fd in sec["fields"])
+        f.append("</fieldset>")
+    f.append(f'<p class="check"><label><input type="checkbox" name="consent" required> <span>{inline(spec["consent"])}</span></label></p>')
+    f.append('<p><button class="btn btn-lg" type="submit">Send application</button></p></form>')
+    return "\n".join(f)
 
 def about_blocks(blocks):
     """Replace the figure and the four h3+p founder entries on About with portraits."""
@@ -296,13 +368,13 @@ def page_html(p):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="canonical" href="{url}">
+{'<meta name="robots" content="noindex, nofollow">' + chr(10) if p.get("noindex") else ""}<link rel="canonical" href="{url}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Hydra"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:url" content="{url}"><meta property="og:image" content="{SITE}/assets/brand/og-image-light.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css?v=20261027-combined">
+<link rel="stylesheet" href="/css/site.css?v=20261127-pilot">
 <script src="/js/navigation.js" defer></script>
 </head>
 <body>

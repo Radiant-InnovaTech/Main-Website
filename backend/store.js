@@ -13,7 +13,7 @@
 const path = require('path');
 const fs   = require('fs');
 
-const TABLES = ['waitlist_entries', 'contact_requests', 'admin_otps', 'audit_logs'];
+const TABLES = ['waitlist_entries', 'contact_requests', 'pilot_applications', 'admin_otps', 'audit_logs'];
 
 function memoryBackend() {
   if (process.env.NODE_ENV !== 'test') throw new Error('DATA_STORE=memory is allowed only in tests');
@@ -66,6 +66,11 @@ function sqliteBackend() {
       id TEXT PRIMARY KEY, action TEXT NOT NULL, details TEXT, admin_email TEXT, ip TEXT, created_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS idx_audit_created_at ON audit_logs(created_at);
+    CREATE TABLE IF NOT EXISTS pilot_applications (
+      id TEXT PRIMARY KEY, startup_name TEXT NOT NULL, full_name TEXT NOT NULL, email TEXT NOT NULL,
+      answers TEXT NOT NULL, consent INTEGER NOT NULL DEFAULT 1, ip_address TEXT, created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_pilot_created_at ON pilot_applications(created_at);
   `);
   // Columns added for the Talk to us form. SQLite has no "ADD COLUMN IF NOT EXISTS".
   const have = new Set(db.prepare('PRAGMA table_info(contact_requests)').all().map(c => c.name));
@@ -161,15 +166,16 @@ async function purge(months) {
   const iso = cutoff.toISOString();
   const contacts = await backend.removeOlderThan('contact_requests', iso);
   const waitlist = await backend.removeOlderThan('waitlist_entries', iso);
+  const pilots = await backend.removeOlderThan('pilot_applications', iso);
   const audits = await backend.removeOlderThan('audit_logs', iso);
   await backend.removeOlderThan('admin_otps', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-  return { contacts, waitlist, audits };
+  return { contacts, waitlist, pilots, audits };
 }
 
 // Public submissions used to copy names, emails and IP addresses into the audit log. Keep the event and entry id,
 // but remove that duplicate personal data so deleting or expiring a form record actually removes the contact details.
 async function scrubAuditPii() {
-  const actions = new Set(['waitlist_submit', 'contact_submit', 'admin_delete', 'admin_delete_contact']);
+  const actions = new Set(['waitlist_submit', 'contact_submit', 'pilot_submit', 'admin_delete', 'admin_delete_contact', 'admin_delete_pilot']);
   let changed = 0;
   for (const row of await backend.all('audit_logs')) {
     if (!actions.has(row.action)) continue;

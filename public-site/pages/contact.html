@@ -11,7 +11,7 @@
 <link rel="icon" href="/assets/brand/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/assets/brand/favicon.svg"><link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/site.css?v=20261027-combined">
+<link rel="stylesheet" href="/css/site.css?v=20261127-pilot">
 <script src="/js/navigation.js" defer></script>
 </head>
 <body>
@@ -89,9 +89,18 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (ok) ok.hidden = true; if (bad) bad.hidden = true;
+      // Groups of tick boxes (the pilot form): the browser cannot require "at least one", so check here.
+      var groups = [].slice.call(form.querySelectorAll("fieldset[data-multi]"));
+      for (var i = 0; i < groups.length; i++) {
+        if (groups[i].hasAttribute("data-required") && !groups[i].querySelector("input:checked")) {
+          fail("Please answer: " + groups[i].querySelector("legend").textContent);
+          groups[i].querySelector("input").focus(); return;
+        }
+      }
       var wid = widgets[form.id];
       if (wid !== undefined && !window.turnstile.getResponse(wid)) { fail("Please wait a moment for the check above the button to finish, then send again."); return; }
-      var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
+      var data = {}; new FormData(form).forEach(function (v, k) { data[k] = (k in data) ? [].concat(data[k], v) : v; });
+      groups.forEach(function (g) { var n = g.getAttribute("data-multi"); data[n] = n in data ? [].concat(data[n]) : []; });
       data.consent = form.querySelector('[name="consent"]').checked;
       var btn = form.querySelector("button[type=submit]"); btn.disabled = true;
       function retry(msg) { fail(msg); btn.disabled = false; if (wid !== undefined) window.turnstile.reset(wid); }
